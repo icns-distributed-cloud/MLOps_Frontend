@@ -3,6 +3,12 @@
       <div class="data-description">
         데이터 셋으로 훈련한 모델들을 확인할 수 있습니다.
       </div>
+      <div class="content">
+      <div class="content-header">
+          <button class="add-btn" @click="openDataAddModal">
+          새 모델 생성
+          </button>
+        </div>
   
       <div class="data-container">
         <div v-if="isLoading" class="loading">
@@ -75,6 +81,7 @@
             </button>
           </div>
         </div>-->
+      </div>
       </div>
     </div>
   </template>
@@ -300,5 +307,29 @@
     background-color: #2c2c2c;
     border: none;
   }
+
+  .content-header {
+  margin: 10px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: right;
+}
+  .add-btn {
+  width: 190px;
+  height: 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  color: #e8e8e8;
+  font-weight: 400;
+  border: 1px #676767a6 solid;
+  cursor: pointer;
+  transition: all 0.5s;
+  background-color: #3f8ae2;
+  margin-right: 30px;
+}
+
+.add-btn:hover {
+  background-color: #2f6cb1;
+}
   </style>
   

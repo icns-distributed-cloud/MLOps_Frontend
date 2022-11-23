@@ -1,30 +1,30 @@
 <template>
     <div class="main">
       <div class="header">
-        <div class="title">모델 훈련</div>
-        <SelectedData
+      <div class="title">모델 훈련</div>
+      <SelectedData
+        v-if="showData"
+        :datasetId="datasetId"
+        @changeDataset="changeDataset"
+      />
+    </div>
+    <div class="content">
+      <ModelTrainControl
           v-if="showData"
           :datasetId="datasetId"
-          @changeDataset="changeDataset"
-        />
-      </div>
-      <div class="content">
-        <ModelTrainControl
-            v-if="showData"
-            :datasetId="datasetId"
-        />
-      </div>
-      <DatasetSelectModal
-        v-if="showDatasetSelectModal"
-        @close="closeDatasetSelectModal"
-        :datasetId="datasetId"
-      >
-        <template slot="description">
-          <div class="description">
-            모델훈련을 실행 할 데이터셋을 선택하세요.
-          </div>
-        </template>
-      </DatasetSelectModal>
+      />
+    </div>
+    <DatasetSelectModal
+      v-if="showDatasetSelectModal"
+      @close="closeDatasetSelectModal"
+      :datasetId="datasetId"
+    >
+      <template slot="description">
+        <div class="description">
+          모델훈련을 실행 할 데이터셋을 선택하세요.
+        </div>
+      </template>
+    </DatasetSelectModal>
     </div>
   </template>
   
@@ -91,5 +91,6 @@
     display: flex;
     justify-content: right;
   }
+
   </style>
   
