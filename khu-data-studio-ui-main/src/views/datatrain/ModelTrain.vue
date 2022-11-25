@@ -13,6 +13,7 @@
           v-if="showData"
           :datasetId="datasetId"
       />
+      
     </div>
     <DatasetSelectModal
       v-if="showDatasetSelectModal"
@@ -32,7 +33,7 @@
   import SelectedData from "@/components/common/SelectedData";
   import DatasetSelectModal from "@/components/common/DatasetSelectModal";
   import ModelTrainControl from "@/components/datatrain/ModelTrainControl";
-  
+
   export default {
     components: {
       DatasetSelectModal,

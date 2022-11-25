@@ -1,226 +1,145 @@
 <template>
-    <div class="model-train-control">
-      <div class="data-description">
-        데이터 셋으로 훈련한 모델들을 확인할 수 있습니다.
-      </div>
-      <div class="content">
+  <div class="model-train-control">
+    <div class="data-description">
+      데이터 셋으로 훈련한 모델들을 확인할 수 있습니다.
+    </div>
+    <div class="content">
       <div class="content-header">
-          <button class="add-btn" @click="openDataAddModal">
-          새 모델 생성
-          </button>
-        </div>
-  
+        <button class="add-btn" @click="openModelAddModal">
+        새 모델 생성
+        </button>
+      </div>
       <div class="data-container">
         <div v-if="isLoading" class="loading">
           <Spinner />
         </div>
-        <div class="table-container" v-if="!isLoading">
-          <table>
-            <thead>
-              <template v-for="(col, i) in data.column">
-                <th :key="i" v-if="col.dateTimeColumn">
-                  {{ col.name }}
-                </th>
-              </template>
-              <template v-for="(col, i) in data.column">
-                <th :key="i" v-if="!col.dateTimeColumn">
-                  {{ col.name }}
-                </th>
-              </template>
-            </thead>
-            <tbody>
-              <tr v-for="(row, i) in data.data" :key="i">
-                <template v-for="(col, j) in data.column">
-                  <td
-                    :key="j"
-                    v-if="col.dateTimeColumn"
-                    class="datetime-td"
-                  >
-                    {{ row[col.name] }}
-                  </td>
-                </template>
-                <template v-for="(col, j) in data.column">
-                  <td
-                    :key="j"
-                    v-if="!col.dateTimeColumn"
-                    :class="{ 'na-td': isNaIdx(i, j) }"
-                  >
-                    {{ row[col.name] }}
-                  </td>
-                </template>
-              </tr>
-            </tbody>
-          </table>
+
+        <ModelAddModal v-if="showModelAddModal" @close="closeModelAddModal" />
+        <ModelDelete v-if="showModelDelete" @close="closeModelDelete" />
+        <ModelCompareModal v-if="showModelCompare" @close="closeModelCompare" />
+
+        <div class="models-container" v-if="!isLoading">
+          <div class="table-container">
+            <table>
+              <tbody>
+                <tr
+                  v-for="(model, index) in models"
+                  :key="index"
+                >
+                  <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
+                  <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <!--
-        <div class="action-container">
-          <div class="method-label">
-            결측치 처리 방법을 선택하세요.
-          </div>
-          <select
-            v-model="selectedMethod"
-            class="method-select"
-          >
-            <option
-              v-for="method in methods"
-              :value="method.value"
-              :key="method.value"
-            >
-              {{ method.text }}
-            </option>
-          </select>
-          <div class="btn-container">
-            <button class="restore-btn" @click="findNa">
-              복원
-            </button>
-            <button class="run-btn" @click="runNa">
-              수행
-            </button>
-            <button class="save-btn" @click="save">
-              저장
-            </button>
-          </div>
-        </div>-->
       </div>
+      <div class="content-footer">
+        <button class="footer-btn" @click="openModelDelete">
+        선택 모델 삭제
+        </button>
+        <button class="footer-btn" @click="openModelCompare">
+        선택 모델 비교
+        </button>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
-  import { mapActions } from "vuex";
+//  import { mapActions } from "vuex";
   import Spinner from "@/components/common/Spinner";
+  import ModelModal from "@/components/datatrain/ModelModal.vue";
+  import ModelCompareModal from "@/components/datatrain/ModelCompareModal.vue";
+  import ModelAddModal from "@/components/datatrain/ModelAddModal.vue"; 
+
   export default {
     props: ["datasetId"],
     components: {
       Spinner,
+      ModelModal,
+      ModelCompareModal,
+      ModelAddModal
     },
     data() {
       return {
-        data: [],
-        saveData: [],
-        originData: [],
-        originDataNa: [],
-        isLoading: true,
-        naIdxList: [],
-        selectedMethod: "0",
-        idxCol: "created_at",
-        methods: [
+        checked_model_list: [],
+        isLoading: false,
+        showModelAddModal: false,
+        
+        showModelDelete: false,
+        showModelCompare: false,
+        models : [
           {
-            text: "VAR모델 기반 예측값으로 대체",
-            value: "0",
+            name: "Test Model v1",
+            dataset_name : "Walmart_sales.csv",
+            model_name: "ARIMA",
+            process: 0,
+            accuracy: 0,
+            start_time : "2022-11-23 15:22:13",
+            process_time: "00:16:15",
+            accuracy_url: "acc_img.png",
+            loss_url: "loss_img.png",
           },
           {
-            text: "전,후 데이터 평균값으로 대체",
-            value: "1",
+            name: "Test Model v2",
+            dataset_name : "Walmart_sales.csv",
+            model_name: "LSTM",
+            process: 0,
+            accuracy: 0,
+            start_time : "2022-11-23 11:22:33",
+            process_time: "00:12:34",
+            accuracy_url: "acc_img.png",
+            loss_url: "loss_img.png",
           },
-          {
-            text: "결측치 포함 행 제거",
-            value: "2",
-          },
-        ],
+        ]
       };
     },
     methods: {
-      ...mapActions("dataset", ["FETCH_DATA", "UPDATE_DATA"]),
-      ...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
-      findNa() {
-        this.isLoading = true;
-        this.FETCH_DATA({
-          datasetId: this.datasetId,
-          limit: 0,
-        }).then((res) => {
-          this.originData = res;
-          this.FIND_NA({ request: res }).then((res) => {
-            this.saveData = res;
-            this.data = res;
-            this.originDataNa = res;
-            this.isLoading = false;
-            this.updateNaIdx();
-          });
-        });
-      },
-      updateNaIdx() {
-        this.naIdxList = [];
-        for (
-          var i = 0;
-          i < this.originDataNa.data.length;
-          i++
-        ) {
-          for (
-            var j = 0;
-            j < this.originDataNa.column.length;
-            j++
-          ) {
-            if (
-              this.originDataNa.data[i][
-                this.originDataNa.column[j].name
-              ] === null
-            ) {
-              this.naIdxList.push({ i, j });
-            }
-          }
+      //...mapActions("dataset", ["FETCH_DATA", "UPDATE_DATA"]),
+      //...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
+      FetchModels(){
+        if (this.models.length == 0){
+          this.isLoading = true;
+        }
+        else{
+          this.isLoading = false;
         }
       },
-      isNaIdx(iIdx, jIdx) {
-        var isContain = this.naIdxList.filter(
-          (e) => e.i === iIdx && e.j === jIdx
-        );
-        return isContain.length > 0;
-      },
-      restore() {
-        this.isLoading = true;
-        this.data = this.originDataNa;
-        this.isLoading = false;
-      },
-      runNa() {
-        this.isLoading = true;
-        this.RUN_NA({
-          method: this.selectedMethod,
-          idxCol: this.idxCol,
-          request: this.originData,
-        }).then((res) => {
-          this.data = res.run;
-          this.saveData = res.save;
-          this.isLoading = false;
-        });
-      },
-      save() {
-        this.isLoading = true;
-        this.UPDATE_DATA({
-          datasetId: this.datasetId,
-          request: this.saveData,
-        }).then(() => {
-          this.findNa();
-        });
-      },
+      
+      //새 모델 생성 open, close
+      openModelAddModal() {this.showModelAddModal = true;},
+      closeModelAddModal() {this.showModelAddModal = false;},
+      //선택 모델 삭제 open, close
+      openModelDelete() {this.showModelDelete = true;},
+      closeModelDelete() {this.showModelDelete = false;},
+      //선택 모델 비교 open, close
+      openModelCompare() {this.showModelCompare = true;},
+      closeModelCompare() {this.showModelCompare = false;},
+
     },
-    created() {
-      this.findNa();
+    /*created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
+      this.FetchModels();
+    },*/
+    mounted() {
+      this.FetchModels();
     },
   };
   </script>
   
   <style scoped>
+  .content {
+    width: 95%;
+    height: calc(100vh - 110px);
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    margin: 20px auto;
+    margin-top: 0px;
+    box-sizing: border-box;
+    padding: 15px;
+}
   .model-train-control {
     height: 100%;
-  }
-  table {
-    color: #e8e8e8;
-    font-weight: 300;
-    text-align: center;
-    font-size: 16px;
-    border: 1.5px solid #545454;
-  }
-  th {
-    height: 35px;
-    font-size: 17px;
-    font-weight: 400;
-    background-color: #2c2c2c;
-  }
-  td {
-    border: 0.5px solid #353535;
-    height: 30px;
-    width: 12%;
   }
   
   .data-description {
@@ -228,84 +147,30 @@
     font-weight: 300;
     margin-bottom: 5px;
   }
-  .data-container {
-    display: flex;
-    justify-content: space-between;
-    height: calc(100% - 35px);
-  }
   .table-container {
-    overflow: auto;
-    width: 65%;
-  }
-  
-  .action-container {
-    margin-right: 20px;
-    padding: 20px;
-    position: relative;
-    border: 0.8px solid rgba(109, 109, 109, 0.306);
-    background-color: rgba(255, 255, 255, 0.014);
-    border-radius: 15px;
-    width: 250px;
-    margin-left: 10px;
-  }
+  padding-top: 10px;
+  overflow: auto;
+  height: calc(100% - 50px);
+}
+
+table {
+  color: #e8e8e8;
+  font-weight: 300;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+  width: 100%;
+}
+
+tr{
+  display: flex;
+  align-items: center;
+  width:100%;
+
+}
   .loading {
     margin-top: 30px;
     width: 65%;
-  }
-  .method-label {
-    color: #e8e8e8;
-    margin-bottom: 10px;
-  }
-  .method-select {
-    background-color: rgb(39, 39, 39);
-    color: #e8e8e8;
-    font-size: 16px;
-    padding: 10px;
-  }
-  .btn-container {
-    width: 250px;
-    padding-right: 20px;
-    display: flex;
-    justify-content: space-around;
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 20px;
-  }
-  .btn-container button {
-    width: 70px;
-    font-size: 18px;
-    height: 30px;
-    font-size: 17px;
-    margin: 0 5px;
-    border-radius: 5px;
-    color: #e8e8e8;
-    font-weight: 400;
-    border: 1px #676767a6 solid;
-    cursor: pointer;
-    transition: all 0.5s;
-  }
-  
-  .restore-btn,
-  .run-btn {
-    background-color: #373737;
-  }
-  .restore-btn:hover,
-  .run-btn:hover {
-    background-color: #464646;
-  }
-  .save-btn {
-    background-color: #3f8ae2;
-  }
-  .save-btn:hover {
-    background-color: #2f6cb1;
-  }
-  .na-td {
-    border: 1px double #ae2f2f;
-  }
-  .datetime-td {
-    border: 1.5px solid #545454;
-    background-color: #2c2c2c;
-    border: none;
   }
 
   .content-header {
@@ -314,7 +179,7 @@
   display: flex;
   justify-content: right;
 }
-  .add-btn {
+.add-btn {
   width: 190px;
   height: 30px;
   font-size: 16px;
@@ -327,9 +192,48 @@
   background-color: #3f8ae2;
   margin-right: 30px;
 }
+.models-container {
+  height: 90%;
+  width: 100%;
+  justify-content: center;
+  margin: 0px auto;
+  padding: 10px;
+  color: #e8e8e8;
+  background-color: #252525;
+  border-radius: 7px;
+}
 
-.add-btn:hover {
+.model_checkbox{
+  width: 20px;
+  height: 20px;
+}
+
+v-col{
+  display: flex;
+}
+
+button:hover {
   background-color: #2f6cb1;
 }
-  </style>
+
+.content-footer {
+  margin: 10px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: right;
+}
+.footer-btn {
+  width: 150px;
+  height: 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  color: #e8e8e8;
+  font-weight: 400;
+  border: 1px #676767a6 solid;
+  cursor: pointer;
+  transition: all 0.5s;
+  background-color: #3f8ae2;
+  margin-right: 30px;
+}
+</style>
   
