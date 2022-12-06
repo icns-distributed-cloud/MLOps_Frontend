@@ -26,8 +26,8 @@
                   v-for="(model, index) in models"
                   :key="index"
                 >
-                  <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
                   <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
+                  <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
                 </tr>
               </tbody>
             </table>
@@ -166,7 +166,7 @@ tr{
   display: flex;
   align-items: center;
   width:100%;
-
+  padding: 0px, 20px;
 }
   .loading {
     margin-top: 30px;

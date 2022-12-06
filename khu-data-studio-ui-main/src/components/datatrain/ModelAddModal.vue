@@ -16,7 +16,7 @@
             <div class="model-select">
               <select v-model="selected_model" @change="onChange(selected_model)">
                 <option 
-                v-for="(model, index) in model_templates"
+                v-for="(model, index) in getModelinfos"
                 :key="index"
                 :value="model">
                   {{model.name}}
@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="close-btn" @click="close">
+          <button class="close-btn" @click="RunModel()">
             닫기
           </button>
         </div>
@@ -53,58 +53,28 @@
 </template>
 
 <script>
-//import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       model_name: "모델의 이름을 입력해주세요.",
       selected_model:[],
-      model_templates:[
-        {
-          name: "LSTM",
-          hyperparams: [
-            {
-              param_name: "Epoch",
-              val: 10,
-              description: "Number of iterations",
-            },
-            {
-              param_name: "Dropout",
-              val: 20,
-              description: "Avoid overfitting in training by bypassing randomly selected neurons",
-            },
-            {
-              param_name: "LearningRate",
-              val: 123,
-              description: "How quickly the network updates its parameters",
-            },
-          ],
-        },
-        {
-          name: "ARIMA",
-          hyperparams: [
-            {
-              param_name: "Epoch",
-              val: 10,
-              description: "Number of iterations",
-            },
-            {
-              param_name: "Dropout",
-              val: 20,
-              description: "Avoid overfitting in training by bypassing randomly selected neurons",
-            },
-            {
-              param_name: "BatchSize",
-              val: 32,
-              description: "The number of samples to work",
-            },
-          ],
-        },
-      ],
     };
   },
   methods: {
-    close() {
+    ...mapActions("training", [
+      "FETCH_MODELINFOS",
+      "RUN_MODEL",
+    ]),
+    GenerateModelContainer(){
+      var run_model_info = this.selected_model;
+      run_model_info['model_name'] = this.model_name;
+      //run_model_info['datasetId'] = this.datasetId;
+      run_model_info['datasetId'] = 0;
+      this.RUN_MODEL(run_model_info);
+    },
+    RunModel() {
+      this.GenerateModelContainer()
       this.$emit("close");
     },
     onChange(value){
@@ -112,8 +82,11 @@ export default {
     },
   },
   created(){
-    this.selected_model = [];
-  }
+    this.FETCH_MODELINFOS();
+  },
+  computed: {
+    ...mapGetters("training", ["getModelinfos"]),
+  },
 };
 </script>
 

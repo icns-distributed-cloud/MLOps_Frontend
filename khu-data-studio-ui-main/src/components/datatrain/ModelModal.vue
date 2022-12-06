@@ -24,7 +24,7 @@
         </tbody>
       </table>
     </div>
-    <div class="image-div" v-if="see_detail">
+    <div class="image-div modal-body" v-if="see_detail">
       <div class="accuracy image-box">
         <img :src="require(`@/assets/images/${model.accuracy_url}`)" /> 
       </div>
