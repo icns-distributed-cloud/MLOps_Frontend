@@ -1,13 +1,9 @@
 <template>
-  <div class="datalist-container">
+  <div class="dataset-list-root">
     <div class="table-container">
       <table>
         <thead>
-          <th>Name</th>
-          <th>Host</th>
-          <th>Port</th>
-          <th>Database</th>
-          <th>Table</th>
+          <th>데이터셋</th>
           <th>Action</th>
         </thead>
         <tbody>
@@ -16,39 +12,33 @@
             :key="dataset.id"
           >
             <td class="name">{{ dataset.name }}</td>
-            <td>{{ dataset.host }}</td>
-            <td>{{ dataset.port }}</td>
-            <td>{{ dataset.db }}</td>
-            <td>{{ dataset.tableName }}</td>
             <td class="action">
               <button
                 class="show-btn"
-                @click="
-                  openDatasetPreviewModal(
-                    dataset.id,
-                    dataset.name
-                  )
-                "
+                @click="openDatasetPreviewModal(dataset)"
               >
                 <font-awesome-icon
                   icon="fa-solid fa-table"
-                />열람
+                />데이터 열람
+              </button>
+              <button
+                class="add-data-btn"
+                @click="openDatasetAddDataModal(dataset)"
+              >
+                <font-awesome-icon
+                  icon="fa-solid fa-plus"
+                />데이터 추가
               </button>
               <button
                 class="edit-btn"
-                @click="openDatasetUpdateModal(dataset.id)"
+                @click="openDatasetUpdateModal(dataset)"
               >
                 <font-awesome-icon icon="fa-solid fa-pen" />
                 수정
               </button>
               <button
                 class="delete-btn"
-                @click="
-                  openDatasetDeleteModal(
-                    dataset.id,
-                    dataset.name
-                  )
-                "
+                @click="openDatasetDeleteModal(dataset)"
               >
                 <font-awesome-icon
                   icon="fa-solid fa-trash-can"
@@ -67,34 +57,43 @@
     <DatasetDeleteModal
       v-if="showDatasetDeleteModal"
       @close="closeDatasetDeleteModal"
-      :datasetId="datasetId"
-      :datasetName="datasetName"
+      :dataset="dataset"
     />
     <DatasetPreviewModal
       v-if="showDatasetPreviewModal"
       @close="closeDatasetPreviewModal"
-      :datasetId="datasetId"
-      :datasetName="datasetName"
+      :dataset="dataset"
+    />
+    <DatasetAddDataModal
+      v-if="showDatasetAddDataModal"
+      @close="closeDatasetAddDataModal"
+      :dataset="dataset"
     />
   </div>
 </template>
 
 <script>
-import DatasetUpdateModal from "@/components/dataset/DatasetUpdateModal";
-import DatasetDeleteModal from "@/components/dataset/DatasetDeleteModal";
-import DatasetPreviewModal from "@/components/dataset/DatasetPreviewModal";
+import DatasetUpdateModal from "@/components/dataset/modal/DatasetUpdateModal";
+import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
+import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
+import DatasetAddDataModal from "@/components/dataset/modal/DatasetAddDataModal";
 import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     DatasetUpdateModal,
     DatasetDeleteModal,
     DatasetPreviewModal,
+    DatasetAddDataModal,
+  },
+  computed: {
+    ...mapGetters("dataset", ["getDatasets"]),
   },
   data() {
     return {
       showDatasetUpdateModal: false,
       showDatasetDeleteModal: false,
       showDatasetPreviewModal: false,
+      showDatasetAddDataModal: false,
       dataset: {},
       datasetId: 0,
       datasetName: "",
@@ -102,104 +101,129 @@ export default {
   },
   methods: {
     ...mapActions("dataset", ["FETCH_DATASET"]),
-    openDatasetUpdateModal(datasetId) {
-      this.FETCH_DATASET(datasetId).then((res) => {
-        this.dataset = res;
-        this.showDatasetUpdateModal = true;
-      });
+    openDatasetUpdateModal(dataset) {
+      this.dataset = dataset;
+      this.showDatasetUpdateModal = true;
     },
     closeDatasetUpdateModal() {
       this.showDatasetUpdateModal = false;
     },
-    openDatasetDeleteModal(datasetId, datasetName) {
-      this.datasetId = datasetId;
-      this.datasetName = datasetName;
+    openDatasetDeleteModal(dataset) {
+      this.dataset = dataset;
       this.showDatasetDeleteModal = true;
     },
     closeDatasetDeleteModal() {
       this.showDatasetDeleteModal = false;
     },
-    openDatasetPreviewModal(datasetId, datasetName) {
-      this.datasetId = datasetId;
-      this.datasetName = datasetName;
+    openDatasetPreviewModal(dataset) {
+      this.dataset = dataset;
       this.showDatasetPreviewModal = true;
     },
     closeDatasetPreviewModal() {
       this.showDatasetPreviewModal = false;
     },
-  },
-  computed: {
-    ...mapGetters("dataset", ["getDatasets"]),
+    openDatasetAddDataModal(dataset) {
+      this.dataset = dataset;
+      this.showDatasetAddDataModal = true;
+    },
+    closeDatasetAddDataModal() {
+      this.showDatasetAddDataModal = false;
+    },
   },
 };
 </script>
 
 <style scoped>
-.datalist-container {
-  height: calc(100% - 30px);
+.dataset-list-root {
+  height: 90%;
+  display: flex;
+  justify-content: center;
 }
 .table-container {
-  padding-top: 10px;
-  overflow: auto;
-  height: calc(100% - 50px);
+  display: flex;
+  justify-content: center;
+  height: calc(100% - 30px);
+  width: calc(100% - 20px);
+  margin-top: 10px;
 }
 table {
+  justify-content: center;
   color: #e8e8e8;
   font-weight: 300;
-  border-collapse: collapse;
   text-align: center;
   font-size: 16px;
-  border: 1.5px solid #545454;
-  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  display: block;
+  overflow: auto;
 }
 th {
+  position: sticky;
+  top: 0px;
   height: 35px;
   border: 1.5px solid #545454;
   font-size: 17px;
   font-weight: 400;
   background-color: #2c2c2c;
+  width: 300px;
 }
-td {
-  border: 1px solid #353535;
-  height: 30px;
-  width: 12%;
+th:first-child {
+  border-right: none;
 }
 
+td {
+  border: 1.5px solid #353535;
+  border-top: none;
+  height: 60px;
+}
+td:first-child {
+  border-right: none;
+}
 .name {
-  min-width: 200px;
+  min-width: 300px;
 }
 .action {
-  min-width: 190px;
+  padding: 0 20px;
+  min-width: 620px;
 }
 .action button {
-  padding: 5px;
-  width: 60px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 20px;
   margin: 5px;
   cursor: pointer;
   background-color: transparent;
   border-radius: 5px;
+  font-size: 15px;
 }
+
+button svg {
+  margin-right: 6px;
+}
+
 .show-btn {
   border: 1px solid rgb(157, 157, 157);
   color: rgb(157, 157, 157);
 }
-.show-btn svg {
-  margin-right: 3px;
+
+.add-data-btn {
+  border: 1px solid rgb(76, 135, 90);
+  color: rgb(76, 135, 90);
 }
 
 .edit-btn {
   border: 1px solid rgb(48, 119, 181);
   color: rgb(48, 119, 181);
 }
+.edit-btn svg {
+  margin-right: 2px;
+}
 .delete-btn {
   color: rgb(206, 54, 54);
   border: 1px solid rgb(206, 54, 54);
 }
-.delete-btn svg {
-  margin-right: 3px;
-}
 
 .action button:hover {
-  background-color: rgba(181, 181, 181, 0.182);
+  background-color: rgba(181, 181, 181, 0.065);
 }
 </style>

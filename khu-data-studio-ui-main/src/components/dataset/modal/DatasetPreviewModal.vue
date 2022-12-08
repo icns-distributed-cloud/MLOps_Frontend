@@ -5,42 +5,41 @@
         <div class="modal-header">
           <div class="title">데이터셋 열람</div>
           <div class="description">
-            상위 5행의 데이터를 열람할 수 있습니다.
+            상위 20행의 데이터를 열람할 수 있습니다.
           </div>
         </div>
         <div class="modal-body">
-          <div class="name">{{ datasetName }}</div>
-          <Spinner v-if="isLoading" />
-          <div class="preview-table-container">
-            <table>
+          <div class="name">{{ dataset.name }}</div>
+          <Spinner v-if="isLoading" class="spinner" />
+          <div
+            class="preview-table-container"
+            v-if="!isLoading"
+          >
+            <table
+              v-if="Object.keys(this.data).length !== 0"
+            >
               <thead>
-                <template v-for="(col, i) in data.column">
-                  <th :key="i" v-if="col.dateTimeColumn">
-                    {{ col.name }}
-                  </th>
-                </template>
-                <template v-for="(col, i) in data.column">
-                  <th :key="i" v-if="!col.dateTimeColumn">
-                    {{ col.name }}
-                  </th>
-                </template>
+                <th>
+                  {{ this.data.dateTimeColumn }}
+                </th>
+                <th
+                  v-for="(col, i) in data.column"
+                  :key="i"
+                >
+                  {{ col.name }}
+                </th>
               </thead>
               <tbody>
                 <tr v-for="(row, i) in data.data" :key="i">
-                  <template v-for="(col, j) in data.column">
-                    <td
-                      :key="j"
-                      v-if="col.dateTimeColumn"
-                      class="datetime-td"
-                    >
-                      {{ row[col.name] }}
-                    </td>
-                  </template>
-                  <template v-for="(col, j) in data.column">
-                    <td :key="j" v-if="!col.dateTimeColumn">
-                      {{ row[col.name] }}
-                    </td>
-                  </template>
+                  <td class="datetime-td">
+                    {{ row.date }}
+                  </td>
+                  <td
+                    v-for="(col, j) in data.column"
+                    :key="j"
+                  >
+                    {{ row.value[col.name] }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -61,26 +60,26 @@ import Spinner from "@/components/common/Spinner";
 
 import { mapActions } from "vuex";
 export default {
-  props: ["datasetId", "datasetName"],
+  props: ["dataset"],
   components: {
     Spinner,
   },
   data() {
     return {
-      data: [],
+      data: {},
       isLoading: true,
     };
   },
   methods: {
-    ...mapActions("dataset", ["FETCH_DATA"]),
+    ...mapActions("dataset", ["PREVIEW_DATA"]),
     close() {
       this.$emit("close");
     },
     getData() {
-      this.FETCH_DATA({
-        datasetId: this.datasetId,
-        limit: 5,
+      this.PREVIEW_DATA({
+        datasetId: this.dataset.id,
       }).then((res) => {
+        console.log(res);
         this.isLoading = false;
         this.data = res;
       });
@@ -112,10 +111,12 @@ export default {
 
 .modal-container {
   width: 800px;
+  height: 420px;
   margin: 0px auto;
   color: #e8e8e8;
   background-color: #252525;
   border-radius: 7px;
+  position: relative;
 }
 
 .modal-header {
@@ -138,41 +139,59 @@ export default {
 .name {
   font-size: 17px;
   padding-left: 10px;
+  color: #3f8ae2;
 }
 .preview-table-container {
-  overflow: auto;
+  display: flex;
+  justify-content: center;
+  height: 230px;
 }
 table {
   margin-top: 10px;
   color: #e8e8e8;
   font-weight: 300;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: center;
   font-size: 16px;
-  border: 1.5px solid #545454;
+  border: 2px solid #545454;
+  display: block;
+  overflow: auto;
 }
 th {
   height: 35px;
+  padding: 0 10px;
   border: 1.5px solid #545454;
   font-size: 15px;
   font-weight: 400;
   background-color: #2c2c2c;
+  border-top: none;
+}
+th:first-child {
+  border-right: none;
 }
 td {
   border: 1px solid #353535;
   height: 30px;
-  width: 12%;
 }
 .datetime-td {
-  border: 1.5px solid #545454;
+  width: 180px;
   background-color: #2c2c2c;
+  border-top: none;
 }
 
 .modal-footer {
   display: flex;
   justify-content: right;
-  padding: 15px 20px;
+  align-items: center;
+  position: absolute;
+  padding: 0px 20px;
+  bottom: 0px;
+  right: 0px;
+  width: 100%;
   border-top: 0.2px #969696 solid;
+  box-sizing: border-box;
+  height: 50px;
 }
 
 .modal-footer button {
@@ -200,5 +219,8 @@ td {
 }
 .close-btn:hover {
   background-color: #464646;
+}
+.spinner {
+  margin-top: 20px;
 }
 </style>

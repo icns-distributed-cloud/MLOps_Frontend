@@ -1,7 +1,7 @@
 <template>
   <div class="selected-data">
     <div>{{ dataset.name }}</div>
-    <div>
+    <div class="change-btn-container">
       <button @click="changeDataset">데이터셋 변경</button>
     </div>
   </div>
@@ -43,6 +43,9 @@ export default {
   padding-left: 10px;
   color: #e8e8e8;
   border-radius: 10px;
+}
+.change-btn-container {
+  display: flex;
 }
 button {
   padding: 3px 5px;

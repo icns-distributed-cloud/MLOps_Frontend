@@ -8,39 +8,99 @@
         <div class="modal-body">
           <div>
             <slot name="description"></slot>
-            <table>
-              <thead>
-                <th>Name</th>
-                <th>Host</th>
-                <th>Port</th>
-                <th>Database</th>
-                <th>Table</th>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="dataset in getDatasets"
-                  :key="dataset.id"
-                  @click="select(dataset.id)"
-                  :class="[
-                    selected === dataset.id
-                      ? 'selected'
-                      : 'unselected',
-                  ]"
-                >
-                  <td class="name">
-                    {{ dataset.name }}
-                  </td>
-                  <td>{{ dataset.host }}</td>
-                  <td>{{ dataset.port }}</td>
-                  <td>{{ dataset.db }}</td>
-                  <td>{{ dataset.tableName }}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <th>데이터셋</th>
+                  <th class="history-th">
+                    최근 결측치 처리 이력
+                  </th>
+                  <th class="history-th">
+                    최근 노이즈 제거 이력
+                  </th>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="dataset in getDatasets"
+                    :key="dataset.id"
+                    @click="select(dataset.id)"
+                    :class="[
+                      selected === dataset.id
+                        ? 'selected'
+                        : 'unselected',
+                    ]"
+                  >
+                    <td class="name">
+                      {{ dataset.name }}
+                    </td>
+                    <template>
+                      <td
+                        class="history-td"
+                        v-if="
+                          dataset.historyMissingValue !==
+                          null
+                        "
+                      >
+                        <span class="history-td-desc"
+                          >처리방법 :
+                        </span>
+
+                        {{
+                          dataset.historyMissingValue.method
+                        }}
+
+                        <br />
+
+                        <span class="history-td-desc">
+                          수행일시 :
+                        </span>
+                        {{
+                          formatDate(
+                            dataset.historyMissingValue
+                              .createdDate
+                          )
+                        }}
+                      </td>
+                      <td v-else>-</td>
+                    </template>
+                    <template>
+                      <td
+                        class="history-td"
+                        v-if="dataset.historyNoise !== null"
+                      >
+                        <span class="history-td-desc"
+                          >가중치 :
+                        </span>
+                        {{ dataset.historyNoise.com }}
+
+                        <br />
+
+                        <span class="history-td-desc"
+                          >수행일시 :
+                        </span>
+                        {{
+                          formatDate(
+                            dataset.historyNoise.createdDate
+                          )
+                        }}
+                      </td>
+                      <td v-else>-</td>
+                    </template>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="close-btn" @click="close">
+          <button class="cancel-btn" @click="cancel">
+            취소
+          </button>
+          <button
+            class="close-btn"
+            @click="close"
+            :disabled="selected === 0"
+          >
             완료
           </button>
         </div>
@@ -50,31 +110,36 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["datasetId"],
   data() {
     return {
-      selected: 1,
+      selected: 0,
     };
   },
   methods: {
+    ...mapActions("dataset", ["FETCH_DATASETS"]),
     close() {
       this.$emit("close", this.selected);
     },
     select(id) {
       this.selected = id;
     },
+    cancel() {
+      this.$router.push({ name: "manage" });
+    },
+    formatDate(createdDate) {
+      let date = createdDate.slice(0, 10);
+      let time = createdDate.slice(11, 19);
+      return date + " " + time;
+    },
   },
   computed: {
     ...mapGetters("dataset", ["getDatasets"]),
   },
   created() {
-    if (this.datasetId === 0) {
-      this.selected = this.getDatasets[0].id;
-    } else {
-      this.selected = this.datasetId;
-    }
+    this.FETCH_DATASETS();
   },
 };
 </script>
@@ -98,7 +163,8 @@ export default {
 }
 
 .modal-container {
-  width: 800px;
+  width: 900px;
+  height: 400px;
   margin: 0px auto;
   color: #e8e8e8;
   background-color: #252525;
@@ -138,32 +204,56 @@ export default {
   transition: all 0.5s;
 }
 
+.cancel-btn {
+  background-color: #373737;
+}
+.cancel-btn:hover {
+  background-color: #464646;
+}
+
 .close-btn {
   background-color: #3f8ae2;
 }
 .close-btn:hover {
   background-color: #2f6cb1;
 }
+
+.close-btn:disabled {
+  background-color: #3f8be23f;
+}
 .description {
   margin-left: 10px;
   font-weight: 300;
 }
+.table-container {
+  display: flex;
+  justify-content: center;
+  height: 230px;
+}
 table {
-  width: 100%;
   margin-top: 10px;
   color: #e8e8e8;
   font-weight: 300;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: center;
   font-size: 15px;
   border: 1.5px solid #545454;
+  display: block;
+  overflow: auto;
 }
 th {
+  position: sticky;
+  top: 0px;
   height: 30px;
   border: 1.5px solid #545454;
   font-size: 15px;
   font-weight: 400;
   background-color: #2c2c2c;
+  width: 400px;
+}
+.history-th {
+  min-width: 130px;
 }
 tr {
   cursor: pointer;
@@ -174,12 +264,21 @@ tr {
 td {
   border: 1px solid #353535;
   height: 30px;
-  width: 14%;
 }
-.name {
-  width: 250px;
-}
+
 .selected {
   background-color: #3f8ae2;
+}
+.history-td {
+  padding-left: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+  font-size: 15px;
+}
+
+.history-td-desc {
+  font-size: 13px;
+  color: rgb(213, 172, 49);
 }
 </style>

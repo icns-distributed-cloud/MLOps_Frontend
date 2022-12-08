@@ -19,9 +19,9 @@ export default {};
   animation: load7 1.8s infinite ease-in-out;
 }
 .loader {
-  color: #eaeaea;
-  font-size: 10px;
-  margin: 80px auto;
+  color: #8f8f8f;
+  font-size: 5px;
+  margin: 0px auto;
   position: relative;
   text-indent: -9999em;
   -webkit-transform: translateZ(0);
