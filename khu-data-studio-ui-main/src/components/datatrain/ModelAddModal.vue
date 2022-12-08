@@ -11,7 +11,7 @@
         <div class="modal-body">
           <div class="body-head">
             <div class="name-input">
-              <input :value="selected_model.name"/>
+              <input v-model="selected_model.name"/>
             </div>
             <div class="model-select">
               <select v-model="selected_model" @change="onChange(selected_model)">
