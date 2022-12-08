@@ -11,18 +11,28 @@
         <div class="modal-body">
           <div class="body-head">
             <div class="name-input">
-              <input :value="model_name"/>
+              <input :value="selected_model.name"/>
             </div>
             <div class="model-select">
               <select v-model="selected_model" @change="onChange(selected_model)">
                 <option 
-                v-for="(model, index) in getModelinfos"
+                v-for="(model, index) in model_info_list"
                 :key="index"
                 :value="model">
-                  {{model.name}}
+                  {{model.model_name}}
                 </option>
               </select>
             </div>
+          </div>
+          <div class="body-options body-table">
+            <table>
+              <thead>
+                <th>공개 여부</th>
+                <th><input type="checkbox" v-model="selected_model.isPublic"></th>
+                <th>GPU 사용 여부</th>
+                <th><input type="checkbox" v-model="selected_model.isUseGPU"></th>
+              </thead>
+            </table>
           </div>
           <div class="body-table">
             <table>
@@ -32,7 +42,7 @@
                 <th>설명</th>
               </thead>
               <tbody>
-                <tr v-for="(param, index) in selected_model.hyperparams"
+                <tr v-for="(param, index) in selected_model.parameter_json"
                 :key="index">
                   <td >{{param.param_name}}</td>
                   <td><input :value="param.val"/></td>
@@ -43,7 +53,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="close-btn" @click="RunModel()">
+          <button class="train-btn" @click="RunModel()">
+            모델 훈련
+          </button>
+          <button class="close-btn" @click="close()">
             닫기
           </button>
         </div>
@@ -53,39 +66,39 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import {mapActions} from "vuex";
+import model_info from "@/assets/models/model_info_config"
 export default {
   data() {
     return {
-      model_name: "모델의 이름을 입력해주세요.",
+      model_info_list:[],
       selected_model:[],
     };
   },
   methods: {
     ...mapActions("training", [
-      "FETCH_MODELINFOS",
       "RUN_MODEL",
     ]),
-    GenerateModelContainer(){
-      var run_model_info = this.selected_model;
-      run_model_info['model_name'] = this.model_name;
-      //run_model_info['datasetId'] = this.datasetId;
-      run_model_info['datasetId'] = 0;
-      this.RUN_MODEL(run_model_info);
+    close() {
+      this.$emit("close", this.selected);
     },
     RunModel() {
-      this.GenerateModelContainer()
+      var run_model_info = this.selected_model;
+      this.RUN_MODEL(run_model_info);
       this.$emit("close");
     },
     onChange(value){
       console.log(value);
     },
+
+    Fetch_ModelInfos(){
+      this.model_info_list = model_info;
+    },
   },
   created(){
-    this.FETCH_MODELINFOS();
+    this.Fetch_ModelInfos();
   },
   computed: {
-    ...mapGetters("training", ["getModelinfos"]),
   },
 };
 </script>
@@ -197,7 +210,6 @@ td {
 }
 
 .modal-footer button {
-  width: 60px;
   height: 30px;
   font-size: 17px;
   margin: 0 5px;
@@ -208,7 +220,12 @@ td {
   cursor: pointer;
   transition: all 0.5s;
 }
-
+.train-btn {
+  background-color: #3f8ae2;
+}
+.train-btn:hover {
+  background-color: #2f6cb1;
+}
 .close-btn {
   background-color: #373737;
 }

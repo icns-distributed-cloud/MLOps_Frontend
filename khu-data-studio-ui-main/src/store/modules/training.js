@@ -1,39 +1,32 @@
 import training from "@/api/training";
 
 const state = {
-  model_infos: [],
+  running_model_infos: [],
 };
 
 const getters = {
-  getModelinfos(state) {
-    return state.model_infos;
+  getRunningModelinfos(state) {
+    return state.running_model_infos;
   },
 };
 
 const mutations = {
-  SET_MODELINFOS(state, payload) {
-    state.model_infos = payload;
+  SET_RUNNING_MODELINFOS(state, payload) {
+    state.running_model_infos = payload;
   },
 };
 
 const actions = {
-  FETCH_MODELINFOS(context) {
-    return training.getList().then((res) => {
-      console.log(res.data.message)
-      console.log(res.data.code)
-      context.commit("SET_MODELINFOS", res.data.data);
+  FETCH_RUNNING_MODELINFOS(context, userId) {
+    return training.get_running_model_list(userId).then((res) => {
+      context.commit("SET_RUNNING_MODELINFOS", res.data.data);
     });
   },
   RUN_MODEL(
-    context,
-    {
-      item,
-    }
+    context, item,
   ) {
     return training
-      .run({
-        item,
-      })
+      .run(item)
       .then((res) => {
         return res.data;
       });

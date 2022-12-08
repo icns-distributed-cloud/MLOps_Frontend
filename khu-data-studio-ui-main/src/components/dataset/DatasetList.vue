@@ -170,7 +170,6 @@ th {
 th:first-child {
   border-right: none;
 }
-
 td {
   border: 1.5px solid #353535;
   border-top: none;
@@ -196,21 +195,17 @@ td:first-child {
   border-radius: 5px;
   font-size: 15px;
 }
-
 button svg {
   margin-right: 6px;
 }
-
 .show-btn {
   border: 1px solid rgb(157, 157, 157);
   color: rgb(157, 157, 157);
 }
-
 .add-data-btn {
   border: 1px solid rgb(76, 135, 90);
   color: rgb(76, 135, 90);
 }
-
 .edit-btn {
   border: 1px solid rgb(48, 119, 181);
   color: rgb(48, 119, 181);
@@ -222,7 +217,6 @@ button svg {
   color: rgb(206, 54, 54);
   border: 1px solid rgb(206, 54, 54);
 }
-
 .action button:hover {
   background-color: rgba(181, 181, 181, 0.065);
 }

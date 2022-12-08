@@ -70,7 +70,7 @@ const dataset = {
     return axios.get("/dataset-api/datasets/" + datasetId);
   },
   getList() {
-    return axios.get("/dataset-api/datasets");
+    return axios.get("/api/dataset/post/getorigindatasetlist");
   },
   update({ datasetId, name }) {
     return axios.put("/dataset-api/datasets/" + datasetId, {

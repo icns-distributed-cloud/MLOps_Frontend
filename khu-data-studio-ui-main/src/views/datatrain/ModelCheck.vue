@@ -14,7 +14,7 @@
             :datasetId="datasetId"
         />
       </div>
-      <DatasetSelectModal
+      <!--<DatasetSelectModal
         v-if="showDatasetSelectModal"
         @close="closeDatasetSelectModal"
         :datasetId="datasetId"
@@ -24,18 +24,18 @@
             모델훈련을 실행 할 데이터셋을 선택하세요.
           </div>
         </template>
-      </DatasetSelectModal>
+      </DatasetSelectModal>-->
     </div>
   </template>
   
   <script>
   import SelectedData from "@/components/common/SelectedData";
-  import DatasetSelectModal from "@/components/common/DatasetSelectModal";
+  //import DatasetSelectModal from "@/components/common/DatasetSelectModal";
   import ModelCheckControl from "@/components/datatrain/ModelCheckControl";
   
   export default {
     components: {
-      DatasetSelectModal,
+      //DatasetSelectModal,
       SelectedData,
       ModelCheckControl,
     },

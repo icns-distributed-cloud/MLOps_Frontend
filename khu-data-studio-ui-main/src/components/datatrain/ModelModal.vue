@@ -4,17 +4,17 @@
       <table>
         <tbody>
           <tr>
-            <td>{{model.name}}</td>
-            <td>{{model.dataset_name}}</td>
-            <td>{{model.model_name}}</td>
-            <td>진행도 : {{model.process}}</td>
-            <td>정확도 : {{model.accuracy}}</td>
+            <td>{{model_info.name}}</td>
+            <td>{{model_info.datasetId}}</td>
+            <td>{{model_info.model_name}}</td>
+            <td>진행도 : {{model_info.process}}</td>
+            <td>loss : {{model_info.loss}}</td>
           </tr>
           <tr>
             <td>시작 시간</td>
-            <td>{{model.start_time}}</td>
+            <td>{{model_info.start_time}}</td>
             <td>경과 시간</td>
-            <td>{{model.process_time}}</td>
+            <td>{{Get_Process_Time(model_info.start_time)}}</td>
             <td>
               <button class="detail-btn" @click="Change_See_Detail">
                 자세히보기
@@ -42,34 +42,36 @@ export default {
   data() {
     return {
       selected: 1,
-      accuracy_img: "acc_img.png",
-      loss_img: "loss_img.png",
       see_detail: false,
-      model:{
-        name:"",
-        dataset_name : "",
-        model_name: "",
-        process: 0,
-        accuracy: 0,
-        start_time: "",
-        process_time: "",
-        accuracy_url: "acc_img.png",
-        loss_url: "loss_img.png",
-      },
     };
   },
   created() {
-    this.setModel_info()
+    this.Set_Model_info()
   },
   methods: {
     Change_See_Detail(){
       this.see_detail = !this.see_detail;
     },
-    setModel_info(){
+    Set_Model_info(){
       this.model = this.model_info;
     },
   },
   computed: {
+    Get_Process_Time(start_time){
+      const s = 1000;
+      const m = s*60;
+      const h = m*60;
+      const now = new Date();
+      start_time = new Date(start_time);
+      var diff = now - start_time;
+      now.setHours(parseInt(diff / h));
+      diff = diff % h;
+      now.setMinutes(parseInt(diff/m));
+      diff = diff % m;
+      now.setSeconds(parseInt(diff/s));
+      
+      return now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
+    },
     //...mapGetters("dataset", ["getDatasets"]),
   },
   

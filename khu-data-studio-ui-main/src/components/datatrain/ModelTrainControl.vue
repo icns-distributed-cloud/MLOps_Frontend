@@ -23,7 +23,7 @@
             <table>
               <tbody>
                 <tr
-                  v-for="(model, index) in models"
+                  v-for="(model, index) in getRunningModelinfos"
                   :key="index"
                 >
                   <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
@@ -47,7 +47,7 @@
 </template>
   
   <script>
-//  import { mapActions } from "vuex";
+  import { mapGetters, mapActions } from "vuex";
   import Spinner from "@/components/common/Spinner";
   import ModelModal from "@/components/datatrain/ModelModal.vue";
   import ModelCompareModal from "@/components/datatrain/ModelCompareModal.vue";
@@ -63,49 +63,19 @@
     },
     data() {
       return {
+        userId: 1,
+
         checked_model_list: [],
         isLoading: false,
         showModelAddModal: false,
         
         showModelDelete: false,
         showModelCompare: false,
-        models : [
-          {
-            name: "Test Model v1",
-            dataset_name : "Walmart_sales.csv",
-            model_name: "ARIMA",
-            process: 0,
-            accuracy: 0,
-            start_time : "2022-11-23 15:22:13",
-            process_time: "00:16:15",
-            accuracy_url: "acc_img.png",
-            loss_url: "loss_img.png",
-          },
-          {
-            name: "Test Model v2",
-            dataset_name : "Walmart_sales.csv",
-            model_name: "LSTM",
-            process: 0,
-            accuracy: 0,
-            start_time : "2022-11-23 11:22:33",
-            process_time: "00:12:34",
-            accuracy_url: "acc_img.png",
-            loss_url: "loss_img.png",
-          },
-        ]
       };
     },
     methods: {
-      //...mapActions("dataset", ["FETCH_DATA", "UPDATE_DATA"]),
+      ...mapActions("training", ["FETCH_RUNNING_MODELINFOS"]),
       //...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
-      FetchModels(){
-        if (this.models.length == 0){
-          this.isLoading = true;
-        }
-        else{
-          this.isLoading = false;
-        }
-      },
       
       //새 모델 생성 open, close
       openModelAddModal() {this.showModelAddModal = true;},
@@ -122,7 +92,10 @@
       this.FetchModels();
     },*/
     mounted() {
-      this.FetchModels();
+      this.FETCH_RUNNING_MODELINFOS(this.userId);
+    },
+    computed: {
+      ...mapGetters("training", ["getRunningModelinfos"]),
     },
   };
   </script>
