@@ -4,13 +4,17 @@ const training = {
   get_running_model_list(
     userId,
   ){
-    return axios.pose("/api/model/post/getmodellist", {
+    return axios.post("/api/model/post/getmodellist", {
       userId,
     });
   },
-  run(item) {
+  run(
+    item,
+  ) {
     //return axios.post("/api/model/post/createmodel", {
-      return axios.post("/training-api/runmodel", item);
+      return axios.post("/api/model/post/createmodel", 
+      item,
+    );
   },
 };
 

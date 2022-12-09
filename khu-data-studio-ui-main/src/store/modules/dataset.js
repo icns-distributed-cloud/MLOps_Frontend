@@ -125,6 +125,31 @@ const actions = {
         return res.data;
       });
   },
+  UPDATE_DATA_WITH_DATABASE(
+    context,
+    { datasetId, host, port, db, username, password, table }
+  ) {
+    return dataset
+      .updateWithDatabase({
+        datasetId,
+        host,
+        port,
+        db,
+        username,
+        password,
+        table,
+      })
+      .then((res) => {
+        return res.data;
+      });
+  },
+  SAVE_DATASET_WITH_CSV(context,csv) {
+    return dataset
+      .updateWithCsv(csv)
+      .then((res) => {
+        return res.data;
+      });
+  },
 };
 
 export default {

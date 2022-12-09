@@ -19,6 +19,7 @@ const mutations = {
 const actions = {
   FETCH_RUNNING_MODELINFOS(context, userId) {
     return training.get_running_model_list(userId).then((res) => {
+      console.log(res.data.data);
       context.commit("SET_RUNNING_MODELINFOS", res.data.data);
     });
   },

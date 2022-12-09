@@ -120,12 +120,12 @@ const dataset = {
       }
     );
   },
-  updateWithCsv({ datasetId, csv }) {
+  updateWithCsv(csv) {
     let formData = new FormData();
     formData.append("csv", csv);
 
-    return axios.put(
-      "/dataset-api/datasets/" + datasetId + "/data/csv",
+    return axios.post(
+      "/dataset-api/datasets/data/csv",
       formData
     );
   },

@@ -88,9 +88,9 @@
       closeModelCompare() {this.showModelCompare = false;},
 
     },
-    /*created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
-      this.FetchModels();
-    },*/
+    created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
+      this.FETCH_RUNNING_MODELINFOS(this.userId);
+    },
     mounted() {
       this.FETCH_RUNNING_MODELINFOS(this.userId);
     },

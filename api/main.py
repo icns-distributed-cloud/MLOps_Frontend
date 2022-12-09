@@ -31,7 +31,7 @@ async def Generate_Model_Container(request:Request):
     req = await request.json()
 
     PATH = os.path.join(os.environ["PWD"], "Model_Templates", req['name'])
-    CONFIG_PATH = os.path.join(PATH, req['model_name'])+".json"
+    CONFIG_PATH = os.path.join(PATH, 'config.json')
     if os.path.isdir(CONFIG_PATH):
         return {"message":"Model Already Exist!", "data":"", "code":400}
     else:

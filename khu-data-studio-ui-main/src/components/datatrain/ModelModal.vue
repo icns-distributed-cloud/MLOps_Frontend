@@ -5,16 +5,16 @@
         <tbody>
           <tr>
             <td>{{model_info.name}}</td>
-            <td>{{model_info.datasetId}}</td>
+            <td>{{model_info.dataset_name}}</td>
             <td>{{model_info.model_name}}</td>
             <td>진행도 : {{model_info.process}}</td>
             <td>loss : {{model_info.loss}}</td>
           </tr>
           <tr>
             <td>시작 시간</td>
-            <td>{{model_info.start_time}}</td>
+            <td>{{this.model_info.start_time}}</td>
             <td>경과 시간</td>
-            <td>{{Get_Process_Time(model_info.start_time)}}</td>
+            <td>{{model_info.process_time}}</td>
             <td>
               <button class="detail-btn" @click="Change_See_Detail">
                 자세히보기
@@ -55,25 +55,27 @@ export default {
     Set_Model_info(){
       this.model = this.model_info;
     },
-  },
-  computed: {
-    Get_Process_Time(start_time){
+    Get_Process_Time(){
       const s = 1000;
       const m = s*60;
       const h = m*60;
       const now = new Date();
-      start_time = new Date(start_time);
+      const start_time = new Date(this.model_info.start_time);
       var diff = now - start_time;
-      now.setHours(parseInt(diff / h));
+      now.setHours(parseInt(diff/h));
       diff = diff % h;
       now.setMinutes(parseInt(diff/m));
       diff = diff % m;
       now.setSeconds(parseInt(diff/s));
-      
-      return now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
+      this.model_info.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
     },
+  },
+  computed: {
     //...mapGetters("dataset", ["getDatasets"]),
   },
+  mounted(){
+    setInterval(this.Get_Process_Time, 1000);
+  }
   
 };
 </script>

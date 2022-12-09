@@ -14,8 +14,8 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.config.productionTip = false;
 
+//axios.defaults.baseURL = "http://163.180.117.186:8088";
 axios.defaults.baseURL = "http://163.180.117.38:18000";
-
 new Vue({
   router,
   store,
