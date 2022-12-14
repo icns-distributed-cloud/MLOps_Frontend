@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       name: this.dataset.name,
+      userId: 1,
     };
   },
   methods: {
@@ -51,7 +52,7 @@ export default {
         datasetId: this.dataset.id,
         name: this.name,
       }).then(() => {
-        this.FETCH_DATASETS().then(() => {
+        this.FETCH_DATASETS(this.userId).then(() => {
           this.$emit("close");
         });
       });

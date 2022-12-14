@@ -9,12 +9,17 @@
 import { mapActions } from "vuex";
 import Gnb from "@/components/navigation/Gnb";
 export default {
+  data() {
+      return {
+        userId: 1,
+      }
+  },
   components: { Gnb },
   methods: {
     ...mapActions("dataset", ["FETCH_DATASETS"]),
   },
   created() {
-    this.FETCH_DATASETS();
+    this.FETCH_DATASETS(this.userId);
   },
 };
 </script>

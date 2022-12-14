@@ -33,7 +33,7 @@ const dataset = {
       })
     );
     return axios.post(
-      "/dataset-api/datasets/csv",
+      "/api/dataset/post/createmodel",
       formData
     );
   },
@@ -67,10 +67,17 @@ const dataset = {
     );
   },
   get(datasetId) {
-    return axios.get("/dataset-api/datasets/" + datasetId);
+    return axios.post(
+      "/dataset-api/datasets/",
+      datasetId
+      );
   },
-  getList() {
-    return axios.get("/api/dataset/post/getorigindatasetlist");
+  getList(userId) {
+    console.log({userId})
+    return axios.post(
+      "/api/dataset/post/getorigindatasetlist",
+      {userId}
+      );
   },
   update({ datasetId, name }) {
     return axios.put("/dataset-api/datasets/" + datasetId, {

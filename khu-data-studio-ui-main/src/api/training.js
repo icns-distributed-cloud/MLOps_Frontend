@@ -9,12 +9,11 @@ const training = {
     });
   },
   run(
-    item,
+    preDatasetId, userId, name, parameter_json, isPublic, isUseGPU
   ) {
-    //return axios.post("/api/model/post/createmodel", {
-      return axios.post("/api/model/post/createmodel", 
-      item,
-    );
+      return axios.post("/api/model/post/createmodel", {
+      preDatasetId, userId, name, parameter_json, isPublic, isUseGPU
+      });
   },
 };
 

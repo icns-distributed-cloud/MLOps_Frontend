@@ -11,7 +11,7 @@
         <div class="modal-body">
           <div class="body-head">
             <div class="name-input">
-              <input v-model="selected_model.name"/>
+              <input v-model="name"/>
             </div>
             <div class="model-select">
               <select v-model="selected_model" @change="onChange(selected_model)">
@@ -28,9 +28,9 @@
             <table>
               <thead>
                 <th>공개 여부</th>
-                <th><input type="checkbox" v-model="selected_model.isPublic"></th>
+                <th><input type="checkbox" v-model="isPublic"></th>
                 <th>GPU 사용 여부</th>
-                <th><input type="checkbox" v-model="selected_model.isUseGPU"></th>
+                <th><input type="checkbox" v-model="isUseGPU"></th>
               </thead>
             </table>
           </div>
@@ -53,7 +53,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="train-btn" @click="RunModel()">
+          <button class="train-btn" @click="RunModelButton()">
             모델 훈련
           </button>
           <button class="close-btn" @click="close()">
@@ -71,20 +71,39 @@ import model_info from "@/assets/models/model_info_config"
 export default {
   data() {
     return {
+      name: "",
       model_info_list:[],
       selected_model:[],
+      preDatasetId: 1,
+      userId: 1,
+      isPublic: false, 
+      isUseGPU: false,
     };
   },
   methods: {
-    ...mapActions("training", [
-      "RUN_MODEL",
-    ]),
+    ...mapActions("training", ["RUN_MODEL"]),
     close() {
       this.$emit("close", this.selected);
     },
-    RunModel() {
-      var run_model_info = this.selected_model;
-      this.RUN_MODEL(run_model_info);
+    GetParamDict(parameter_json){
+      var param_list = [];
+      var dict = {};
+      parameter_json.forEach(elem => {
+        dict = {};
+        dict[elem.param_name] = elem.val;
+        param_list.push(dict);
+      });
+      return param_list;
+    },
+    RunModelButton() {
+      const preDatasetId = this.preDatasetId;
+      const userId = this.userId;
+      const name = this.name;
+      const parameter_json = this.GetParamDict(this.selected_model.parameter_json);
+      const isPublic = this.isPublic;
+      const isUseGPU = this.isUseGPU;
+      
+      this.RUN_MODEL({preDatasetId, userId, name, parameter_json, isPublic, isUseGPU});
       this.$emit("close");
     },
     onChange(value){

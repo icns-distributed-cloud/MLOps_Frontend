@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       msg: "",
+      userId: 1,
     };
   },
   methods: {
@@ -47,7 +48,7 @@ export default {
       this.DELETE_DATASET({
         datasetId: this.dataset.id,
       }).then(() => {
-        this.FETCH_DATASETS().then(() => {
+        this.FETCH_DATASETS(this.userId).then(() => {
           this.$emit("close");
         });
       });

@@ -222,6 +222,7 @@ export default {
   },
   data() {
     return {
+      userId: 1,
       isLoading: false,
       dataSource: 0,
       name: "",
@@ -289,7 +290,7 @@ export default {
           table: this.table,
         })
           .then(() => {
-            this.FETCH_DATASETS().then(() => {
+            this.FETCH_DATASETS(this.userId).then(() => {
               this.$emit("close");
             });
           })
@@ -303,7 +304,7 @@ export default {
           csv: this.csv,
         })
           .then(() => {
-            this.FETCH_DATASETS().then(() => {
+            this.FETCH_DATASETS(this.userId).then(() => {
               this.$emit("close");
             });
           })

@@ -1,11 +1,6 @@
 const model_info = [
     {
-        "preDatasetId" : 0,
-        "userId" : 1,
-        "name" : "LSTM 1호",
         "model_name": "LSTM",
-        "isPublic" : false,
-        "isUseGPU" : false,
         "parameter_json":[
             {
                 "param_name" : "epochs",

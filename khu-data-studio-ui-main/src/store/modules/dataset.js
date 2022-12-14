@@ -50,8 +50,9 @@ const actions = {
       return res.data;
     });
   },
-  FETCH_DATASETS(context) {
-    return dataset.getList().then((res) => {
+  FETCH_DATASETS(context, userId) {
+    console.log("TEST");
+    return dataset.getList(userId).then((res) => {
       context.commit("SET_DATASETS", res.data);
     });
   },
