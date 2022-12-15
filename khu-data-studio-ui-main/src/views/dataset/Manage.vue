@@ -19,7 +19,7 @@
 
 <script>
 import DatasetList from "@/components/dataset/DatasetList";
-import DatasetAddModal from "@/components/dataset/DatasetAddModal";
+import DatasetAddModal from "@/components/dataset/modal/DatasetAddModal";
 export default {
   components: {
     DatasetList,

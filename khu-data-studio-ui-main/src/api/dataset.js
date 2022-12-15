@@ -20,21 +20,13 @@ const dataset = {
       table,
     });
   },
-  saveWithCsv({ name, csv }) {
-    let formData = new FormData();
-    formData.append("csv", csv);
-    let request = {
-      name,
-    };
-    formData.append(
-      "request",
-      new Blob([JSON.stringify(request)], {
-        type: "application/json",
-      })
-    );
+  saveWithCsv(csv) {
+    console.log({csv});
+    var file = new FormData();
+    file.append("file", csv);
+    console.log("/api/dataset/post/createorigin", {file: csv});
     return axios.post(
-      "/api/dataset/post/createmodel",
-      formData
+      "/api/dataset/post/createorigin", file
     );
   },
   previewWithDatabase({
@@ -73,7 +65,6 @@ const dataset = {
       );
   },
   getList(userId) {
-    console.log({userId})
     return axios.post(
       "/api/dataset/post/getorigindatasetlist",
       {userId}

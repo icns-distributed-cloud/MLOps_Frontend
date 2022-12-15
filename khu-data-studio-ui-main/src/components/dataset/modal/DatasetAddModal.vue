@@ -298,10 +298,7 @@ export default {
             this.saveMsgOrigin = err.response.data.message;
           });
       } else {
-        this.SAVE_DATASET_WITH_CSV({
-          name: this.name,
-          csv: this.csv,
-        })
+        this.SAVE_DATASET_WITH_CSV(this.csv)
           .then(() => {
             this.FETCH_DATASETS().then(() => {
               this.$emit("close");

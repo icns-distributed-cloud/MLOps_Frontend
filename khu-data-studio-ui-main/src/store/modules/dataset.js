@@ -12,7 +12,7 @@ const getters = {
 
 const mutations = {
   SET_DATASETS(state, payload) {
-    state.datasets = payload;
+    state.datasets = payload.data;
   },
 };
 
@@ -51,7 +51,6 @@ const actions = {
     });
   },
   FETCH_DATASETS(context, userId) {
-    console.log("TEST");
     return dataset.getList(userId).then((res) => {
       context.commit("SET_DATASETS", res.data);
     });
@@ -144,9 +143,9 @@ const actions = {
         return res.data;
       });
   },
-  SAVE_DATASET_WITH_CSV(context,csv) {
+  SAVE_DATASET_WITH_CSV(context, file) {
     return dataset
-      .updateWithCsv(csv)
+      .saveWithCsv(file)
       .then((res) => {
         return res.data;
       });
