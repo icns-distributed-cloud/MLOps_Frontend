@@ -53,6 +53,7 @@
       v-if="showDatasetUpdateModal"
       @close="closeDatasetUpdateModal"
       :dataset="dataset"
+      :userId="userId"
     />
     <DatasetDeleteModal
       v-if="showDatasetDeleteModal"
@@ -90,6 +91,7 @@ export default {
   },
   data() {
     return {
+      userId:1,
       showDatasetUpdateModal: false,
       showDatasetDeleteModal: false,
       showDatasetPreviewModal: false,
@@ -100,12 +102,15 @@ export default {
     };
   },
   methods: {
-    ...mapActions("dataset", ["FETCH_DATASET"]),
+    ...mapActions("dataset", ["FETCH_DATASETS"]),
     openDatasetUpdateModal(dataset) {
       this.dataset = dataset;
       this.showDatasetUpdateModal = true;
     },
     closeDatasetUpdateModal() {
+      this.FETCH_DATASETS({
+        userId: this.userId
+      });
       this.showDatasetUpdateModal = false;
     },
     openDatasetDeleteModal(dataset) {

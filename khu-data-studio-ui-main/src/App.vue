@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <Gnb />
+    <Gnb v-if="userId>0" />
+      <!--<Gnb />-->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Gnb from "@/components/navigation/Gnb";
 export default {
   data() {
       return {
-        userId: 1,
       }
   },
   components: { Gnb },
@@ -19,7 +19,13 @@ export default {
     ...mapActions("dataset", ["FETCH_DATASETS"]),
   },
   created() {
-    this.FETCH_DATASETS(this.userId);
+    this.FETCH_DATASETS({
+        userId: this.userId
+      });
+    console.log();
+  },
+  computed: {
+    ...mapGetters("login", ["userId"]),
   },
 };
 </script>

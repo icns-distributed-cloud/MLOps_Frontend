@@ -3,62 +3,77 @@
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-header">
-          <div class="title">데이터셋 수정</div>
+          <div class="title">로그인</div>
         </div>
         <div class="modal-body">
           <div class="input">
-            <label for="name">Dataset Name</label>
+            <label for="ID">ID</label>
             <input
               type="text"
-              id="name"
+              id="ID"
               autocomplete="off"
-              v-model="name"
+              v-model="loginId"
             />
           </div>
+          <div class="input">
+            <label for="PW">PW</label>
+            <input
+              type="text"
+              id="PW"
+              autocomplete="off"
+              v-model="password"
+            />
+          </div>
+          
         </div>
         <div class="modal-footer">
-          <button class="update-btn" @click="update">
-            저장
+          <button class="registration-btn" @click="Registration">
+            회원가입
           </button>
-          <button class="close-btn" @click="close">
-            닫기
+          <button class="login-btn" @click="Login">
+            로그인
           </button>
         </div>
       </div>
     </div>
+    <RegistrationModal v-if="RegistrationModal_flag" @close="RegistrationModal_close" />
   </div>
 </template>
 
 <script>
+import RegistrationModal from "@/components/home/RegistrationModal";
 import { mapActions } from "vuex";
 export default {
-  props: ["dataset", "userId"],
+  components:{
+    RegistrationModal,
+  },
   data() {
     return {
-      name: this.dataset.name,
+      loginId: "",
+      password: "",
+
+      RegistrationModal_flag: false,
     };
   },
   methods: {
-    ...mapActions("dataset", [
-      "FETCH_DATASETS",
-      "UPDATE_DATASET",
+    ...mapActions("login", [
+      "LOGIN",
     ]),
-    close() {
-      this.$emit("close");
-    },
-    update() {
-      this.UPDATE_DATASET({
-        userId: this.userId,
-        originDatasetId: this.dataset.id,
-        name: this.name,
-      }).then(() => {
-        this.FETCH_DATASETS({
-          userId: this.userId,
-        }).then(() => {
-          this.$emit("close");
-        });
+    Login() {
+      this.LOGIN({
+        loginId: this.loginId,
+        password: this.password,
+      }).then((res) => {
+        console.log(res.data)
       });
     },
+    Registration(){
+      console.log("회원가입", this.ID, this.PW);
+      this.RegistrationModal_flag=true;
+    },
+    RegistrationModal_close(){
+      this.RegistrationModal_flag=false;
+    }
   },
 };
 </script>
@@ -141,7 +156,6 @@ input {
 }
 
 .modal-footer button {
-  width: 60px;
   height: 30px;
   font-size: 17px;
   margin: 0 5px;
@@ -153,17 +167,23 @@ input {
   transition: all 0.5s;
 }
 
-.update-btn {
+.login-btn {
   background-color: #3f8ae2;
 }
-.update-btn:hover {
+.login-btn:hover {
   background-color: #2f6cb1;
 }
 
-.close-btn {
+.login-btn {
+  background-color: #3f8ae2;
+}
+.login-btn:hover {
+  background-color: #2f6cb1;
+}
+.registration-btn {
   background-color: #373737;
 }
-.close-btn:hover {
+.registration-btn:hover {
   background-color: #464646;
 }
 </style>

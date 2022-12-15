@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import dataset from "./modules/dataset";
 import cleaning from "./modules/cleaning";
 import training from "./modules/training";
+import login from "./modules/login";
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ const store = new Vuex.Store({
     dataset,
     cleaning,
     training,
+    login,
   },
 });
 

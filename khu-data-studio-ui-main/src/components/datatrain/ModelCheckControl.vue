@@ -97,20 +97,6 @@
         naIdxList: [],
         selectedMethod: "0",
         idxCol: "created_at",
-        methods: [
-          {
-            text: "VAR모델 기반 예측값으로 대체",
-            value: "0",
-          },
-          {
-            text: "전,후 데이터 평균값으로 대체",
-            value: "1",
-          },
-          {
-            text: "결측치 포함 행 제거",
-            value: "2",
-          },
-        ],
       };
     },
     methods: {

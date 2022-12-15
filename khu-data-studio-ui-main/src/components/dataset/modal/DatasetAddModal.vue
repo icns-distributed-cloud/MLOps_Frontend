@@ -222,6 +222,7 @@ export default {
   },
   data() {
     return {
+      userId: 1,
       isLoading: false,
       dataSource: 0,
       name: "",
@@ -270,6 +271,7 @@ export default {
       "SAVE_DATASET_WITH_CSV",
       "PREVIEW_WITH_DATABASE",
       "PREVIEW_WITH_CSV",
+      "UPDATE_DATASET",
     ]),
     close() {
       this.$emit("close");
@@ -298,11 +300,19 @@ export default {
             this.saveMsgOrigin = err.response.data.message;
           });
       } else {
-        this.SAVE_DATASET_WITH_CSV(this.csv)
-          .then(() => {
-            this.FETCH_DATASETS().then(() => {
-              this.$emit("close");
-            });
+        this.SAVE_DATASET_WITH_CSV({
+          csv: this.csv
+        })
+          .then((res) => {
+            this.UPDATE_DATASET({
+              userId: this.userId, 
+              originDatasetId: res.data.originDatasetId, 
+              name: this.name
+            }).then(() => {
+                  this.FETCH_DATASETS({userId: this.userId}).then(() => {
+                  this.$emit("close");
+                });
+              })
           })
           .catch((err) => {
             this.saveError = true;

@@ -12,7 +12,7 @@
           </tr>
           <tr>
             <td>시작 시간</td>
-            <td>{{this.model_info.start_time}}</td>
+            <td>{{this.model_info.createdDate}}</td>
             <td>경과 시간</td>
             <td>{{model_info.process_time}}</td>
             <td>

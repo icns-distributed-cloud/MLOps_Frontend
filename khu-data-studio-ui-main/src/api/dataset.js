@@ -21,10 +21,8 @@ const dataset = {
     });
   },
   saveWithCsv(csv) {
-    console.log({csv});
     var file = new FormData();
     file.append("file", csv);
-    console.log("/api/dataset/post/createorigin", {file: csv});
     return axios.post(
       "/api/dataset/post/createorigin", file
     );
@@ -70,8 +68,10 @@ const dataset = {
       {userId}
       );
   },
-  update({ datasetId, name }) {
-    return axios.put("/dataset-api/datasets/" + datasetId, {
+  update({ userId, originDatasetId, name }) {
+    return axios.post("/api/dataset/post/updateorigin", {
+      userId,
+      originDatasetId,
       name,
     });
   },

@@ -281,7 +281,9 @@ export default {
           csv: this.csv,
         })
           .then(() => {
-            this.FETCH_DATASETS().then(() => {
+            this.FETCH_DATASETS({
+              userId: this.userId
+            }).then(() => {
               this.$emit("close");
             });
           })

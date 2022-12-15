@@ -50,7 +50,7 @@ const actions = {
       return res.data;
     });
   },
-  FETCH_DATASETS(context, userId) {
+  FETCH_DATASETS(context, {userId}) {
     return dataset.getList(userId).then((res) => {
       context.commit("SET_DATASETS", res.data);
     });
@@ -58,28 +58,16 @@ const actions = {
   UPDATE_DATASET(
     context,
     {
-      datasetId,
-      name,
-      host,
-      port,
-      db,
-      userName,
-      password,
-      tableName,
-      dateTimeColumn,
+      userId,
+      originDatasetId,
+      name
     }
   ) {
     return dataset
       .update({
-        datasetId,
-        name,
-        host,
-        port,
-        db,
-        userName,
-        password,
-        tableName,
-        dateTimeColumn,
+        userId,
+        originDatasetId,
+        name
       })
       .then((res) => {
         return res.data;
@@ -143,11 +131,13 @@ const actions = {
         return res.data;
       });
   },
-  SAVE_DATASET_WITH_CSV(context, file) {
+  SAVE_DATASET_WITH_CSV(context, {
+    csv
+  }) {
     return dataset
-      .saveWithCsv(file)
+      .saveWithCsv(csv)
       .then((res) => {
-        return res.data;
+         return res.data;
       });
   },
 };

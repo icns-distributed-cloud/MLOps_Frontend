@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "@/views/Home";
+import Home from "@/views/home/Home";
 import Manage from "@/views/dataset/Manage";
 import Visualize from "@/views/status/Visualize";
 import Statistic from "@/views/status/Statistic";
