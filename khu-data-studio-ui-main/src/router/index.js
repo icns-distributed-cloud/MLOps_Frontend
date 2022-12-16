@@ -11,7 +11,13 @@ import ModelTrain from "@/views/datatrain/ModelTrain";
 
 Vue.use(VueRouter);
 
-const routes = [{
+const routes = [
+    {
+        path: "/",
+        name: "home",
+        component: Home,
+    },
+    {
         path: "/home",
         name: "home",
         component: Home,

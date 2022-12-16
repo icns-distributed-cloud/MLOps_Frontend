@@ -18,7 +18,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="dataset in getDatasets"
+                  v-for="dataset in datasetlist"
                   :key="dataset.id"
                   @click="select(dataset.id)"
                   :class="[
@@ -40,6 +40,13 @@
           </div>
         </div>
         <div class="modal-footer">
+          <button class="close-btn" @click="prevpage">
+            이전
+          </button>
+           
+          <button class="close-btn" @click="nextpage">
+            다음
+          </button>
           <button class="close-btn" @click="close">
             완료
           </button>
@@ -55,7 +62,10 @@ export default {
   props: ["datasetId"],
   data() {
     return {
+      datasetlist: [],
+      page: 0,
       selected: 1,
+      distance: 10,
     };
   },
   methods: {
@@ -65,9 +75,27 @@ export default {
     select(id) {
       this.selected = id;
     },
+    getDatasetList(){
+      var start = this.distance * this.page;
+      var end = start + this.distance;
+      this.datasetlist = this.getDatasets.slice(start, end);
+      console.log(start, end, this.datasetlist);
+    },
+    prevpage(){
+      if (this.page > 0){
+        this.page = this.page-1;
+      }
+      this.getDatasetList();
+    },
+    nextpage(){
+      if (this.page < parseInt(this.getDatasets.length/this.distance)){
+        this.page = this.page+1;
+      }
+      this.getDatasetList();
+    },
   },
   computed: {
-    ...mapGetters("dataset", ["getDatasets"]),
+    ...mapGetters("dataset", ["getDatasets"])
   },
   created() {
     if (this.datasetId === 0) {

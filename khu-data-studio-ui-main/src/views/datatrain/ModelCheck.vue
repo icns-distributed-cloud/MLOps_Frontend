@@ -78,6 +78,8 @@
   .content {
     width: 95%;
     height: calc(100vh - 90px);
+    max-height: 100px;
+    overflow: auto;
     background-color: #1e1e1e;
     border-radius: 10px;
     margin: 20px auto;
