@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import model_info from "@/assets/models/model_info_config"
 export default {
   data() {
@@ -75,13 +75,12 @@ export default {
       model_info_list:[],
       selected_model:[],
       preDatasetId: 1,
-      userId: 1,
       isPublic: false, 
       isUseGPU: false,
     };
   },
   methods: {
-    ...mapActions("training", ["RUN_MODEL"]),
+    ...mapActions("training", ["RUN_MODEL", "FETCH_RUNNING_MODELINFOS"]),
     close() {
       this.$emit("close", this.selected);
     },
@@ -103,7 +102,12 @@ export default {
       const isPublic = this.isPublic;
       const isUseGPU = this.isUseGPU;
       
-      this.RUN_MODEL({preDatasetId, userId, name, parameter_json, isPublic, isUseGPU});
+      this.RUN_MODEL({preDatasetId, userId, name, parameter_json, isPublic, isUseGPU})
+      .then(()=>{
+        this.FETCH_RUNNING_MODELINFOS({
+          userId: userId,
+        });
+      })
       this.$emit("close");
     },
     onChange(value){
@@ -118,6 +122,7 @@ export default {
     this.Fetch_ModelInfos();
   },
   computed: {
+    ...mapGetters("login", ["userId"]),
   },
 };
 </script>

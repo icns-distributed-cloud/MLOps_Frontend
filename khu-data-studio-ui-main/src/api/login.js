@@ -3,11 +3,18 @@ import axios from "axios";
 const login = {
   login({
     loginId,
-    password
+    loginPassword
   }){
-    console.log({loginId, password})    
+    console.log({loginId, loginPassword})    
     return axios.post("/api/users/post/login", {
-      loginId, password
+      loginId, loginPassword
+    });
+  },
+  registration({
+    loginId, password, name, eMail, phoneNumber
+  }){
+    return axios.post("/api/users/post/login", {
+      loginId, password, name, eMail, phoneNumber
     });
   },
 };

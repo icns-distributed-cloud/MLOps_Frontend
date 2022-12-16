@@ -20,6 +20,7 @@
 <script>
 import DatasetList from "@/components/dataset/DatasetList";
 import DatasetAddModal from "@/components/dataset/modal/DatasetAddModal";
+import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     DatasetList,
@@ -30,7 +31,13 @@ export default {
       showDataAddModal: false,
     };
   },
+  computed: {
+    ...mapGetters("login", ["userId"]),
+  },
   methods: {
+    ...mapActions("dataset", [
+      "FETCH_DATASETS"
+    ]),
     openDataAddModal() {
       this.showDataAddModal = true;
     },
@@ -38,6 +45,12 @@ export default {
       this.showDataAddModal = false;
     },
   },
+  created(){
+    console.log("Manage", this.userId)
+    this.FETCH_DATASETS({
+      userId: this.userId
+    });
+  }
 };
 </script>
 

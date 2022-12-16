@@ -62,9 +62,12 @@ export default {
     Login() {
       this.LOGIN({
         loginId: this.loginId,
-        password: this.password,
+        loginPassword: this.password,
       }).then((res) => {
-        console.log(res.data)
+        if (res.userId>0){
+          this.$emit("close");
+          this.ToDataManage();
+        }
       });
     },
     Registration(){
@@ -73,7 +76,11 @@ export default {
     },
     RegistrationModal_close(){
       this.RegistrationModal_flag=false;
-    }
+    },
+    ToDataManage() {
+      // object
+      this.$router.push({ path: 'dataset/manage' })
+    },
   },
 };
 </script>

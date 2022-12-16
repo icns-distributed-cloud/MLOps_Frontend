@@ -214,7 +214,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
 export default {
   components: {
@@ -222,7 +222,6 @@ export default {
   },
   data() {
     return {
-      userId: 1,
       isLoading: false,
       dataSource: 0,
       name: "",
@@ -247,6 +246,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("login", ["userId"]),
     saveMsg() {
       if (this.saveMsgOrigin === null) {
         return "실패하였습니다.";

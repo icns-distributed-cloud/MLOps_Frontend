@@ -12,16 +12,17 @@ const getters = {
 
 const mutations = {
   SET_USERID(state, payload) {
-    state.Id = payload;
+    console.log(payload);
+    //state.Id = payload;
+    state.Id = 1;
   },
 };
 
 const actions = {
-  LOGIN(context, {loginId, password}) {
+  LOGIN(context, {loginId, loginPassword}) {
     return login.login({
-      loginId, password
+      loginId, loginPassword
     }).then((res) => {
-      console.log(res)
       if(res.data.success){
         if(res.data.data.userId>0){
           context.commit("SET_USERID", res.data.data.userId);
@@ -33,6 +34,18 @@ const actions = {
       }
       else{
         alert("로그인에 실패하였습니다.");
+      }
+    });
+  },
+  REGISTRATION(context, {loginId, password, name, eMail, phoneNumber}){
+    return login.registration({
+      loginId, password, name, eMail, phoneNumber
+    }).then((res) => {
+      if(res.data.success){
+        alert("회원가입에 성공하였습니다.");
+      }
+      else{
+        alert("회원가입에 실패하였습니다.");
       }
     });
   },

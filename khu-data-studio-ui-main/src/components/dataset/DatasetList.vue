@@ -78,7 +78,7 @@ import DatasetUpdateModal from "@/components/dataset/modal/DatasetUpdateModal";
 import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
 import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
 import DatasetAddDataModal from "@/components/dataset/modal/DatasetAddDataModal";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   components: {
     DatasetUpdateModal,
@@ -88,10 +88,10 @@ export default {
   },
   computed: {
     ...mapGetters("dataset", ["getDatasets"]),
+    ...mapGetters("login", ["userId"]),
   },
   data() {
     return {
-      userId:1,
       showDatasetUpdateModal: false,
       showDatasetDeleteModal: false,
       showDatasetPreviewModal: false,
@@ -102,7 +102,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions("dataset", ["FETCH_DATASETS"]),
     openDatasetUpdateModal(dataset) {
       this.dataset = dataset;
       this.showDatasetUpdateModal = true;

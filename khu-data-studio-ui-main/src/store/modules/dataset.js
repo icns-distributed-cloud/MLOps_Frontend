@@ -51,6 +51,7 @@ const actions = {
     });
   },
   FETCH_DATASETS(context, {userId}) {
+    console.log("FETCH_DATASETS", userId);
     return dataset.getList(userId).then((res) => {
       context.commit("SET_DATASETS", res.data);
     });

@@ -3,7 +3,7 @@
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-header">
-          <div class="title">로그인</div>
+          <div class="title">회원 가입</div>
         </div>
         <div class="modal-body">
           <div class="input">
@@ -14,6 +14,9 @@
               autocomplete="off"
               v-model="loginId"
             />
+            <button class="dup_btn" @click="Login">
+              중복확인
+            </button>
           </div>
           <div class="input">
             <label for="PW">PW</label>
@@ -24,13 +27,40 @@
               v-model="password"
             />
           </div>
+          <div class="input">
+            <label for="PW">Name</label>
+            <input
+              type="text"
+              id="Name"
+              autocomplete="off"
+              v-model="Name"
+            />
+          </div>
+          <div class="input">
+            <label for="PW">E-mail</label>
+            <input
+              type="text"
+              id="E-mail"
+              autocomplete="off"
+              v-model="Email"
+            />
+          </div>
+          <div class="input">
+            <label for="PW">HP</label>
+            <input
+              type="text"
+              id="HP"
+              autocomplete="off"
+              v-model="HP"
+            />
+          </div>
           
         </div>
         <div class="modal-footer">
-          <button class="login-btn" @click="Login">
+          <button class="registration-btn" @click="Registration()">
             회원가입
           </button>
-          <button class="registration-btn" @click="close()">
+          <button class="close-btn" @click="close()">
             닫기
           </button>
         </div>
@@ -46,19 +76,26 @@ export default {
     return {
       loginId: "",
       password: "",
+      Name: "",
+      Email: "",
+      HP: "",
     };
   },
   methods: {
     ...mapActions("login", [
-      "LOGIN",
+      "REGISTRATION",
     ]),
-    Login() {
-      this.LOGIN({
-        loginId: this.loginId,
-        password: this.password,
+    Registration() {
+      this.REGISTRATION({
+        loginId: this.loginId, 
+        password: this.password, 
+        name: this.Name, 
+        eMail: this.Email, 
+        phoneNumber: this.HP,
       }).then((res) => {
         console.log(res.data)
       });
+      this.$emit("close");
     },
     close() {
       this.$emit("close");
@@ -144,6 +181,20 @@ input {
   border-top: 0.2px #969696 solid;
 }
 
+.dup_btn {
+  height: 30px;
+  font-size: 17px;
+  margin: 0 20px;
+  color: #e8e8e8;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.5s;
+  background-color: #373737;
+  text-decoration: underline;
+}
+button:hover {
+  background-color: #464646;
+}
 .modal-footer button {
   height: 30px;
   font-size: 17px;
@@ -156,23 +207,17 @@ input {
   transition: all 0.5s;
 }
 
-.login-btn {
+.registration-btn {
   background-color: #3f8ae2;
 }
-.login-btn:hover {
+.registration-btn:hover {
   background-color: #2f6cb1;
 }
 
-.login-btn {
-  background-color: #3f8ae2;
-}
-.login-btn:hover {
-  background-color: #2f6cb1;
-}
-.registration-btn {
+.close-btn {
   background-color: #373737;
 }
-.registration-btn:hover {
+.close-btn:hover {
   background-color: #464646;
 }
 </style>
