@@ -17,34 +17,38 @@
                 <th>Table</th>
               </thead>
               <tbody>
-                <tr
-                  v-for="dataset in datasetlist"
-                  :key="dataset.id"
-                  @click="select(dataset.id)"
-                  :class="[
-                    selected === dataset.id
-                      ? 'selected'
-                      : 'unselected',
-                  ]"
+                <template
+                v-for="(dataset, index) in getDatasets.slice().reverse()"
                 >
-                  <td class="name">
-                    {{ dataset.name }}
-                  </td>
-                  <td>{{ dataset.host }}</td>
-                  <td>{{ dataset.port }}</td>
-                  <td>{{ dataset.db }}</td>
-                  <td>{{ dataset.tableName }}</td>
-                </tr>
+                  <tr
+                    v-if="list_start <= index && index < list_end"
+                    :key="dataset.id"
+                    @click="select(dataset.id)"
+                    :class="[
+                      selected === dataset.id
+                        ? 'selected'
+                        : 'unselected',
+                    ]"
+                  >
+                    <td class="name">
+                      {{ dataset.name }}
+                    </td>
+                    <td>{{ dataset.host }}</td>
+                    <td>{{ dataset.port }}</td>
+                    <td>{{ dataset.db }}</td>
+                    <td>{{ dataset.tableName }}</td>
+                  </tr>
+                </template>
               </tbody>
             </table>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="close-btn" @click="prevpage">
+          <button class="pagemove-btn" @click="prevpage">
             이전
           </button>
            
-          <button class="close-btn" @click="nextpage">
+          <button class="pagemove-btn" @click="nextpage">
             다음
           </button>
           <button class="close-btn" @click="close">
@@ -62,9 +66,10 @@ export default {
   props: ["datasetId"],
   data() {
     return {
-      datasetlist: [],
+      list_start: 0,
+      list_end: 10,
       page: 0,
-      selected: 1,
+      selected: -1,
       distance: 10,
     };
   },
@@ -75,23 +80,21 @@ export default {
     select(id) {
       this.selected = id;
     },
-    getDatasetList(){
-      var start = this.distance * this.page;
-      var end = start + this.distance;
-      this.datasetlist = this.getDatasets.slice(start, end);
-      console.log(start, end, this.datasetlist);
+    getPage(){
+      this.list_start = this.distance * this.page;
+      this.list_end = this.list_start+this.distance;
     },
     prevpage(){
       if (this.page > 0){
         this.page = this.page-1;
       }
-      this.getDatasetList();
+      this.getPage();
     },
     nextpage(){
       if (this.page < parseInt(this.getDatasets.length/this.distance)){
         this.page = this.page+1;
       }
-      this.getDatasetList();
+      this.getPage();
     },
   },
   computed: {
@@ -124,7 +127,8 @@ export default {
   vertical-align: middle;
 }
 .modal-container {
-  width: 800px;
+  width: 50%;
+  max-height: 600px;
   margin: 0px auto;
   color: #e8e8e8;
   background-color: #252525;
@@ -158,6 +162,12 @@ export default {
   border: 1px #676767a6 solid;
   cursor: pointer;
   transition: all 0.5s;
+}
+.pagemove-btn {
+  background-color: #252525;
+}
+.pagemove-btn:hover {
+  background-color: #676767a6;
 }
 .close-btn {
   background-color: #3f8ae2;

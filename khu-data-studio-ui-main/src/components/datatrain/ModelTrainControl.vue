@@ -22,24 +22,33 @@
           <div class="table-container">
             <table>
               <tbody>
-                <tr
-                  v-for="(model, index) in getRunningModelinfos"
-                  :key="index"
+                <template
+                v-for="(model, index) in getRunningModelinfos.slice().reverse()"
                 >
-                  <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
-                  <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
-                </tr>
+                  <tr
+                    v-if="list_start <= index && index < list_end" :key="index"
+                  >
+                    <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
+                    <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
+                  </tr>
+                </template>
               </tbody>
             </table>
           </div>
         </div>
       </div>
       <div class="content-footer">
+        <button class="footer-btn pagemove-btn" @click="prevpage">
+          이전
+        </button>
+        <button class="footer-btn pagemove-btn" @click="nextpage">
+          다음
+        </button>
         <button class="footer-btn" @click="openModelDelete">
-        선택 모델 삭제
+          선택 모델 삭제
         </button>
         <button class="footer-btn" @click="openModelCompare">
-        선택 모델 비교
+          선택 모델 비교
         </button>
       </div>
     </div>
@@ -69,6 +78,11 @@
         
         showModelDelete: false,
         showModelCompare: false,
+
+        page: 0,
+        list_start:0,
+        list_end: 5,
+        distance: 5,
       };
     },
     methods: {
@@ -84,7 +98,22 @@
       //선택 모델 비교 open, close
       openModelCompare() {this.showModelCompare = true;},
       closeModelCompare() {this.showModelCompare = false;},
-
+      getPage(){
+        this.list_start = this.distance * this.page;
+        this.list_end = this.list_start+this.distance;
+      },
+      prevpage(){
+        if (this.page > 0){
+          this.page = this.page-1;
+        }
+        this.getPage();
+      },
+      nextpage(){
+        if (this.page < parseInt(this.getRunningModelinfos.length/this.distance)){
+          this.page = this.page+1;
+        }
+        this.getPage();
+      },
     },
     created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
       this.FETCH_RUNNING_MODELINFOS({
@@ -102,7 +131,7 @@
   };
   </script>
   
-  <style scoped>
+<style scoped>
   .content {
     width: 95%;
     height: calc(100vh - 110px);
@@ -192,7 +221,7 @@ button:hover {
 }
 
 .content-footer {
-  margin: 10px 20px;
+  margin: 10px 0px;
   width: 100%;
   display: flex;
   justify-content: right;
@@ -208,7 +237,14 @@ button:hover {
   cursor: pointer;
   transition: all 0.5s;
   background-color: #3f8ae2;
-  margin-right: 30px;
+  margin-right: 10px;
+}
+.pagemove-btn {
+  width: 60px;
+  background-color: #252525;
+}
+.pagemove-btn:hover {
+  background-color: #676767a6;
 }
 </style>
   
