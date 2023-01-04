@@ -23,7 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install
       # 빌드
-      - name: Build Page
+      - name: Install package.json
+        run: npm install package.json
+      # 빌드
+      - name: Build 
         run: npm run build
         env:
           NODE_ENV: production
