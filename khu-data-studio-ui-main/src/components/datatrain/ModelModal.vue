@@ -7,7 +7,7 @@
             <td>{{model_info.name}}</td>
             <td>{{model_info.dataset_name}}</td>
             <td>{{model_info.model_name}}</td>
-            <td>진행도 : {{model_info.process}}</td>
+            <td>진행도 : {{process}}</td>
             <td>loss : {{model_info.loss}}</td>
           </tr>
           <tr>
@@ -41,8 +41,10 @@ export default {
   props: ["model_info"],
   data() {
     return {
+      timer: null,
       selected: 1,
       see_detail: false,
+      process: "0%",
     };
   },
   created() {
@@ -70,25 +72,35 @@ export default {
       this.model_info.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
     },
     
-    Read_Log_file(){
-      const fs = require('fs')
-      fs.readFile("http://data.icnslab.net/outputs/1/process.log", "UTF-8", (err, file) =>{
-        if (err) {
-          console.error(err)
-        }
-        else{
-          console.log(file);
-        }
-      })
+    ReadLog(){
+      var url = "http://data.icnslab.net/outputs/1/process.log";
+      fetch(url)
+        .then(res => res.blob()) // Gets the response and returns it as a blob
+        .then(blob => {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var txt = e.target.result;
+            var txt_list = txt.split("\n");
+            txt_list.pop();
+            var last_line = txt_list.pop();
+            this.process = last_line.split('|')[0];
+          }
+          reader.readAsText(blob);
+        })
     },
   },
   computed: {
     //...mapGetters("dataset", ["getDatasets"]),
   },
   mounted(){
-    setInterval(this.Get_Process_Time, 1000);
-    this.Read_Log_file();
-  }
+    this.timer = setInterval(() => {
+        this.Get_Process_Time();
+        this.Read_Log_file();
+      }, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  },
   
 };
 </script>

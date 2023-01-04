@@ -51,7 +51,6 @@ export default {
     return {
       loginId: "",
       password: "",
-
       RegistrationModal_flag: false,
     };
   },
@@ -81,6 +80,7 @@ export default {
       // object
       this.$router.push({ path: 'dataset/manage' })
     },
+    
   },
 };
 </script>
