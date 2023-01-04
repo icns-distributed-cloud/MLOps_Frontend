@@ -22,7 +22,11 @@ jobs:
           path: khu-data-studio-ui-main
       # 패키지 설치
       - name: Install dependencies
-        run: npm install
+        uses: actions/setup-node@v3.5.1
+        with:
+          path: khu-data-studio-ui-main
+          run: npm install
+        #run: npm install
       # 빌드
       - name: Build 
         # uses: actions/checkout
