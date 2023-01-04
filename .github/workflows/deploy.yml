@@ -22,6 +22,8 @@ jobs:
       # 패키지 설치
       - name: Install dependencies
         run: npm install
+        with:
+          path: khu-data-studio-ui-main
       # 빌드
       - name: Build 
         # uses: actions/checkout
@@ -33,6 +35,8 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+        with:
+          path: khu-data-studio-ui-main
       # Artifact name
       - name: Temporarily save build artifact
         uses: actions/upload-artifact@v2
