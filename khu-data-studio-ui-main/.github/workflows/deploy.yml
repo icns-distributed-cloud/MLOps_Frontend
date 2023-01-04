@@ -24,13 +24,13 @@ jobs:
         run: npm install
       # 빌드
       - name: Build 
-        uses: actions/checkout
-        with:
-          script: |  
-            cd khu-data-studio-ui-main
-            npm run build
+        # uses: actions/checkout
+        # with:
+        #   script: |  
+        #     cd khu-data-studio-ui-main
+        #     npm run build
           
-        #run: npm run build
+        run: npm run build
         env:
           NODE_ENV: production
       # Artifact name
