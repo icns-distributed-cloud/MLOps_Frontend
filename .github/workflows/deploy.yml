@@ -20,28 +20,24 @@ jobs:
           node-version: '10.15.1'
           node-version-file: '.node-version'
           path: khu-data-studio-ui-main
-      # 패키지 설치
+      # 패키지 설치 및 빌드
       - name: Install dependencies
         uses: actions/setup-node@v3.5.1
         with:
           path: khu-data-studio-ui-main
-          run: npm install
+          run: npm install | npm run build
+          
         #run: npm install
       # 빌드
-      - name: Build 
-        uses: actions/setup-node@v3.5.1
-        with:
-          path: khu-data-studio-ui-main
-          run: npm run build
         # uses: actions/checkout
         # with:
         #   script: |  
         #     cd khu-data-studio-ui-main
         #     npm run build
           
-        run: npm run build
-        env:
-          NODE_ENV: production
+        # run: npm run build
+        # env:
+        #   NODE_ENV: production
       # Artifact name
       - name: Temporarily save build artifact
         uses: actions/upload-artifact@v2
