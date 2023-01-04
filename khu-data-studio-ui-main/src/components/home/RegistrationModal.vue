@@ -14,7 +14,7 @@
               autocomplete="off"
               v-model="loginId"
             />
-            <button class="dup_btn" @click="Login">
+            <button class="dup_btn">
               중복확인
             </button>
           </div>

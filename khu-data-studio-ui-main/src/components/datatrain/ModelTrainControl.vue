@@ -26,7 +26,7 @@
                 v-for="(model, index) in getRunningModelinfos.slice().reverse()"
                 >
                   <tr
-                    v-if="list_start <= index && index < list_end" :key="index"
+                    v-if="model.datasetId == datasetId" :key="index"
                   >
                     <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
                     <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
@@ -55,7 +55,7 @@
   </div>
 </template>
   
-  <script>
+<script>
   import { mapGetters, mapActions } from "vuex";
   import Spinner from "@/components/common/Spinner";
   import ModelModal from "@/components/datatrain/ModelModal.vue";
@@ -78,11 +78,6 @@
         
         showModelDelete: false,
         showModelCompare: false,
-
-        page: 0,
-        list_start:0,
-        list_end: 5,
-        distance: 5,
       };
     },
     methods: {
@@ -98,32 +93,13 @@
       //선택 모델 비교 open, close
       openModelCompare() {this.showModelCompare = true;},
       closeModelCompare() {this.showModelCompare = false;},
-      getPage(){
-        this.list_start = this.distance * this.page;
-        this.list_end = this.list_start+this.distance;
-      },
-      prevpage(){
-        if (this.page > 0){
-          this.page = this.page-1;
-        }
-        this.getPage();
-      },
-      nextpage(){
-        if (this.page < parseInt(this.getRunningModelinfos.length/this.distance)){
-          this.page = this.page+1;
-        }
-        this.getPage();
-      },
+
     },
     created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
       this.FETCH_RUNNING_MODELINFOS({
         userId: this.userId,
       });
     },
-    /*
-    mounted() {
-      this.FETCH_RUNNING_MODELINFOS(this.userId);
-    },*/
     computed: {
       ...mapGetters("training", ["getRunningModelinfos"]),
       ...mapGetters("login", ["userId"]),
@@ -158,12 +134,17 @@
 }
 
 table {
+  width: 100%;
+  justify-content: center;
   color: #e8e8e8;
   font-weight: 300;
-  border-collapse: collapse;
   text-align: center;
   font-size: 16px;
-  width: 100%;
+  border-collapse: separate;
+  /*border-collapse: collapse;*/
+  border-spacing: 0;
+  display: block;
+  overflow: auto;
 }
 
 tr{

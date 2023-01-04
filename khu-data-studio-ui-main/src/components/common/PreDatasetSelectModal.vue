@@ -75,7 +75,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props: ["OridatasetId"],
+  props: ["PredatasetId"],
   data() {
     return {
       list_start: 0,
@@ -113,10 +113,10 @@ export default {
     ...mapGetters("dataset", ["getDatasets"])
   },
   created() {
-    if (this.OridatasetId === 0) {
+    if (this.PredatasetId === 0) {
       this.selected = this.getDatasets[0].id;
     } else {
-      this.selected = this.OridatasetId;
+      this.selected = this.PredatasetId;
     }
   },
 };

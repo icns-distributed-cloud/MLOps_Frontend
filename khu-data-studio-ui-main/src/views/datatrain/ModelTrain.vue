@@ -1,37 +1,49 @@
 <template>
     <div class="main">
       <div class="header">
-      <div class="title">모델 훈련</div>
-      <SelectedData
-        v-if="showData"
-        :datasetId="datasetId"
-        @changeDataset="changeDataset"
-      />
-    </div>
-    <div class="content">
-      <ModelTrainControl
+        <div class="title">모델 훈련</div>
+        <SelectedData
           v-if="showData"
           :datasetId="datasetId"
-      />
-      
-    </div>
-    <DatasetSelectModal
-      v-if="showDatasetSelectModal"
-      @close="closeDatasetSelectModal"
-      :datasetId="datasetId"
-    >
-      <template slot="description">
-        <div class="description">
-          모델훈련을 실행 할 데이터셋을 선택하세요.
-        </div>
-      </template>
-    </DatasetSelectModal>
+          @changeDataset="changeDataset"
+        />
+      </div>
+      <div class="content">
+        <ModelTrainControl
+            v-if="showData"
+            :PredatasetId="PredatasetId"
+        />
+      </div>
+      <DatasetSelectModal
+        v-if="showDatasetSelectModal"
+        @close="closeDatasetSelectModal"
+        :OridatasetId="OridatasetId"
+      >
+        <template slot="description">
+          <div class="description">
+            모델훈련을 실행 할 데이터셋을 선택하세요.
+          </div>
+        </template>
+      </DatasetSelectModal>
+
+      <PreDatasetSelectModal
+        v-if="showPreDatasetSelectModal"
+        @close="closePreDatasetSelectModal"
+        :PredatasetId="PredatasetId"
+      >
+        <template slot="description">
+          <div class="description">
+            모델훈련을 실행 할 데이터셋을 선택하세요.
+          </div>
+        </template>
+      </PreDatasetSelectModal>
     </div>
   </template>
   
   <script>
   import SelectedData from "@/components/common/SelectedData";
   import DatasetSelectModal from "@/components/common/DatasetSelectModal";
+  import PreDatasetSelectModal from "@/components/common/PreDatasetSelectModal";
   import ModelTrainControl from "@/components/datatrain/ModelTrainControl";
 
   export default {
@@ -39,18 +51,26 @@
       DatasetSelectModal,
       SelectedData,
       ModelTrainControl,
+      PreDatasetSelectModal,
     },
     data() {
       return {
         showDatasetSelectModal: true,
-        datasetId: 0,
+        showPreDatasetSelectModal: false,
+        OridatasetId: 0,
+        PredatasetId: 0,
         showData: false,
       };
     },
     methods: {
-      closeDatasetSelectModal(datasetId) {
+      closeDatasetSelectModal(OridatasetId) {
         this.showDatasetSelectModal = false;
-        this.datasetId = datasetId;
+        this.OridatasetId = OridatasetId;
+        this.showPreDatasetSelectModal = true;
+      },
+      closePreDatasetSelectModal(PredatasetId) {
+        this.showPreDatasetSelectModal = false;
+        this.PredatasetId = PredatasetId;
         this.showData = true;
       },
       changeDataset() {

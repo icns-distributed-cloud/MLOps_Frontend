@@ -69,12 +69,25 @@ export default {
       now.setSeconds(parseInt(diff/s));
       this.model_info.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
     },
+    
+    Read_Log_file(){
+      const fs = require('fs')
+      fs.readFile("http://data.icnslab.net/outputs/1/process.log", "UTF-8", (err, file) =>{
+        if (err) {
+          console.error(err)
+        }
+        else{
+          console.log(file);
+        }
+      })
+    },
   },
   computed: {
     //...mapGetters("dataset", ["getDatasets"]),
   },
   mounted(){
     setInterval(this.Get_Process_Time, 1000);
+    this.Read_Log_file();
   }
   
 };

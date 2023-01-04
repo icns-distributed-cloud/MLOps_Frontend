@@ -281,6 +281,11 @@ export default {
       this.saveError = false;
       this.saveMsgOrigin = "데이터를 확인하고 있습니다.";
       if (this.selected === 0) {
+        if (this.name == "")
+        {
+          this.name = this.db + '.' + this.table;
+        }
+        
         this.SAVE_DATASET_WITH_DATABASE({
           name: this.name,
           host: this.host,
@@ -323,6 +328,9 @@ export default {
 
     handleCsvChange(e) {
       this.csv = e.target.files[0];
+      if (this.name == ""){
+        this.name = this.csv.name;
+      }
     },
     select(value) {
       this.selected = value;
@@ -350,6 +358,12 @@ export default {
       this.previewMsgOrigin = "데이터를 불러오고 있습니다.";
       this.previewErrMsg = "";
       this.isLoading = true;
+
+      if (this.name == "")
+      {
+        this.name = this.db + '.' + this.table;
+      }
+
       if (this.selected === 0) {
         this.PREVIEW_WITH_DATABASE({
           host: this.host,
