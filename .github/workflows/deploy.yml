@@ -9,6 +9,9 @@ on:
 jobs:
   # job의 이름 설정
   build:
+    env:
+      path: khu-data-studio-ui-main
+
     # 해당 job을 실행하는 운영 체제
     runs-on: ubuntu-latest
     steps:
@@ -21,10 +24,7 @@ jobs:
           node-version-file: '.node-version'
       # 패키지 설치 및 빌드
       - name: Install dependencies
-        uses: actions/upload-artifact@v2
-        with:
-          path: /khu-data-studio-ui-main
-          run: npm install | npm run build
+        run: npm install | npm run build
           
         #run: npm install
       # 빌드
