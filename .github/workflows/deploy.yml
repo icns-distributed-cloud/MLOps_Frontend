@@ -19,10 +19,9 @@ jobs:
         with:
           node-version: '10.15.1'
           node-version-file: '.node-version'
-          path: /khu-data-studio-ui-main
       # 패키지 설치 및 빌드
       - name: Install dependencies
-        uses: actions/setup-node@v3.5.1
+        uses: actions/upload-artifact@v2
         with:
           path: /khu-data-studio-ui-main
           run: npm install | npm run build
