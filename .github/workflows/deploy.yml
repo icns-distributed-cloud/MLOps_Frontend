@@ -7,17 +7,27 @@ on:
     branches: [seolroh]
 
 jobs:
-
+  # job의 이름 설정
   build:
+    # 해당 job을 실행하는 운영 체제
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # node.js 환경설정
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.5.1
         with:
           node-version: '10.15.1'
           node-version-file: '.node-version'
-    # Artifact name
+      # 패키지 설치
+      - name: Install dependencies
+        run: npm install
+      # 빌드
+      - name: Build Page
+        run: npm run build
+        env:
+          NODE_ENV: production
+      # Artifact name
       - name: Temporarily save build artifact
         uses: actions/upload-artifact@v2
         with:
