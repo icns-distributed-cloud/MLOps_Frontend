@@ -38,12 +38,12 @@
         </div>
       </div>
       <div class="content-footer">
-        <button class="footer-btn pagemove-btn" @click="prevpage">
+        <!--<button class="footer-btn pagemove-btn" @click="prevpage">
           이전
         </button>
         <button class="footer-btn pagemove-btn" @click="nextpage">
           다음
-        </button>
+        </button>-->
         <button class="footer-btn" @click="openModelDelete">
           선택 모델 삭제
         </button>

@@ -3,7 +3,7 @@
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-header">
-          <div>데이터셋 선택</div>
+          <div>데이터셋 버전 선택</div>
         </div>
         <div class="modal-body">
           <div>

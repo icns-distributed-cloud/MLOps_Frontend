@@ -95,7 +95,7 @@ export default {
   mounted(){
     this.timer = setInterval(() => {
         this.Get_Process_Time();
-        this.Read_Log_file();
+        this.ReadLog();
       }, 1000)
   },
   beforeDestroy() {

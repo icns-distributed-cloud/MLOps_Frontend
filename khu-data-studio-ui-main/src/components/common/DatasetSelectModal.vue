@@ -3,7 +3,7 @@
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-header">
-          <div>데이터셋 선택</div>
+          <div>원본 데이터셋 선택</div>
         </div>
         <div class="modal-body">
           <div>
@@ -73,9 +73,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
-  props: ["OridatasetId"],
+  props: ["datasetId"],
   data() {
     return {
       list_start: 0,
@@ -86,7 +86,13 @@ export default {
     };
   },
   methods: {
+    ...mapActions("dataset", [
+      "FETCH_PREDATASETS"
+    ]),
     close() {
+      this.FETCH_PREDATASETS({
+        originDatasetMasterId:this.datasetId,
+      });
       this.$emit("close", this.selected);
     },
     select(id) {

@@ -60,12 +60,10 @@ const actions = {
       context.commit("SET_DATASETS", res.data);
     });
   },
-  FETCH_PREDATASETS(context, {userId, datasetId}) {
-    console.log("FETCH_PREDATASETS", userId, datasetId);
-    return dataset.GetPreList({
-      userId,
-      datasetId,
-    }).then((res) => {
+  FETCH_PREDATASETS(context, {originDatasetMasterId}) {
+    console.log("FETCH_PREDATASETS", originDatasetMasterId);
+    return dataset.GetPreList(originDatasetMasterId)
+      .then((res) => {
       context.commit("SET_PREDATASETS", res.data);
     });
   },
@@ -113,8 +111,8 @@ const actions = {
       })
       .catch(() => {});
   },
-  FETCH_DATA(context, { datasetId, limit }) {
-    return dataset.getData(datasetId, limit).then((res) => {
+  FETCH_DATA(context, { PredatasetId, limit }) {
+    return dataset.getData(PredatasetId, limit).then((res) => {
       return res.data;
     });
   },
@@ -123,9 +121,9 @@ const actions = {
       return res.data;
     });
   },
-  UPDATE_DATA(context, { datasetId, request }) {
+  UPDATE_DATA(context, { preDatasetMasterId, name, isPublic, preProcessJson, loginId }) {
     return dataset
-      .updateData(datasetId, request)
+      .updateData(preDatasetMasterId, name, isPublic, preProcessJson, loginId)
       .then((res) => {
         return res.data;
       });

@@ -21,7 +21,7 @@
       >
         <template slot="description">
           <div class="description">
-            모델훈련을 실행 할 데이터셋을 선택하세요.
+            모델훈련을 실행 할 원본 데이터셋을 선택하세요.
           </div>
         </template>
       </DatasetSelectModal>
@@ -33,7 +33,7 @@
       >
         <template slot="description">
           <div class="description">
-            모델훈련을 실행 할 데이터셋을 선택하세요.
+            모델훈련을 실행 할 데이터셋 버전을 선택하세요.
           </div>
         </template>
       </PreDatasetSelectModal>

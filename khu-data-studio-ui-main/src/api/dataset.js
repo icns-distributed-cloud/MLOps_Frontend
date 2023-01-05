@@ -50,7 +50,6 @@ const dataset = {
   previewWithCsv({ csv }) {
     let formData = new FormData();
     formData.append("csv", csv);
-
     return axios.post(
       "/dataset-api/datasets/preview/csv",
       formData
@@ -68,10 +67,11 @@ const dataset = {
       {userId}
       );
   },
-  GetPreList({userId, originDatasetId}){
+  GetPreList(originDatasetId){
+    console.log("GetPreList", originDatasetId);
     return axios.post(
       "/api/dataset/post/getpredatasetlist",
-      {userId, originDatasetId}
+      {originDatasetId}
     );
   },
   update({ userId, originDatasetId, name }) {
@@ -91,10 +91,10 @@ const dataset = {
       "/dataset-api/datasets/" + datasetId + "/data/preview"
     );
   },
-  getData(datasetId, st, et) {
+  getData(PredatasetId, st, et) {
     return axios.get(
       "/dataset-api/datasets/" +
-        datasetId +
+      PredatasetId +
         "/data?st=" +
         st +
         "&et=" +
@@ -134,11 +134,11 @@ const dataset = {
     );
   },
 
-  updateData({ datasetId, data }) {
-    return axios.put(
-      "/dataset-api/datasets/" + datasetId + "/data",
-      data
-    );
+  updateData( preDatasetMasterId, name, isPublic, preProcessJson, loginId ) {
+    return axios.post(
+      "/api/predataset/post/createpre",{
+        preDatasetMasterId, name, isPublic, preProcessJson, loginId
+      });
   },
   deleteDataByDate({ datasetId, dateList }) {
     return axios.delete(

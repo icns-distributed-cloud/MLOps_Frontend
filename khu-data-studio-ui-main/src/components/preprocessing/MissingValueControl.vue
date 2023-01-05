@@ -8,6 +8,12 @@
       <div v-if="isLoading" class="loading">
         <Spinner />
       </div>
+      <PredataSaveModal 
+        v-if="isSaving"
+        :PredatasetId="PredatasetId"
+        :preProcessJson="preProcessJson"
+        @close="closeSavingModal"
+      />
       <div class="table-container" v-if="!isLoading">
         <table>
           <thead>
@@ -79,12 +85,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
+import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
 export default {
-  props: ["datasetId"],
+  props: ["PredatasetId"],
   components: {
     Spinner,
+    PredataSaveModal,
   },
   data() {
     return {
@@ -93,23 +101,24 @@ export default {
       originData: [],
       originDataNa: [],
       isLoading: true,
+      isSaving: false,
       naIdxList: [],
       selectedMethod: "0",
       idxCol: "created_at",
       methods: [
         {
-          text: "VAR모델 기반 예측값으로 대체",
+          text: "VAR모델 예측값으로 대체",
           value: "0",
         },
         {
-          text: "전,후 데이터 평균값으로 대체",
+          text: "보간 예측값으로 대체",
           value: "1",
         },
-        {
-          text: "결측치 포함 행 제거",
-          value: "2",
-        },
       ],
+      preProcessJson:{
+        method: "",
+        column: "",
+      },
     };
   },
   methods: {
@@ -118,7 +127,7 @@ export default {
     findNa() {
       this.isLoading = true;
       this.FETCH_DATA({
-        datasetId: this.datasetId,
+        PredatasetId: this.PredatasetId,
         limit: 0,
       }).then((res) => {
         this.originData = res;
@@ -177,18 +186,19 @@ export default {
       });
     },
     save() {
-      this.isLoading = true;
-      this.UPDATE_DATA({
-        datasetId: this.datasetId,
-        request: this.saveData,
-      }).then(() => {
-        this.findNa();
-      });
+      this.preProcessJson['method'] = this.selectedMethod;
+      this.isSaving = true;
+    },
+    closeSavingModal() {
+      this.isSaving = false;
     },
   },
   created() {
     this.findNa();
   },
+  computed:{
+    ...mapGetters("login", ["userId"]),
+  }
 };
 </script>
 
