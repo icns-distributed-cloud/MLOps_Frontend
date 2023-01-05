@@ -26,7 +26,7 @@
                 v-for="(model, index) in getRunningModelinfos.slice().reverse()"
                 >
                   <tr
-                    v-if="model.datasetId == datasetId" :key="index"
+                    v-if="model.datasetId == predatasetId" :key="index"
                   >
                     <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
                     <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
@@ -63,7 +63,7 @@
   import ModelAddModal from "@/components/datatrain/ModelAddModal.vue"; 
 
   export default {
-    props: ["datasetId"],
+    props: ["predatasetId"],
     components: {
       Spinner,
       ModelModal,

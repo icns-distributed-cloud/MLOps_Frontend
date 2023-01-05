@@ -2,6 +2,7 @@ import dataset from "@/api/dataset";
 
 const state = {
   datasets: [],
+  Predatasets: [],
 };
 
 const getters = {
@@ -13,6 +14,9 @@ const getters = {
 const mutations = {
   SET_DATASETS(state, payload) {
     state.datasets = payload.data;
+  },
+  SET_PREDATASETS(state, payload) {
+    state.Predatasets = payload.data;
   },
 };
 
@@ -56,6 +60,15 @@ const actions = {
       context.commit("SET_DATASETS", res.data);
     });
   },
+  FETCH_PREDATASETS(context, {userId, datasetId}) {
+    console.log("FETCH_PREDATASETS", userId, datasetId);
+    return dataset.GetPreList({
+      userId,
+      datasetId,
+    }).then((res) => {
+      context.commit("SET_PREDATASETS", res.data);
+    });
+  },
   UPDATE_DATASET(
     context,
     {
@@ -75,7 +88,10 @@ const actions = {
       });
   },
   DELETE_DATASET(context, { datasetId }) {
-    return dataset.delete(datasetId).then((res) => {
+    return dataset.delete({
+      "datasetId" : datasetId,
+    }).then((res) => {
+      if (res.data.success) {console.log("DELETE_DATASET 성공!");}
       return res;
     });
   },

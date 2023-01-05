@@ -68,6 +68,12 @@ const dataset = {
       {userId}
       );
   },
+  GetPreList({userId, originDatasetId}){
+    return axios.post(
+      "/api/dataset/post/getpredatasetlist",
+      {userId, originDatasetId}
+    );
+  },
   update({ userId, originDatasetId, name }) {
     return axios.post("/api/dataset/post/updateorigin", {
       userId,
@@ -75,10 +81,10 @@ const dataset = {
       name,
     });
   },
-  delete(datasetId) {
-    return axios.delete(
-      "/dataset-api/datasets/" + datasetId
-    );
+  delete({ originDatasetMasterId }) {
+    return axios.delete("/api/dataset/post/deleteorigin",{
+      originDatasetMasterId
+    });
   },
   previewData({ datasetId }) {
     return axios.get(
