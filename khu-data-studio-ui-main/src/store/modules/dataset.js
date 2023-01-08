@@ -2,6 +2,7 @@ import dataset from "@/api/dataset";
 
 const state = {
   datasets: [],
+  Predatasets: [],
 };
 
 const getters = {
@@ -13,6 +14,9 @@ const getters = {
 const mutations = {
   SET_DATASETS(state, payload) {
     state.datasets = payload.data;
+  },
+  SET_PREDATASETS(state, payload) {
+    state.Predatasets = payload.data;
   },
 };
 
@@ -56,6 +60,13 @@ const actions = {
       context.commit("SET_DATASETS", res.data);
     });
   },
+  FETCH_PREDATASETS(context, {originDatasetMasterId}) {
+    console.log("FETCH_PREDATASETS", originDatasetMasterId);
+    return dataset.GetPreList(originDatasetMasterId)
+      .then((res) => {
+      context.commit("SET_PREDATASETS", res.data);
+    });
+  },
   UPDATE_DATASET(
     context,
     {
@@ -75,7 +86,10 @@ const actions = {
       });
   },
   DELETE_DATASET(context, { datasetId }) {
-    return dataset.delete(datasetId).then((res) => {
+    return dataset.delete({
+      "datasetId" : datasetId,
+    }).then((res) => {
+      if (res.data.success) {console.log("DELETE_DATASET 성공!");}
       return res;
     });
   },
@@ -97,8 +111,8 @@ const actions = {
       })
       .catch(() => {});
   },
-  FETCH_DATA(context, { datasetId, limit }) {
-    return dataset.getData(datasetId, limit).then((res) => {
+  FETCH_DATA(context, { PredatasetId, limit }) {
+    return dataset.getData(PredatasetId, limit).then((res) => {
       return res.data;
     });
   },
@@ -107,9 +121,9 @@ const actions = {
       return res.data;
     });
   },
-  UPDATE_DATA(context, { datasetId, request }) {
+  UPDATE_DATA(context, { preDatasetMasterId, name, isPublic, preProcessJson, loginId }) {
     return dataset
-      .updateData(datasetId, request)
+      .updateData(preDatasetMasterId, name, isPublic, preProcessJson, loginId)
       .then((res) => {
         return res.data;
       });

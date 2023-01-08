@@ -4,7 +4,7 @@
       <div class="title">결측치 처리</div>
       <SelectedData
         v-if="showData"
-        :PredatasetId="PredatasetId"
+        :datasetId="datasetId"
         @changeDataset="changeDataset"
       />
     </div>
@@ -17,11 +17,11 @@
     <DatasetSelectModal
       v-if="showDatasetSelectModal"
       @close="closeDatasetSelectModal"
-      :OridatasetId="OridatasetId"
+      :datasetId="datasetId"
     >
       <template slot="description">
         <div class="description">
-          모델훈련을 실행 할 데이터셋을 선택하세요.
+          전처리작업을 실행 할 원본데이터셋을 선택하세요.
         </div>
       </template>
     </DatasetSelectModal>
@@ -29,11 +29,11 @@
     <PreDatasetSelectModal
       v-if="showPreDatasetSelectModal"
       @close="closePreDatasetSelectModal"
-      :PredatasetId="PredatasetId"
+      :datasetId="datasetId"
     >
       <template slot="description">
         <div class="description">
-          모델훈련을 실행 할 데이터셋을 선택하세요.
+          전처리작업을 실행 할 데이터셋 버전을 선택하세요.
         </div>
       </template>
     </PreDatasetSelectModal>
@@ -57,20 +57,20 @@ export default {
     return {
       showDatasetSelectModal: true,
       showPreDatasetSelectModal: false,
-      OridatasetId: 0,
+      datasetId: 0,
       PredatasetId: 0,
       showData: false,
     };
   },
   methods: {
-    closeDatasetSelectModal(OridatasetId) {
+    closeDatasetSelectModal(datasetId) {
       this.showDatasetSelectModal = false;
-      this.OridatasetId = OridatasetId;
+      this.datasetId = datasetId;
       this.showPreDatasetSelectModal = true;
     },
-    closePreDatasetSelectModal(PredatasetId) {
+    closePreDatasetSelectModal(datasetId) {
       this.showPreDatasetSelectModal = false;
-      this.PredatasetId = PredatasetId;
+      this.PredatasetId = datasetId;
       this.showData = true;
     },
     changeDataset() {

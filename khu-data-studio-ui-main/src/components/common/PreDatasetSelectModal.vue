@@ -3,7 +3,7 @@
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-header">
-          <div>데이터셋 선택</div>
+          <div>데이터셋 버전 선택</div>
         </div>
         <div class="modal-body">
           <div>
@@ -75,7 +75,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props: ["PredatasetId"],
+  props: ["datasetId"],
   data() {
     return {
       list_start: 0,
@@ -113,10 +113,10 @@ export default {
     ...mapGetters("dataset", ["getDatasets"])
   },
   created() {
-    if (this.PredatasetId === 0) {
-      this.selected = this.getDatasets[0].id;
+    if (this.datasetId === 0) {
+      this.selected = this.datasetId[0].id;
     } else {
-      this.selected = this.PredatasetId;
+      this.selected = this.datasetId;
     }
   },
 };
