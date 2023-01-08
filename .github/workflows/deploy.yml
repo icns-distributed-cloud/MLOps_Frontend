@@ -66,11 +66,3 @@ jobs:
           timeout: 100s
           script: 
             docker run -d --name ${{ secrets.MLOPS_UI_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.MLOPS_UI_DOCKER_REPO }}
-
-  #     - name: Deploy to Firebase
-  #       uses: w9jds/firebase-action@v1.1.0
-  #       with:
-  #         args: deploy
-  #       env:
-  #         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-  #         PROJECT_ID: chez-mout
