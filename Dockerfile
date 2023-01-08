@@ -3,7 +3,7 @@ WORKDIR /MLOps_Frontend
 COPY package*.json ./
 RUN npm install --production
 COPY . .
-RUN yarn run build
+RUN /bin/sh -c yarn run build
 RUN npm run build
 
 # FROM appleboy/drone-ssh:1.6.4-linux-amd64
