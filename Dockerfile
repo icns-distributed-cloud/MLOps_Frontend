@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm install --production
 COPY . .
 RUN /bin/sh -c /bin/sh -c yarn run build
-RUN npm run build
+RUN /bin/sh -c npm run build
 
 # FROM appleboy/drone-ssh:1.6.4-linux-amd64
 
