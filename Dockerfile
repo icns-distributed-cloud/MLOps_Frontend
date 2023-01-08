@@ -8,7 +8,7 @@ WORKDIR /MLOps_Frontend
 COPY package.json .
 
 ADD . .
-RUN npm instal
+RUN npm install
 # FROM appleboy/drone-ssh:1.6.4-linux-amd64
 
 #ENV APP_HOME=/usr/app/
