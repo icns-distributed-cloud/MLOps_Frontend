@@ -65,4 +65,4 @@ jobs:
           port: ${{ secrets.MLOPS_UI_PORT }}
           timeout: 100s
           script: 
-            docker run -d --name ${{ secrets.MLOPS_UI_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.MLOPS_UI_DOCKER_REPO }}
+            docker run -d --name ${{ secrets.MLOPS_UI_CONTAINER_NAME }} -p 8082:8082 ${{ secrets.MLOPS_UI_DOCKER_REPO }}
