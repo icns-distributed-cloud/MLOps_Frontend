@@ -26,15 +26,16 @@ jobs:
       - name: Install dependencies
         run: npm install
       # 빌드
+      - name: npm run build
         # uses: actions/checkout
         # with:
         #   script: |  
         #     cd khu-data-studio-ui-main
         #     npm run build
           
-        # run: npm run build
-        # env:
-        #   NODE_ENV: production
+        run: npm run build
+        env:
+          NODE_ENV: production
       # Artifact name
       - name: Temporarily save build artifact
         uses: actions/upload-artifact@v2
