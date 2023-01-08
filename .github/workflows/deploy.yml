@@ -64,5 +64,7 @@ jobs:
           password: ${{ secrets.MLOPS_UI_PW }}
           port: ${{ secrets.MLOPS_UI_PORT }}
           timeout: 100s
-          script: 
+          script:  |
+            docker rm -f ${{ secrets.MLOPS_UI_CONTAINER_NAME }}
+            docker rmi ${{ secrets.MLOPS_UI_DOCKER_REPO }}
             docker run -d --name ${{ secrets.MLOPS_UI_CONTAINER_NAME }} -p 8082:8082 ${{ secrets.MLOPS_UI_DOCKER_REPO }}
