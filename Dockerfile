@@ -1,6 +1,6 @@
 FROM ubuntu 
 #python:3.10 
-WORKDIR /root
+WORKDIR /MLOps_Dashboard_API
 COPY package.json .
 
 ADD . .
