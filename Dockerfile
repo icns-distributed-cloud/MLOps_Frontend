@@ -1,10 +1,9 @@
 FROM ubuntu 
 #python:3.10 
-WORKDIR /MLOps_Dashboard_API
+WORKDIR /MLOps_Frontend
 COPY package.json .
 
 ADD . .
-RUN apt-get update && apt-get upgrade -y
 RUN npm install
 EXPOSE 8082
 
