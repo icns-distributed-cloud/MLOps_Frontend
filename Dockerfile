@@ -14,6 +14,8 @@ COPY package*.json ./
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 # build app for production with minification
+RUN npm ci
+RUN npm run serve
 RUN npm run build
 EXPOSE 8082
 ENTRYPOINT ["npm", "run", "serve"]
