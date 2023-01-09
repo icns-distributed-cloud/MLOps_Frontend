@@ -1,4 +1,8 @@
 # khu-data-studio-ui
+```
+git clone -b hyeonki https://github.com/icns-distributed-cloud/MLOps_Frontend.git
+cd MLOps_Frontend
+```
 
 ## Project setup
 ```
