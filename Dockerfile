@@ -3,6 +3,7 @@ WORKDIR /root
 COPY package.json .
 
 ADD . .
+RUN apt-get update && apt-get upgrade -y
 RUN npm install
 EXPOSE 8082
 
