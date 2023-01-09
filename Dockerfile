@@ -1,4 +1,4 @@
-FROM ubuntu 
+FROM node:lts-alpine 
 #python:3.10 
 WORKDIR /MLOps_Frontend
 COPY package.json .
