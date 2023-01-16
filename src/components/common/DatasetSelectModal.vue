@@ -93,7 +93,6 @@ export default {
       this.FETCH_PREDATASETS({
         originDatasetMasterId:this.selected,
       });
-      console.log(this.selected);
       this.$emit("close", this.selected);
     },
     select(id) {
@@ -210,7 +209,6 @@ table {
   border: 1.5px solid #545454;
 
   justify-content: center;
-  display: block;
   overflow: auto;
 }
 th {

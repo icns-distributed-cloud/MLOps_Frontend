@@ -1,7 +1,7 @@
 import login from "@/api/login";
 
 const state = {
-  Id: 1,
+  Id: 0,
 };
 
 const getters = {
@@ -13,8 +13,7 @@ const getters = {
 const mutations = {
   SET_USERID(state, payload) {
     console.log(payload);
-    //state.Id = payload;
-    state.Id = 1;
+    state.Id = payload;
   },
 };
 

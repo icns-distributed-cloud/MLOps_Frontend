@@ -69,12 +69,12 @@
 import { mapGetters, mapActions } from "vuex";
 import model_info from "@/assets/models/model_info_config"
 export default {
+  props: ["predatasetId"],
   data() {
     return {
       name: "",
       model_info_list:[],
       selected_model:[],
-      preDatasetId: 1,
       isPublic: false, 
       isUseGPU: false,
     };
@@ -82,7 +82,7 @@ export default {
   methods: {
     ...mapActions("training", ["RUN_MODEL", "FETCH_RUNNING_MODELINFOS"]),
     close() {
-      this.$emit("close", this.selected);
+      this.$emit("close");
     },
     GetParamDict(parameter_json){
       var param_list = [];
@@ -119,6 +119,7 @@ export default {
     },
   },
   created(){
+    console.log(this.predatasetId);
     this.Fetch_ModelInfos();
   },
   computed: {

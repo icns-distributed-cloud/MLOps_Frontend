@@ -14,7 +14,11 @@
           <Spinner />
         </div>
 
-        <ModelAddModal v-if="showModelAddModal" @close="closeModelAddModal" />
+        <ModelAddModal 
+          v-if="showModelAddModal" 
+          @close="closeModelAddModal" 
+          :predatasetId="predatasetId" 
+        />
         <ModelDelete v-if="showModelDelete" @close="closeModelDelete" />
         <ModelCompareModal v-if="showModelCompare" @close="closeModelCompare" />
 
@@ -99,6 +103,7 @@
       this.FETCH_RUNNING_MODELINFOS({
         userId: this.userId,
       });
+      console.log(this.predatasetId);
     },
     computed: {
       ...mapGetters("training", ["getRunningModelinfos"]),
@@ -143,7 +148,6 @@ table {
   border-collapse: separate;
   /*border-collapse: collapse;*/
   border-spacing: 0;
-  display: block;
   overflow: auto;
 }
 
