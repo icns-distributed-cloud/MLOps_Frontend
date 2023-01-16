@@ -2,31 +2,21 @@ import dataset from "@/api/dataset";
 
 const state = {
   datasets: [],
-  Predatasets: [],
 };
 
 const getters = {
   getDatasets(state) {
     return state.datasets;
   },
-  getPredatasets(state){
-    return state.Predatasets;
-  }
 };
 
 const mutations = {
   SET_DATASETS(state, payload) {
     state.datasets = payload.data;
   },
-  SET_PREDATASETS(state, payload) {
-    state.Predatasets = payload.data;
-  },
 };
 
 const actions = {
-  getPredatasets(state){
-    return state.Predatasets;
-  },
   SAVE_DATASET(
     context,
     {
@@ -68,9 +58,8 @@ const actions = {
   FETCH_PREDATASETS(context, {originDatasetMasterId}) {
     return dataset.GetPreList(originDatasetMasterId)
       .then((res) => {
-      context.commit("SET_PREDATASETS", res.data);
-      console.log(res.data);
-    });
+        return res.data;
+      });
   },
   UPDATE_DATASET(
     context,
@@ -80,6 +69,7 @@ const actions = {
       name
     }
   ) {
+    console.log({userId, originDatasetId, name});
     return dataset
       .update({
         userId,
@@ -94,7 +84,17 @@ const actions = {
     return dataset.delete({
       originDatasetMasterId,
     }).then((res) => {
-      if (res.data.success) {console.log("DELETE_DATASET 성공!");}
+      if (res.data.success) {alert("데이터셋이 삭제되었습니다.");}
+      else {alert("데이터셋 삭제에 실패하였습니다.");}
+      return res;
+    });
+  },
+  DELETE_PREDATASET(context, { preDatasetMasterId }) {
+    return dataset.delete({
+      preDatasetMasterId,
+    }).then((res) => {
+      if (res.data.success) {alert("데이터셋이 삭제되었습니다.");}
+      else{alert("데이터셋 삭제에 실패하였습니다.")}
       return res;
     });
   },

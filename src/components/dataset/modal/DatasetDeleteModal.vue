@@ -45,20 +45,21 @@ export default {
       this.$emit("close");
     },
     deleteData() {
-      this.DELETE_DATASET({
-        originDatasetMasterId: this.dataset.id,
-      }).then(() => {
-        this.FETCH_DATASETS({
-          userId: this.dataset.userId
-        }).then(() => {
-          this.$emit("close");
+      if (this.dataset.datasetType){
+        this.DELETE_PREDATASET({
+          preDatasetMasterId: this.dataset.id,
         });
-      });
+      }
+      else {
+        this.DELETE_DATASET({
+          originDatasetMasterId: this.dataset.originDatasetId,
+        }).then(() =>{
+          this.close();
+        })
+      }
+      
     },
   },
-  created(){
-    console.log(this.dataset);
-  }
 };
 </script>
 

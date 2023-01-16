@@ -68,7 +68,6 @@ const dataset = {
       );
   },
   GetPreList(originDatasetMasterId){
-    console.log({originDatasetMasterId})
     return axios.post(
       "/api/predataset/post/getpredatasetlist",
       {originDatasetMasterId}
@@ -81,9 +80,21 @@ const dataset = {
       name,
     });
   },
+  Preupdate({ userId, originDatasetId, name }) {
+    return axios.post("/api/predataset/post/updatepre", {
+      userId,
+      originDatasetId,
+      name,
+    });
+  },
   delete({ originDatasetMasterId }) {
     return axios.post("/api/origindataset/post/deleteorigin",{
       originDatasetMasterId
+    });
+  },
+  Predelete({preDatasetMasterId}){
+    return axios.post("/api/predataset/post/deletepre",{
+      preDatasetMasterId
     });
   },
   previewData({ datasetId }) {

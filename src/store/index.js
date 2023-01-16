@@ -8,6 +8,9 @@ import login from "./modules/login";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  state: {
+    userId: 0,
+  },
   modules: {
     dataset,
     cleaning,

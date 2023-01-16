@@ -21,7 +21,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="dataset in Datasets"
+                  v-for="dataset in Predatasets"
                   :key="dataset.id"
                 >
                   <td class="name">{{ dataset.name }}</td>
@@ -44,14 +44,14 @@
                     </button>-->
                     <button
                       class="edit-btn"
-                      @click="openDatasetUpdateModal(dataset)"
+                      @click="openPreDatasetUpdateModal(dataset)"
                     >
                       <font-awesome-icon icon="fa-solid fa-pen" />
                       수정
                     </button>
                     <button
                       class="delete-btn"
-                      @click="openDatasetDeleteModal(dataset)"
+                      @click="openPreDatasetDeleteModal(dataset)"
                     >
                       <font-awesome-icon
                         icon="fa-solid fa-trash-can"
@@ -70,27 +70,44 @@
         </div>
       </div>
     </div>
+    <DatasetUpdateModal
+      v-if="showPreDatasetUpdateModal"
+      @close="closePreDatasetUpdateModal"
+      :dataset="SelectedDataset"
+      :userId="userId"
+    />
+    <DatasetDeleteModal
+      v-if="showPreDatasetDeleteModal"
+      @close="closePreDatasetDeleteModal"
+      :dataset="SelectedDataset"
+    />
   </div>
 </template>
 
 <script>
 import Spinner from "@/components/common/Spinner";
+import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
+import DatasetUpdateModal from "@/components/dataset/modal/DatasetUpdateModal";
 
 import { mapActions } from "vuex";
 export default {
   props: ["dataset"],
   components: {
     Spinner,
+    DatasetDeleteModal,
+    DatasetUpdateModal,
   },
   data() {
     return {
-      Datasets: [],
       isLoading: true,
-
+      Predatasets: [],
+      showPreDatasetUpdateModal: false,
+      showPreDatasetDeleteModal: false,
+      SelectedDataset: [],
     };
   },
   methods: {
-    ...mapActions("dataset", ["FETCH_PREDATASETS", "getPredatasets"]),
+    ...mapActions("dataset", ["FETCH_PREDATASETS"]),
     close() {
       this.$emit("close");
     },
@@ -98,11 +115,35 @@ export default {
       this.FETCH_PREDATASETS({
         originDatasetMasterId: this.dataset.id,
       }).then((res) => {
-        console.log(res);
         this.isLoading = false;
-        this.Datasets = this.getPredatasets();
+        this.Predatasets = res.data.slice(1, );
+        this.Predatasets.push(res.data[0]);
+        this.Predatasets[this.Predatasets.length-1].name += "(Original)";
       });
     },
+    openPreDatasetUpdateModal(dataset) {
+      this.SelectedDataset = dataset;
+      this.showPreDatasetUpdateModal = true;
+    },
+    closePreDatasetUpdateModal() {
+      this.showPreDatasetUpdateModal = false;
+    },
+    openPreDatasetDeleteModal(dataset) {
+      this.SelectedDataset = dataset;
+      this.showPreDatasetDeleteModal = true;
+    },
+    closePreDatasetDeleteModal() {
+      this.showPreDatasetDeleteModal = false;
+      this.getData();
+    },
+    /*openDatasetPreviewModal(dataset) {
+      this.dataset = dataset;
+      this.showDatasetPreviewModal = true;
+    },*/
+    /*closeDatasetPreviewModal() {
+      this.showDatasetPreviewModal = false;
+    },*/
+
   },
   created() {
     this.getData();
@@ -199,10 +240,47 @@ td {
 td:first-child {
   border-right: none;
 }
-.datetime-td {
-  width: 180px;
-  background-color: #2c2c2c;
-  border-top: none;
+.name {
+  min-width: 200px;
+}
+.action {
+  padding: 0 20px;
+  min-width: 450px;
+}
+.action button {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 20px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 5px;
+  font-size: 15px;
+}
+button svg {
+  margin-right: 6px;
+}
+.show-btn {
+  border: 1px solid rgb(157, 157, 157);
+  color: rgb(157, 157, 157);
+}
+.add-data-btn {
+  border: 1px solid rgb(76, 135, 90);
+  color: rgb(76, 135, 90);
+}
+.edit-btn {
+  border: 1px solid rgb(48, 119, 181);
+  color: rgb(48, 119, 181);
+}
+.edit-btn svg {
+  margin-right: 2px;
+}
+.delete-btn {
+  color: rgb(206, 54, 54);
+  border: 1px solid rgb(206, 54, 54);
+}
+.action button:hover {
+  background-color: rgba(181, 181, 181, 0.065);
 }
 
 .modal-footer {

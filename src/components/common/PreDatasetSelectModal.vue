@@ -5,8 +5,10 @@
         <div class="modal-header">
           <div>데이터셋 버전 선택</div>
         </div>
+        
         <div class="modal-body">
-          <div>
+          <Spinner v-if="isLoading" class="spinner" />
+          <div v-if="!isLoading">
             <slot name="description"></slot>
             <table>
               <thead>
@@ -23,7 +25,7 @@
               </thead>
               <tbody>
                 <template
-                v-for="(dataset, index) in getPredatasets.slice().reverse()"
+                v-for="(dataset, index) in Predatasets.slice().reverse()"
                 >
                   <tr
                     v-if="list_start <= index && index < list_end"
@@ -73,19 +75,37 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
+import Spinner from "@/components/common/Spinner";
+
 export default {
   props: ["datasetId"],
+  components: {
+    Spinner,
+  },
   data() {
     return {
+      isLoading: true,
       list_start: 0,
       list_end: 10,
       page: 0,
       selected: -1,
       distance: 10,
+      Predatasets: [],
     };
   },
   methods: {
+    ...mapActions("dataset", ["FETCH_PREDATASETS"]),
+    getData() {
+      this.FETCH_PREDATASETS({
+        originDatasetMasterId: this.datasetId,
+      }).then((res) => {
+        this.isLoading = false;
+        this.Predatasets = res.data.slice(1, );
+        this.Predatasets.push(res.data[0]);
+        this.Predatasets[this.Predatasets.length-1].name += "(Original)";
+      });
+    },
     close() {
       this.$emit("close", this.selected);
     },
@@ -109,15 +129,13 @@ export default {
       this.getPage();
     },
   },
-  computed: {
-    ...mapGetters("dataset", ["getPredatasets"])
-  },
   created() {
     if (this.datasetId === 0) {
       this.selected = this.datasetId[0].id;
     } else {
       this.selected = this.datasetId;
     }
+    this.getData();
   },
 };
 </script>
@@ -155,6 +173,7 @@ export default {
   font-size: 18px;
 }
 .modal-body {
+  min-height: 30px;
   padding: 10px 20px;
   font-size: 15px;
 }

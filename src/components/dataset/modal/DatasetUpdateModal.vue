@@ -47,17 +47,26 @@ export default {
       this.$emit("close");
     },
     update() {
-      this.UPDATE_DATASET({
-        userId: this.userId,
-        originDatasetId: this.dataset.id,
-        name: this.name,
-      }).then(() => {
-        this.FETCH_DATASETS({
-          userId: this.userId,
+      console.log(this.dataset);
+      if(this.dataset.datasetType){
+        console.log(this.dataset, "inside");
+      }
+      else{
+        var originDatasetId = this.dataset.id;
+        if (originDatasetId == null) {originDatasetId = this.dataset.originDatasetId;}
+        this.UPDATE_DATASET({
+          userId: this.dataset.userId,
+          originDatasetId: originDatasetId,
+          name: this.name,
         }).then(() => {
-          this.$emit("close");
+          this.FETCH_DATASETS({
+            userId: this.userId,
+          }).then(() => {
+            this.$emit("close");
+          });
         });
-      });
+      }
+      
     },
   },
 };
