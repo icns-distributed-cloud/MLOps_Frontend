@@ -24,6 +24,9 @@ const mutations = {
 };
 
 const actions = {
+  getPredatasets(state){
+    return state.Predatasets;
+  },
   SAVE_DATASET(
     context,
     {

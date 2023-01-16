@@ -17,9 +17,9 @@
                 <th>Table</th>-->
                 <th>No</th>
                 <th>Dataset Name</th>
-                <th>User Name</th>
-                <th>Size</th>
-                <th>Created</th>
+                <th>Created Date</th>
+                <th>isPublic</th>
+                <th>PreProcess log</th>
               </thead>
               <tbody>
                 <template
@@ -42,13 +42,13 @@
                     <td>{{ dataset.port }}</td>
                     <td>{{ dataset.db }}</td>
                     <td>{{ dataset.tableName }}</td>-->
-                    <td>{{ index }}</td>
+                    <td>{{ index+1 }}</td>
                     <td class="name">
                       {{ dataset.name }}
                     </td>
-                    <td>{{ dataset.username}}</td>
-                    <td>{{ dataset.size }}</td>
-                    <td>{{ dataset.createdDate }}</td>
+                    <td>{{ dataset.createdDate}}</td>
+                    <td>{{ dataset.public }}</td>
+                    <td>{{ dataset.preProcessJson }}</td>
                   </tr>
                 </template>
               </tbody>
@@ -140,6 +140,7 @@ export default {
 }
 .modal-container {
   width: 50%;
+  max-width: 600px;
   max-height: 600px;
   margin: 0px auto;
   color: #e8e8e8;
@@ -202,7 +203,6 @@ table {
   border: 1.5px solid #545454;
 
   justify-content: center;
-  display: block;
   overflow: auto;
 }
 th {

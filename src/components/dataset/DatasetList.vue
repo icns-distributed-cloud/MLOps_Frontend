@@ -15,20 +15,20 @@
             <td class="action">
               <button
                 class="show-btn"
-                @click="openDatasetPreviewModal(dataset)"
+                @click="openPreDatasetManageModal(dataset)"
               >
                 <font-awesome-icon
                   icon="fa-solid fa-table"
-                />데이터 열람
+                />전처리 데이터 확인
               </button>
-              <button
+              <!--<button
                 class="add-data-btn"
                 @click="openDatasetAddDataModal(dataset)"
               >
                 <font-awesome-icon
                   icon="fa-solid fa-plus"
                 />데이터 추가
-              </button>
+              </button>-->
               <button
                 class="edit-btn"
                 @click="openDatasetUpdateModal(dataset)"
@@ -60,9 +60,9 @@
       @close="closeDatasetDeleteModal"
       :dataset="dataset"
     />
-    <DatasetPreviewModal
-      v-if="showDatasetPreviewModal"
-      @close="closeDatasetPreviewModal"
+    <PreDatasetManageModal
+      v-if="showPreDatasetManageModal"
+      @close="closePreDatasetManageModal"
       :dataset="dataset"
     />
     <DatasetAddDataModal
@@ -76,14 +76,15 @@
 <script>
 import DatasetUpdateModal from "@/components/dataset/modal/DatasetUpdateModal";
 import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
-import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
+//import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
+import PreDatasetManageModal from "@/components/dataset/modal/PreDatasetManageModal";
 import DatasetAddDataModal from "@/components/dataset/modal/DatasetAddDataModal";
 import { mapGetters } from "vuex";
 export default {
   components: {
     DatasetUpdateModal,
     DatasetDeleteModal,
-    DatasetPreviewModal,
+    PreDatasetManageModal,
     DatasetAddDataModal,
   },
   computed: {
@@ -94,7 +95,7 @@ export default {
     return {
       showDatasetUpdateModal: false,
       showDatasetDeleteModal: false,
-      showDatasetPreviewModal: false,
+      showPreDatasetManageModal: false,
       showDatasetAddDataModal: false,
       dataset: {},
       datasetId: 0,
@@ -116,13 +117,20 @@ export default {
     closeDatasetDeleteModal() {
       this.showDatasetDeleteModal = false;
     },
-    openDatasetPreviewModal(dataset) {
+    /*openDatasetPreviewModal(dataset) {
       this.dataset = dataset;
       this.showDatasetPreviewModal = true;
+    },*/
+    openPreDatasetManageModal(dataset){
+      this.dataset = dataset;
+      this.showPreDatasetManageModal = true;
     },
-    closeDatasetPreviewModal() {
+    /*closeDatasetPreviewModal() {
       this.showDatasetPreviewModal = false;
-    },
+    },*/
+    closePreDatasetManageModal(){
+      this.showPreDatasetManageModal = false;
+    },  
     openDatasetAddDataModal(dataset) {
       this.dataset = dataset;
       this.showDatasetAddDataModal = true;

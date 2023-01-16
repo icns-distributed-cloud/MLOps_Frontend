@@ -67,10 +67,11 @@ const dataset = {
       {userId}
       );
   },
-  GetPreList(originDatasetId){
+  GetPreList(originDatasetMasterId){
+    console.log({originDatasetMasterId})
     return axios.post(
       "/api/predataset/post/getpredatasetlist",
-      {originDatasetId}
+      {originDatasetMasterId}
     );
   },
   update({ userId, originDatasetId, name }) {

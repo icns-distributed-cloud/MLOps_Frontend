@@ -7,7 +7,9 @@
         </div>
         <div class="modal-body">
           <span>{{ dataset.name }}</span> 데이터셋을
-          삭제하시겠습니까?
+          삭제하시겠습니까? <br>
+          원본 데이터셋을 삭제하면, 연결된 전처리 데이터셋이<br> 
+          모두 삭제됩니다.
         </div>
         <div class="modal-footer">
           <div class="msg" v-if="msg.length !== 0">
@@ -43,7 +45,6 @@ export default {
       this.$emit("close");
     },
     deleteData() {
-      this.msg = "데이터셋을 삭제하고 있습니다.";
       this.DELETE_DATASET({
         originDatasetMasterId: this.dataset.id,
       }).then(() => {
