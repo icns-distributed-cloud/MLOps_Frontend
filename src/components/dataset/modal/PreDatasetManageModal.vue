@@ -115,11 +115,15 @@ export default {
       this.FETCH_PREDATASETS({
         originDatasetMasterId: this.dataset.id,
       }).then((res) => {
+        if(res.data.length <= 0){this.close();}
         this.isLoading = false;
         this.Predatasets = res.data.slice(1, );
         this.Predatasets.push(res.data[0]);
         this.Predatasets[this.Predatasets.length-1].name += "(Original)";
+        console.log(this.Predatasets);
+        
       });
+      
     },
     openPreDatasetUpdateModal(dataset) {
       this.SelectedDataset = dataset;
@@ -133,8 +137,8 @@ export default {
       this.showPreDatasetDeleteModal = true;
     },
     closePreDatasetDeleteModal() {
-      this.showPreDatasetDeleteModal = false;
       this.getData();
+      this.showPreDatasetDeleteModal = false;
     },
     /*openDatasetPreviewModal(dataset) {
       this.dataset = dataset;

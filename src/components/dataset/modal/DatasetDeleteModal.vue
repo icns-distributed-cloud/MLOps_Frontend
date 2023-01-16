@@ -51,11 +51,15 @@ export default {
         });
       }
       else {
+        var originDatasetId = this.dataset.id;
+        if (originDatasetId == null) {originDatasetId = this.dataset.originDatasetId;}
+
         this.DELETE_DATASET({
-          originDatasetMasterId: this.dataset.originDatasetId,
-        }).then(() =>{
+          originDatasetMasterId: originDatasetId,
+        }).then(()=>{
           this.close();
-        })
+        });
+        
       }
       
     },

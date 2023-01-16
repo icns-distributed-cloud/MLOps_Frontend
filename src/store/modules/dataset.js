@@ -84,6 +84,7 @@ const actions = {
     return dataset.delete({
       originDatasetMasterId,
     }).then((res) => {
+      console.log(res.data);
       if (res.data.success) {alert("데이터셋이 삭제되었습니다.");}
       else {alert("데이터셋 삭제에 실패하였습니다.");}
       return res;
