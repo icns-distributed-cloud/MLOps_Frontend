@@ -9,6 +9,9 @@ const getters = {
   getDatasets(state) {
     return state.datasets;
   },
+  getPredatasets(state){
+    return state.Predatasets;
+  }
 };
 
 const mutations = {
@@ -55,16 +58,15 @@ const actions = {
     });
   },
   FETCH_DATASETS(context, {userId}) {
-    console.log("FETCH_DATASETS", userId);
     return dataset.getList(userId).then((res) => {
       context.commit("SET_DATASETS", res.data);
     });
   },
   FETCH_PREDATASETS(context, {originDatasetMasterId}) {
-    console.log("FETCH_PREDATASETS", originDatasetMasterId);
     return dataset.GetPreList(originDatasetMasterId)
       .then((res) => {
       context.commit("SET_PREDATASETS", res.data);
+      console.log(res.data);
     });
   },
   UPDATE_DATASET(
@@ -85,9 +87,9 @@ const actions = {
         return res.data;
       });
   },
-  DELETE_DATASET(context, { datasetId }) {
+  DELETE_DATASET(context, { originDatasetMasterId }) {
     return dataset.delete({
-      "datasetId" : datasetId,
+      originDatasetMasterId,
     }).then((res) => {
       if (res.data.success) {console.log("DELETE_DATASET 성공!");}
       return res;

@@ -91,8 +91,9 @@ export default {
     ]),
     close() {
       this.FETCH_PREDATASETS({
-        originDatasetMasterId:this.datasetId,
+        originDatasetMasterId:this.selected,
       });
+      console.log(this.selected);
       this.$emit("close", this.selected);
     },
     select(id) {

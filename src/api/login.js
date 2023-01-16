@@ -11,10 +11,10 @@ const login = {
     });
   },
   registration({
-    loginId, password, name, eMail, phoneNumber
+    loginId, loginPassword, name, eMail, phoneNumber
   }){
-    return axios.post("/api/users/post/login", {
-      loginId, password, name, eMail, phoneNumber
+    return axios.post("/api/users/post/register", {
+      loginId, loginPassword, name, eMail, phoneNumber
     });
   },
 };

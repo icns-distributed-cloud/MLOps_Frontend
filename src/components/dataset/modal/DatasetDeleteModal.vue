@@ -45,14 +45,19 @@ export default {
     deleteData() {
       this.msg = "데이터셋을 삭제하고 있습니다.";
       this.DELETE_DATASET({
-        datasetId: this.dataset.id,
+        originDatasetMasterId: this.dataset.id,
       }).then(() => {
-        this.FETCH_DATASETS().then(() => {
+        this.FETCH_DATASETS({
+          userId: this.dataset.userId
+        }).then(() => {
           this.$emit("close");
         });
       });
     },
   },
+  created(){
+    console.log(this.dataset);
+  }
 };
 </script>
 

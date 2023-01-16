@@ -24,7 +24,7 @@ const dataset = {
     var file = new FormData();
     file.append("file", csv);
     return axios.post(
-      "/api/dataset/post/createorigin", file
+      "/api/origindataset/post/createorigin", file
     );
   },
   previewWithDatabase({
@@ -63,26 +63,25 @@ const dataset = {
   },
   getList(userId) {
     return axios.post(
-      "/api/dataset/post/getorigindatasetlist",
+      "/api/origindataset/post/getorigindatasetlist",
       {userId}
       );
   },
   GetPreList(originDatasetId){
-    console.log("GetPreList", originDatasetId);
     return axios.post(
-      "/api/dataset/post/getpredatasetlist",
+      "/api/predataset/post/getpredatasetlist",
       {originDatasetId}
     );
   },
   update({ userId, originDatasetId, name }) {
-    return axios.post("/api/dataset/post/updateorigin", {
+    return axios.post("/api/origindataset/post/updateorigin", {
       userId,
       originDatasetId,
       name,
     });
   },
   delete({ originDatasetMasterId }) {
-    return axios.delete("/api/dataset/post/deleteorigin",{
+    return axios.post("/api/origindataset/post/deleteorigin",{
       originDatasetMasterId
     });
   },

@@ -88,12 +88,10 @@ export default {
     Registration() {
       this.REGISTRATION({
         loginId: this.loginId, 
-        password: this.password, 
+        loginPassword: this.password, 
         name: this.Name, 
         eMail: this.Email, 
         phoneNumber: this.HP,
-      }).then((res) => {
-        console.log(res.data)
       });
       this.$emit("close");
     },

@@ -37,12 +37,12 @@ const actions = {
       }
     });
   },
-  REGISTRATION(context, {loginId, password, name, eMail, phoneNumber}){
+  REGISTRATION(context, {loginId, loginPassword, name, eMail, phoneNumber}){
     return login.registration({
-      loginId, password, name, eMail, phoneNumber
+      loginId, loginPassword, name, eMail, phoneNumber
     }).then((res) => {
       if(res.data.success){
-        alert("회원가입에 성공하였습니다.");
+        alert(res.data.message);
       }
       else{
         alert("회원가입에 실패하였습니다.");

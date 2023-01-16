@@ -23,7 +23,7 @@
               </thead>
               <tbody>
                 <template
-                v-for="(dataset, index) in getDatasets.slice().reverse()"
+                v-for="(dataset, index) in getPredatasets.slice().reverse()"
                 >
                   <tr
                     v-if="list_start <= index && index < list_end"
@@ -103,14 +103,14 @@ export default {
       this.getPage();
     },
     nextpage(){
-      if (this.page < parseInt(this.getDatasets.length/this.distance)){
+      if (this.page < parseInt(this.getPredatasets.length/this.distance)){
         this.page = this.page+1;
       }
       this.getPage();
     },
   },
   computed: {
-    ...mapGetters("dataset", ["getDatasets"])
+    ...mapGetters("dataset", ["getPredatasets"])
   },
   created() {
     if (this.datasetId === 0) {

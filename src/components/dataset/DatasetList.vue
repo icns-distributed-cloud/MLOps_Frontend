@@ -107,9 +107,6 @@ export default {
       this.showDatasetUpdateModal = true;
     },
     closeDatasetUpdateModal() {
-      this.FETCH_DATASETS({
-        userId: this.userId
-      });
       this.showDatasetUpdateModal = false;
     },
     openDatasetDeleteModal(dataset) {
