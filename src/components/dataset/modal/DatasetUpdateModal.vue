@@ -42,14 +42,14 @@ export default {
     ...mapActions("dataset", [
       "FETCH_DATASETS",
       "UPDATE_DATASET",
+      "UPDATE_PREDATASET",
     ]),
     close() {
       this.$emit("close");
     },
     update() {
-      console.log(this.dataset);
       if(this.dataset.datasetType){
-        console.log(this.dataset, "inside");
+        console.log("아직 API미생성");
       }
       else{
         var originDatasetId = this.dataset.id;

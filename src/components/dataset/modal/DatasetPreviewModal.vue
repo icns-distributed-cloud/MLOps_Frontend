@@ -11,39 +11,13 @@
         <div class="modal-body">
           <div class="name">{{ dataset.name }}</div>
           <Spinner v-if="isLoading" class="spinner" />
-          <div
-            class="preview-table-container"
+          <div class="preview-table-container">
+          <DatasetDrawTable
             v-if="!isLoading"
-          >
-            <table
-              v-if="Object.keys(this.data).length !== 0"
-            >
-              <thead>
-                <th>
-                  {{ this.data.dateTimeColumn }}
-                </th>
-                <th
-                  v-for="(col, i) in data.column"
-                  :key="i"
-                >
-                  {{ col.name }}
-                </th>
-              </thead>
-              <tbody>
-                <tr v-for="(row, i) in data.data" :key="i">
-                  <td class="datetime-td">
-                    {{ row.date }}
-                  </td>
-                  <td
-                    v-for="(col, j) in data.column"
-                    :key="j"
-                  >
-                    {{ row.value[col.name] }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            @turnoffSpiner="turnoffSpiner"
+            :path="path"
+          />
+        </div>
         </div>
         <div class="modal-footer">
           <button class="close-btn" @click="close">
@@ -57,33 +31,49 @@
 
 <script>
 import Spinner from "@/components/common/Spinner";
+import DatasetDrawTable from "@/components/common/DatasetDrawTable";
 
 import { mapActions } from "vuex";
 export default {
   props: ["dataset"],
   components: {
     Spinner,
+    DatasetDrawTable,
   },
   data() {
     return {
-      data: {},
       isLoading: true,
+      path:"",
     };
   },
   methods: {
-    ...mapActions("dataset", ["PREVIEW_DATA"]),
+    ...mapActions("dataset", ["CREATE_PREVIEW_DATA", "PREVIEW_DATA"]),
     close() {
       this.$emit("close");
     },
     getData() {
-      this.PREVIEW_DATA({
-        datasetId: this.dataset.id,
-      }).then((res) => {
-        console.log(res);
-        this.isLoading = false;
-        this.data = res;
-      });
+      this.CREATE_PREVIEW_DATA({
+        originDatasetMasterId: this.dataset.originDatasetId, 
+        preDatasetMasterId: this.dataset.preDatasetId, 
+        name: this.dataset.name, 
+        isPulbic: this.dataset.isPulbic, 
+        preProcessJson: this.dataset.preProcessJson, 
+        preProcessType: this.dataset.datasetType, 
+        userId: this.dataset.userId
+      })
+      .then(()=>{
+        this.PREVIEW_DATA({
+          preDatasetMasterId: this.dataset.preDatasetId,
+        })
+        .then((res) => {
+          this.path = res.data[res.data.length-1].path
+          this.isLoading=false;
+        });
+      })
     },
+    turnoffSpiner(){
+      this.isLoading = false;
+    }, 
   },
   created() {
     this.getData();
@@ -100,7 +90,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: table;
+  /*display: table;*/
   transition: opacity 0.3s ease;
 }
 
@@ -111,7 +101,7 @@ export default {
 
 .modal-container {
   width: 800px;
-  height: 420px;
+  height: 800px;
   margin: 0px auto;
   color: #e8e8e8;
   background-color: #252525;
@@ -139,45 +129,13 @@ export default {
 .name {
   font-size: 17px;
   padding-left: 10px;
+  padding-bottom: 10px;
   color: #3f8ae2;
 }
 .preview-table-container {
   display: flex;
   justify-content: center;
   height: 230px;
-}
-table {
-  margin-top: 10px;
-  color: #e8e8e8;
-  font-weight: 300;
-  border-collapse: separate;
-  border-spacing: 0;
-  text-align: center;
-  font-size: 16px;
-  border: 2px solid #545454;
-  display: block;
-  overflow: auto;
-}
-th {
-  height: 35px;
-  padding: 0 10px;
-  border: 1.5px solid #545454;
-  font-size: 15px;
-  font-weight: 400;
-  background-color: #2c2c2c;
-  border-top: none;
-}
-th:first-child {
-  border-right: none;
-}
-td {
-  border: 1px solid #353535;
-  height: 30px;
-}
-.datetime-td {
-  width: 180px;
-  background-color: #2c2c2c;
-  border-top: none;
 }
 
 .modal-footer {

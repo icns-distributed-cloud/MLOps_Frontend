@@ -97,9 +97,20 @@ const dataset = {
       preDatasetMasterId
     });
   },
-  previewData({ datasetId }) {
-    return axios.get(
-      "/dataset-api/datasets/" + datasetId + "/data/preview"
+  createPreviewData({ 
+    originDatasetMasterId, preDatasetMasterId, name, isPulbic, preProcessJson, preProcessType, userId 
+  }){
+    return axios.post(
+      "/api/predataset/post/createminipre",{
+        originDatasetMasterId, preDatasetMasterId, name, isPulbic, preProcessJson, preProcessType, userId
+      }
+    );
+  },
+  getPreviewData({ preDatasetMasterId }) {
+    return axios.post(
+      "/api/predataset/post/getminipredataset",{
+        preDatasetMasterId
+      }
     );
   },
   getData(PredatasetId, st, et) {
@@ -145,7 +156,7 @@ const dataset = {
     );
   },
 
-  updateData( preDatasetMasterId, name, isPublic, preProcessJson, loginId ) {
+  updatePredataSet( preDatasetMasterId, name, isPublic, preProcessJson, loginId ) {
     return axios.post(
       "/api/predataset/post/createpre",{
         preDatasetMasterId, name, isPublic, preProcessJson, loginId

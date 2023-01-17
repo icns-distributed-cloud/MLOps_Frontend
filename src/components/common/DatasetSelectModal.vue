@@ -17,7 +17,6 @@
                 <th>Table</th>-->
                 <th>No</th>
                 <th>Dataset Name</th>
-                <th>User Name</th>
                 <th>Size</th>
                 <th>Created</th>
               </thead>
@@ -46,9 +45,8 @@
                     <td class="name">
                       {{ dataset.name }}
                     </td>
-                    <td>{{ dataset.username}}</td>
-                    <td>{{ dataset.size }}</td>
-                    <td>{{ dataset.createdDate }}</td>
+                    <td>{{ convertFileSize(dataset.fileSize) }}</td>
+                    <td class="date">{{ dataset.createdTime }}</td>
                   </tr>
                 </template>
               </tbody>
@@ -83,6 +81,7 @@ export default {
       page: 0,
       selected: -1,
       distance: 10,
+      fileSize: "",
     };
   },
   methods: {
@@ -113,6 +112,28 @@ export default {
         this.page = this.page+1;
       }
       this.getPage();
+    },
+    convertFileSize(filesize){
+      var count = 0;
+      var ch = "";
+      while(filesize>1000){
+        count = count + 1;
+        filesize = (filesize/1000).toFixed(2);
+      }
+      switch(count){
+        case 0:
+          ch = "B"
+          break
+        case 1:
+          ch = "Kb"
+          break
+        case 2:
+          ch = "Mb"
+          break
+        default:
+          ch = "Gb"
+      }
+      return  filesize.toString() + ch;
     },
   },
   computed: {
@@ -146,7 +167,7 @@ export default {
 }
 .modal-container {
   width: 50%;
-  max-width: 600px;
+  max-width: 800px;
   max-height: 600px;
   margin: 0px auto;
   color: #e8e8e8;
@@ -230,7 +251,10 @@ td {
   width: 14%;
 }
 .name {
-  width: 250px;
+  width: 150px;
+}
+.date {
+  width: 80px;
 }
 .selected {
   background-color: #3f8ae2;

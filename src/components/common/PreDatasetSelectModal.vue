@@ -19,16 +19,16 @@
                 <th>Table</th>-->
                 <th>No</th>
                 <th>Dataset Name</th>
-                <th>Created Date</th>
+                <th>Size</th>
+                <th>Created</th>
                 <th>isPublic</th>
-                <th>PreProcess log</th>
               </thead>
               <tbody>
                 <template
                 v-for="(dataset, index) in Predatasets.slice().reverse()"
                 >
                   <tr
-                    v-if="list_start <= index && index < list_end"
+                    v-if="list_start <= index && index < list_end && dataset.datasetType < 2"
                     :key="dataset.preDatasetId"
                     @click="select(dataset.preDatasetId)"
                     :class="[
@@ -48,9 +48,9 @@
                     <td class="name">
                       {{ dataset.name }}
                     </td>
-                    <td>{{ dataset.createdDate}}</td>
+                    <td>{{ convertFileSize(dataset.fileSize) }}</td>
+                    <td class="date">{{ dataset.createdTime}}</td>
                     <td>{{ dataset.public }}</td>
-                    <td>{{ dataset.preProcessJson }}</td>
                   </tr>
                 </template>
               </tbody>
@@ -90,6 +90,7 @@ export default {
       list_end: 10,
       page: 0,
       selected: -1,
+      selectedName: "",
       distance: 10,
       Predatasets: [],
     };
@@ -109,8 +110,9 @@ export default {
     close() {
       this.$emit("close", this.selected);
     },
-    select(id) {
+    select(id, name) {
       this.selected = id;
+      this.selectedName = name;
     },
     getPage(){
       this.list_start = this.distance * this.page;
@@ -127,6 +129,28 @@ export default {
         this.page = this.page+1;
       }
       this.getPage();
+    },
+    convertFileSize(filesize){
+      var count = 0;
+      var ch = "";
+      while(filesize>1000){
+        count = count + 1;
+        filesize = (filesize/1000).toFixed(2);
+      }
+      switch(count){
+        case 0:
+          ch = "B"
+          break
+        case 1:
+          ch = "Kb"
+          break
+        case 2:
+          ch = "Mb"
+          break
+        default:
+          ch = "Gb"
+      }
+      return  filesize.toString() + ch;
     },
   },
   created() {
@@ -158,7 +182,7 @@ export default {
 }
 .modal-container {
   width: 50%;
-  max-width: 600px;
+  max-width: 800px;
   max-height: 600px;
   margin: 0px auto;
   color: #e8e8e8;
@@ -244,6 +268,9 @@ td {
 }
 .name {
   width: 250px;
+}
+.date {
+  width: 100px;
 }
 .selected {
   background-color: #3f8ae2;

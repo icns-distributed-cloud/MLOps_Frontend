@@ -15,44 +15,11 @@
         :selectedMethod="selectedMethod"
         @close="closeSavingModal"
       />
-      <div class="table-container" v-if="!isLoading">
-        <table>
-          <thead>
-            <template v-for="(col, i) in data.column">
-              <th :key="i" v-if="col.dateTimeColumn">
-                {{ col.name }}
-              </th>
-            </template>
-            <template v-for="(col, i) in data.column">
-              <th :key="i" v-if="!col.dateTimeColumn">
-                {{ col.name }}
-              </th>
-            </template>
-          </thead>
-          <tbody>
-            <tr v-for="(row, i) in data.data" :key="i">
-              <template v-for="(col, j) in data.column">
-                <td
-                  :key="j"
-                  v-if="col.dateTimeColumn"
-                  class="datetime-td"
-                >
-                  {{ row[col.name] }}
-                </td>
-              </template>
-              <template v-for="(col, j) in data.column">
-                <td
-                  :key="j"
-                  v-if="!col.dateTimeColumn"
-                  :class="{ 'na-td': isNaIdx(i, j) }"
-                >
-                  {{ row[col.name] }}
-                </td>
-              </template>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <DatasetDrawTable
+            v-if="!isLoading"
+            @turnoffSpiner="turnoffSpiner"
+            :path="path"
+          />
       <div class="action-container">
         <div class="method-label">
           결측치 처리 방법을 선택하세요.
@@ -70,12 +37,12 @@
           </option>
         </select>
         <div class="btn-container">
-          <button class="restore-btn" @click="findNa">
+          <!--<button class="restore-btn" @click="findNa">
             복원
           </button>
           <button class="run-btn" @click="runNa">
             수행
-          </button>
+          </button>-->
           <button class="save-btn" @click="save">
             저장
           </button>
@@ -89,11 +56,13 @@
 import { mapGetters, mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
 import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
+import DatasetDrawTable from "@/components/common/DatasetDrawTable";
 export default {
   props: ["predatasetId"],
   components: {
     Spinner,
     PredataSaveModal,
+    DatasetDrawTable,
   },
   data() {
     return {
@@ -123,12 +92,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions("dataset", ["FETCH_DATA", "UPDATE_DATA"]),
+    ...mapActions("dataset", ["CREATE_PREVIEW_DATA", "PREVIEW_DATA"]),
     ...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
+    /*
     findNa() {
       this.isLoading = true;
       this.FETCH_DATA({
-        PredatasetId: this.PredatasetId,
+        PredatasetId: this.predatasetId,
         limit: 0,
       }).then((res) => {
         this.originData = res;
@@ -186,16 +156,32 @@ export default {
         this.isLoading = false;
       });
     },
+    */
+    closeSavingModal() {
+      this.isSaving = false;
+    },
+    
     save() {
       this.preProcessJson['method'] = this.selectedMethod;
       this.isSaving = true;
     },
-    closeSavingModal() {
-      this.isSaving = false;
+    getData() {
+      console.log(this.predatasetId);
+      this.PREVIEW_DATA({
+          preDatasetMasterId: this.predatasetId,
+        })
+        .then((res) => {
+          this.path = res.data[res.data.length-1].path;
+          this.isLoading=false;
+        });
     },
+    turnoffSpiner(){
+      this.isLoading = false;
+    }, 
   },
   created() {
-    this.findNa();
+    //this.findNa();
+    this.getData();
   },
   computed:{
     ...mapGetters("login", ["userId"]),
@@ -237,6 +223,8 @@ td {
   height: calc(100% - 35px);
 }
 .table-container {
+  margin: auto;
+  padding: auto;
   overflow: auto;
   width: 65%;
 }

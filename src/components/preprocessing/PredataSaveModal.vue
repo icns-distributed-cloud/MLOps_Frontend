@@ -56,9 +56,8 @@ export default {
     ...mapActions("cleaning", ["SAVE"]),
     save() {
       this.isLoading = true;
-      console.log("save", this.predatasetId, this.name, this.isPublic, this.preProcessJson, this.userId)
       this.SAVE({
-        predatasetId: this.predatasetId,
+        preDatasetMasterId: this.predatasetId,
         name: this.name,
         isPublic: this.isPublic, 
         preProcessJson: this.preProcessJson, 

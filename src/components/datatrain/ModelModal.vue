@@ -5,16 +5,16 @@
         <tbody>
           <tr>
             <td>{{model_info.name}}</td>
-            <td>{{model_info.dataset_name}}</td>
-            <td>{{model_info.model_name}}</td>
+            <td>{{predatasetName}}</td>
+            <td>{{model_info.modelName}}</td>
             <td>진행도 : {{process}}</td>
             <td>val_loss : {{loss}}</td>
           </tr>
           <tr>
             <td>시작 시간</td>
-            <td>{{this.model_info.createdDate}}</td>
+            <td>{{model_info.createdTime}}</td>
             <td>경과 시간</td>
-            <td>{{model_info.process_time}}</td>
+            <td>{{process_time}}</td>
             <td>
               <button class="detail-btn" @click="Change_See_Detail">
                 자세히보기
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-//import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 export default {
   props: ["model_info"],
   data() {
@@ -46,12 +46,35 @@ export default {
       see_detail: false,
       process: "0%",
       loss: "0",
+      predatasetName: "",
+      createdTime: "",
+      endTime: "",
+      real_time_update_flag: true,
+      process_time: "",
     };
   },
   created() {
     this.Set_Model_info()
   },
   methods: {
+    ...mapActions("training", ["GET_MODEL_INFO"]),
+    Get_Process_Info(){
+      this.GET_MODEL_INFO({
+        trainId: this.model_info.trainId,
+      })
+      .then((res)=>{
+        this.predatasetName = res.data.name;
+        this.createdTime = res.data.createdTime;
+        this.endTime = res.data.endTime;
+        if(res.data.status != 0){
+          this.Get_Process_Time();
+        }
+        else{
+          this.real_time_update_flag = false;
+        }
+      })
+      
+    },
     Change_See_Detail(){
       this.see_detail = !this.see_detail;
     },
@@ -63,14 +86,14 @@ export default {
       const m = s*60;
       const h = m*60;
       const now = new Date();
-      const start_time = new Date(this.model_info.start_time);
+      const start_time = new Date(this.model_info.createdTime);
       var diff = now - start_time;
       now.setHours(parseInt(diff/h));
       diff = diff % h;
       now.setMinutes(parseInt(diff/m));
       diff = diff % m;
       now.setSeconds(parseInt(diff/s));
-      this.model_info.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
+      this.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
     },
     async Update_Process_Info(blob){
       var txt = await blob.text();
@@ -96,10 +119,12 @@ export default {
     //...mapGetters("dataset", ["getDatasets"]),
   },
   mounted(){
-    this.timer = setInterval(() => {
-        this.Get_Process_Time();
-        this.ReadLog();
-      }, 1000)
+    if (this.real_time_update_flag){
+      this.timer = setInterval(() => {
+          this.Get_Process_Info();
+          this.ReadLog();
+        }, 1000)
+    }
   },
   beforeDestroy() {
     clearInterval(this.timer)

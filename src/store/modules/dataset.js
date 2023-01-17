@@ -127,9 +127,9 @@ const actions = {
       return res.data;
     });
   },
-  UPDATE_DATA(context, { preDatasetMasterId, name, isPublic, preProcessJson, loginId }) {
+  UPDATE_PREDATASET(context, { preDatasetMasterId, name, isPublic, preProcessJson, loginId }) {
     return dataset
-      .updateData(preDatasetMasterId, name, isPublic, preProcessJson, loginId)
+      .updatePredataSet(preDatasetMasterId, name, isPublic, preProcessJson, loginId)
       .then((res) => {
         return res.data;
       });
@@ -157,6 +157,28 @@ const actions = {
   }) {
     return dataset
       .saveWithCsv(csv)
+      .then((res) => {
+         return res.data;
+      });
+  },
+  CREATE_PREVIEW_DATA(context, {
+    originDatasetMasterId, preDatasetMasterId, name, isPulbic, preProcessJson, preProcessType, userId 
+  }) {
+    return dataset
+      .createPreviewData({
+        originDatasetMasterId, preDatasetMasterId, name, isPulbic, preProcessJson, preProcessType, userId 
+      })
+      .then((res) => {
+         return res.data;
+      });
+  },
+  PREVIEW_DATA(context, {
+    preDatasetMasterId
+  }) {
+    return dataset
+      .getPreviewData({
+        preDatasetMasterId
+      })
       .then((res) => {
          return res.data;
       });

@@ -139,7 +139,7 @@
                 </div>
               </div>
             </div>
-            <div class="preview">
+            <!--<div class="preview">
               <button class="preview-btn" @click="preview">
                 Preview
               </button>
@@ -190,7 +190,7 @@
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
         <div class="modal-footer">
@@ -215,10 +215,10 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import Spinner from "@/components/common/Spinner";
+//import Spinner from "@/components/common/Spinner";
 export default {
   components: {
-    Spinner,
+    //Spinner,
   },
   data() {
     return {
@@ -425,7 +425,8 @@ export default {
 
 .modal-container {
   width: 550px;
-  height: 650px;
+  /*height: 650px;*/
+  height: 450px;
   margin: 0px auto;
   color: #e8e8e8;
   background-color: #252525;
@@ -473,7 +474,8 @@ export default {
 }
 .content {
   background-color: #1f1f1f;
-  height: 475px;
+  /*height: 475px;*/
+  height: 275px;
   border-radius: 0 0 10px 10px;
 }
 .input-container {

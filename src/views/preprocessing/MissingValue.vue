@@ -71,6 +71,7 @@ export default {
     closePreDatasetSelectModal(datasetId) {
       this.showPreDatasetSelectModal = false;
       this.predatasetId = datasetId;
+      console.log(this.predatasetId);
       this.showData = true;
     },
     changeDataset() {

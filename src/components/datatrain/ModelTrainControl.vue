@@ -33,7 +33,9 @@
                     v-if="model.preDatasetId == predatasetId" :key="index"
                   >
                     <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
-                    <ModelModal v-bind:model_info="model"  v-bind:key="index"></ModelModal>
+                    <ModelModal v-bind:model_info="model"  
+                    v-bind:key="index"
+                    ></ModelModal>
                   </tr>
                 </template>
               </tbody>
@@ -100,10 +102,10 @@
 
     },
     created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
-      console.log(this.predatasetId);
       this.FETCH_RUNNING_MODELINFOS({
         userId: this.userId,
       });
+      console.log(this.predatasetId);
     },
     computed: {
       ...mapGetters("training", ["getRunningModelinfos"]),

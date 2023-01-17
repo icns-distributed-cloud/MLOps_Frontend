@@ -2,19 +2,25 @@ import login from "@/api/login";
 
 const state = {
   Id: 0,
+  UserName: "",
 };
 
 const getters = {
   userId(state){
     return state.Id;
+  },
+  userName(state){
+    return state.UserName;
   }
 };
 
 const mutations = {
   SET_USERID(state, payload) {
-    console.log(payload);
     state.Id = payload;
   },
+  SET_LOGINID(state, payload){
+    state.UserName = payload;
+  }
 };
 
 const actions = {
@@ -25,6 +31,7 @@ const actions = {
       if(res.data.success){
         if(res.data.data.userId>0){
           context.commit("SET_USERID", res.data.data.userId);
+          context.commit("SET_LOGINID", loginId);
           return res.data.data;
         }
         else{

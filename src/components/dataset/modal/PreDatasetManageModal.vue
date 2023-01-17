@@ -20,45 +20,47 @@
                 <th>Action</th>
               </thead>
               <tbody>
-                <tr
-                  v-for="dataset in Predatasets"
-                  :key="dataset.id"
-                >
-                  <td class="name">{{ dataset.name }}</td>
-                  <td class="action">
-                    <button
-                      class="show-btn"
-                      @click="openPreDatasetManageModal(dataset)"
-                    >
-                      <font-awesome-icon
-                        icon="fa-solid fa-table"
-                      />전처리 데이터 확인
-                    </button>
-                    <!--<button
-                      class="add-data-btn"
-                      @click="openDatasetAddDataModal(dataset)"
-                    >
-                      <font-awesome-icon
-                        icon="fa-solid fa-plus"
-                      />데이터 추가
-                    </button>-->
-                    <button
-                      class="edit-btn"
-                      @click="openPreDatasetUpdateModal(dataset)"
-                    >
-                      <font-awesome-icon icon="fa-solid fa-pen" />
-                      수정
-                    </button>
-                    <button
-                      class="delete-btn"
-                      @click="openPreDatasetDeleteModal(dataset)"
-                    >
-                      <font-awesome-icon
-                        icon="fa-solid fa-trash-can"
-                      />삭제
-                    </button>
-                  </td>
-                </tr>
+                <template v-for="dataset in Predatasets" >
+                  <tr
+                      :key="dataset.id"
+                      v-if="dataset.datasetType < 2"
+                  >
+                    <td class="name">{{ dataset.name }}</td>
+                    <td class="action">
+                      <button
+                        class="show-btn"
+                        @click="openDatasetPreviewModal(dataset)"
+                      >
+                        <font-awesome-icon
+                          icon="fa-solid fa-table"
+                        />전처리 데이터 확인
+                      </button>
+                      <!--<button
+                        class="add-data-btn"
+                        @click="openDatasetAddDataModal(dataset)"
+                      >
+                        <font-awesome-icon
+                          icon="fa-solid fa-plus"
+                        />데이터 추가
+                      </button>-->
+                      <button
+                        class="edit-btn"
+                        @click="openPreDatasetUpdateModal(dataset)"
+                      >
+                        <font-awesome-icon icon="fa-solid fa-pen" />
+                        수정
+                      </button>
+                      <button
+                        class="delete-btn"
+                        @click="openPreDatasetDeleteModal(dataset)"
+                      >
+                        <font-awesome-icon
+                          icon="fa-solid fa-trash-can"
+                        />삭제
+                      </button>
+                    </td>
+                  </tr>
+                </template>
               </tbody>
             </table>
           </div>
@@ -81,6 +83,11 @@
       @close="closePreDatasetDeleteModal"
       :dataset="SelectedDataset"
     />
+    <DatasetPreviewModal
+      v-if="showDatasetPreviewModal"
+      @close="closeDatasetPreviewModal"
+      :dataset="SelectedDataset"
+    />
   </div>
 </template>
 
@@ -88,6 +95,7 @@
 import Spinner from "@/components/common/Spinner";
 import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
 import DatasetUpdateModal from "@/components/dataset/modal/DatasetUpdateModal";
+import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
 
 import { mapActions } from "vuex";
 export default {
@@ -96,6 +104,7 @@ export default {
     Spinner,
     DatasetDeleteModal,
     DatasetUpdateModal,
+    DatasetPreviewModal,
   },
   data() {
     return {
@@ -103,6 +112,7 @@ export default {
       Predatasets: [],
       showPreDatasetUpdateModal: false,
       showPreDatasetDeleteModal: false,
+      showDatasetPreviewModal: false,
       SelectedDataset: [],
     };
   },
@@ -120,8 +130,6 @@ export default {
         this.Predatasets = res.data.slice(1, );
         this.Predatasets.push(res.data[0]);
         this.Predatasets[this.Predatasets.length-1].name += "(Original)";
-        console.log(this.Predatasets);
-        
       });
       
     },
@@ -140,13 +148,13 @@ export default {
       this.getData();
       this.showPreDatasetDeleteModal = false;
     },
-    /*openDatasetPreviewModal(dataset) {
-      this.dataset = dataset;
+    openDatasetPreviewModal(dataset) {
+      this.SelectedDataset = dataset;
       this.showDatasetPreviewModal = true;
-    },*/
-    /*closeDatasetPreviewModal() {
+    },
+    closeDatasetPreviewModal() {
       this.showDatasetPreviewModal = false;
-    },*/
+    },
 
   },
   created() {

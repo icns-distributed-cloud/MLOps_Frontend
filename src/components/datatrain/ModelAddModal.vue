@@ -14,7 +14,7 @@
               <input v-model="name"/>
             </div>
             <div class="model-select">
-              <select v-model="selected_model" @change="onChange(selected_model)">
+              <select v-model="selected_model">
                 <option 
                 v-for="(model, index) in model_info_list"
                 :key="index"
@@ -74,7 +74,7 @@ export default {
     return {
       name: "",
       model_info_list:[],
-      selected_model:[],
+      selected_model:"",
       isPublic: false, 
       isUseGPU: false,
     };
@@ -95,25 +95,22 @@ export default {
       return param_list;
     },
     RunModelButton() {
-      const preDatasetId = this.predatasetId;
-      const userId = this.userId;
-      const name = this.name;
-      const parameter_json = this.GetParamDict(this.selected_model.parameter_json);
-      const isPublic = this.isPublic;
-      const isUseGPU = this.isUseGPU;
-      
-      this.RUN_MODEL({preDatasetId, userId, name, parameter_json, isPublic, isUseGPU})
+      this.RUN_MODEL({
+        preDatasetId: this.predatasetId, 
+        userId: this.userId, 
+        name: this.name, 
+        modelName: this.selected_model.model_name,
+        parameter_json: this.GetParamDict(this.selected_model.parameter_json), 
+        isPublic: this.isPublic, 
+        isUseGPU: this.isUseGPU,
+      })
       .then(()=>{
         this.FETCH_RUNNING_MODELINFOS({
-          userId: userId,
+          userId: this.userId,
         });
       })
       this.$emit("close");
     },
-    onChange(value){
-      console.log(value);
-    },
-
     Fetch_ModelInfos(){
       this.model_info_list = model_info;
     },

@@ -22,10 +22,16 @@ const actions = {
       context.commit("SET_RUNNING_MODELINFOS", res.data.data);
     });
   },
-  RUN_MODEL(context, {preDatasetId, userId, name, parameter_json, isPublic, isUseGPU}) {
-    console.log({preDatasetId, userId, name, parameter_json, isPublic, isUseGPU})
+  RUN_MODEL(context, {preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU}) {
     return training
-      .run(preDatasetId, userId, name, parameter_json, isPublic, isUseGPU)
+      .run(preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU)
+      .then((res) => {
+        return res.data;
+      });
+  },
+  GET_MODEL_INFO(context, {trainId}) {
+    return training
+      .get_model_info(trainId)
       .then((res) => {
         return res.data;
       });
