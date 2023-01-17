@@ -36,6 +36,12 @@ const actions = {
       return res.data;
     });
   },
+  SAVE(context, {preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, userId}){
+    return cleaning.save({preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, userId})
+    .then((res)=>{
+      return res.data;
+    })
+  }
 };
 
 export default {

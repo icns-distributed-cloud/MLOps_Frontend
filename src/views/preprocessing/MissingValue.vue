@@ -11,32 +11,32 @@
     <div class="content">
       <MissingValueControl
         v-if="showData"
-        :PredatasetId="PredatasetId"
+        :predatasetId="predatasetId"
       />
     </div>
     <DatasetSelectModal
-      v-if="showDatasetSelectModal"
-      @close="closeDatasetSelectModal"
-      :datasetId="datasetId"
-    >
-      <template slot="description">
-        <div class="description">
-          전처리작업을 실행 할 원본데이터셋을 선택하세요.
-        </div>
-      </template>
-    </DatasetSelectModal>
+        v-if="showDatasetSelectModal"
+        @close="closeDatasetSelectModal"
+        :datasetId="datasetId"
+      >
+        <template slot="description">
+          <div class="description">
+            모델훈련을 실행 할 원본 데이터셋을 선택하세요.
+          </div>
+        </template>
+      </DatasetSelectModal>
 
-    <PreDatasetSelectModal
-      v-if="showPreDatasetSelectModal"
-      @close="closePreDatasetSelectModal"
-      :datasetId="datasetId"
-    >
-      <template slot="description">
-        <div class="description">
-          전처리작업을 실행 할 데이터셋 버전을 선택하세요.
-        </div>
-      </template>
-    </PreDatasetSelectModal>
+      <PreDatasetSelectModal
+        v-if="showPreDatasetSelectModal"
+        @close="closePreDatasetSelectModal"
+        :datasetId="datasetId"
+      >
+        <template slot="description">
+          <div class="description">
+            모델훈련을 실행 할 데이터셋 버전을 선택하세요.
+          </div>
+        </template>
+      </PreDatasetSelectModal>
   </div>
 </template>
 
@@ -58,7 +58,7 @@ export default {
       showDatasetSelectModal: true,
       showPreDatasetSelectModal: false,
       datasetId: 0,
-      PredatasetId: 0,
+      predatasetId: 0,
       showData: false,
     };
   },
@@ -70,7 +70,7 @@ export default {
     },
     closePreDatasetSelectModal(datasetId) {
       this.showPreDatasetSelectModal = false;
-      this.PredatasetId = datasetId;
+      this.predatasetId = datasetId;
       this.showData = true;
     },
     changeDataset() {

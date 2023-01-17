@@ -8,7 +8,7 @@
             <td>{{model_info.dataset_name}}</td>
             <td>{{model_info.model_name}}</td>
             <td>진행도 : {{process}}</td>
-            <td>loss : {{model_info.loss}}</td>
+            <td>val_loss : {{loss}}</td>
           </tr>
           <tr>
             <td>시작 시간</td>
@@ -26,10 +26,10 @@
     </div>
     <div class="image-div modal-body" v-if="see_detail">
       <div class="accuracy image-box">
-        <img :src="require(`@/assets/images/${model.accuracy_url}`)" /> 
+        <img src="http://data.icnslab.net/outputs/1/fig1.png" /> 
       </div>
       <div class="loss image-box">
-        <img :src="require(`@/assets/images/${model.loss_url}`)" /> 
+        <img src="http://data.icnslab.net/outputs/1/fig2.png" /> 
       </div>
     </div>
   </div>
@@ -45,6 +45,7 @@ export default {
       selected: 1,
       see_detail: false,
       process: "0%",
+      loss: "0",
     };
   },
   created() {
@@ -71,22 +72,24 @@ export default {
       now.setSeconds(parseInt(diff/s));
       this.model_info.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
     },
-    
+    async Update_Process_Info(blob){
+      var txt = await blob.text();
+      var txt_list = txt.split("\n");
+      txt_list.pop();
+      var last_line = txt_list.pop();
+      this.process = last_line.split('|')[0];
+      
+      txt_list.pop();
+      var loss_line = txt_list.pop().split(' ');
+      this.loss = Number(loss_line[loss_line.length-1]).toFixed(5);
+
+    },
     ReadLog(){
       var url = "http://data.icnslab.net/outputs/1/process.log";
       fetch(url)
-        .then(res => res.blob()) // Gets the response and returns it as a blob
-        .then(blob => {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var txt = e.target.result;
-            var txt_list = txt.split("\n");
-            txt_list.pop();
-            var last_line = txt_list.pop();
-            this.process = last_line.split('|')[0];
-          }
-          reader.readAsText(blob);
-        })
+        .then((res) => {
+          this.Update_Process_Info(res);
+        });
     },
   },
   computed: {

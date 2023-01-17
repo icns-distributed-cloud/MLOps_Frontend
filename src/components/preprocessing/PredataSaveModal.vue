@@ -40,7 +40,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
-  props: ["PredatasetId", "preProcessJson"],
+  props: ["predatasetId", "preProcessJson", "selectedMethod"],
   components: {},
   data() {
     return {
@@ -52,24 +52,20 @@ export default {
     ...mapGetters("login", ["userId"]),
   },
   methods: {
-    ...mapActions("dataset", [
-      "FETCH_DATASETS",
-      "SAVE_DATASET_WITH_DATABASE",
-      "SAVE_DATASET_WITH_CSV",
-      "PREVIEW_WITH_DATABASE",
-      "PREVIEW_WITH_CSV",
-      "UPDATE_DATASET",
-    ]),
+    ...mapActions("dataset", ["FETCH_DATASETS"]),
+    ...mapActions("cleaning", ["SAVE"]),
     save() {
       this.isLoading = true;
-      this.UPDATE_DATA({
-        PredatasetId: this.PredatasetId,
+      console.log("save", this.predatasetId, this.name, this.isPublic, this.preProcessJson, this.userId)
+      this.SAVE({
+        predatasetId: this.predatasetId,
         name: this.name,
         isPublic: this.isPublic, 
         preProcessJson: this.preProcessJson, 
-        loginId: this.userId,
+        preProcessType : this.selectedMethod,
+        userId: this.userId,
       }).then(() => {
-        this.findNa();
+        this.close();
       });
     },
     close() {
@@ -77,7 +73,6 @@ export default {
     },
   },
   created(){
-    console.log(this.preProcessJson);
   }
 };
 </script>

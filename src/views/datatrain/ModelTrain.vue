@@ -72,7 +72,6 @@
         this.showPreDatasetSelectModal = false;
         this.predatasetId = datasetId;
         this.showData = true;
-        console.log(this.predatasetId);
       },
       changeDataset() {
         this.showDatasetSelectModal = true;

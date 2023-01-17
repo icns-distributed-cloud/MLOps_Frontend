@@ -18,12 +18,12 @@ const mutations = {
 
 const actions = {
   FETCH_RUNNING_MODELINFOS(context, {userId}) {
-    console.log("FETCH_RUNNING_MODELINFOS")
     return training.get_running_model_list(userId).then((res) => {
       context.commit("SET_RUNNING_MODELINFOS", res.data.data);
     });
   },
   RUN_MODEL(context, {preDatasetId, userId, name, parameter_json, isPublic, isUseGPU}) {
+    console.log({preDatasetId, userId, name, parameter_json, isPublic, isUseGPU})
     return training
       .run(preDatasetId, userId, name, parameter_json, isPublic, isUseGPU)
       .then((res) => {

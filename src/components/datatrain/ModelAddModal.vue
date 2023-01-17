@@ -95,7 +95,7 @@ export default {
       return param_list;
     },
     RunModelButton() {
-      const preDatasetId = this.preDatasetId;
+      const preDatasetId = this.predatasetId;
       const userId = this.userId;
       const name = this.name;
       const parameter_json = this.GetParamDict(this.selected_model.parameter_json);

@@ -10,8 +10,9 @@
       </div>
       <PredataSaveModal 
         v-if="isSaving"
-        :PredatasetId="PredatasetId"
+        :predatasetId="predatasetId"
         :preProcessJson="preProcessJson"
+        :selectedMethod="selectedMethod"
         @close="closeSavingModal"
       />
       <div class="table-container" v-if="!isLoading">
@@ -89,7 +90,7 @@ import { mapGetters, mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
 import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
 export default {
-  props: ["PredatasetId"],
+  props: ["predatasetId"],
   components: {
     Spinner,
     PredataSaveModal,

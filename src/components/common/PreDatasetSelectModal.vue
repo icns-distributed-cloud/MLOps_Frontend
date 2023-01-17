@@ -29,10 +29,10 @@
                 >
                   <tr
                     v-if="list_start <= index && index < list_end"
-                    :key="dataset.id"
-                    @click="select(dataset.id)"
+                    :key="dataset.preDatasetId"
+                    @click="select(dataset.preDatasetId)"
                     :class="[
-                      selected === dataset.id
+                      selected === dataset.preDatasetId
                         ? 'selected'
                         : 'unselected',
                     ]"
