@@ -61,25 +61,24 @@ const actions = {
         return res.data;
       });
   },
-  UPDATE_DATASET(
-    context,
-    {
-      userId,
-      originDatasetId,
-      name
-    }
+  UPDATE_DATASET(context,{ originDatasetMasterId ,name }
   ) {
-    console.log({userId, originDatasetId, name});
+    console.log({originDatasetMasterId, name});
     return dataset
-      .update({
-        userId,
-        originDatasetId,
-        name
-      })
+      .update({ originDatasetMasterId, name })
       .then((res) => {
         return res.data;
       });
   },
+  UPDATE_PREDATASET(context,{ preDatasetMasterId ,name }
+    ) {
+      console.log({preDatasetMasterId, name});
+      return dataset
+        .preUpdate({ preDatasetMasterId, name })
+        .then((res) => {
+          return res.data;
+        });
+    },
   DELETE_DATASET(context, { originDatasetMasterId }) {
     return dataset.delete({
       originDatasetMasterId,
@@ -127,13 +126,6 @@ const actions = {
       return res.data;
     });
   },
-  UPDATE_PREDATASET(context, { preDatasetMasterId, name, isPublic, preProcessJson, loginId }) {
-    return dataset
-      .updatePredataSet(preDatasetMasterId, name, isPublic, preProcessJson, loginId)
-      .then((res) => {
-        return res.data;
-      });
-  },
   UPDATE_DATA_WITH_DATABASE(
     context,
     { datasetId, host, port, db, username, password, table }
@@ -157,6 +149,15 @@ const actions = {
   }) {
     return dataset
       .saveWithCsv(csv)
+      .then((res) => {
+         return res.data;
+      });
+  },
+  UPDATE_DATASET_WITH_CSV(context, {
+    userId, originDatasetId, name
+  }) {
+    return dataset
+      .updateWithCsv({userId, originDatasetId, name})
       .then((res) => {
          return res.data;
       });

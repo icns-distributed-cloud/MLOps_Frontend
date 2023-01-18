@@ -1,186 +1,168 @@
 <template>
-  <div class="missing-value-control">
-    <div class="data-description">
-      결측치가 포함된 행을 나열합니다.
+  <div class="dataset-list-root">
+    <div v-if="isLoading" class="loading">
+          <Spinner />
     </div>
-
-    <div class="data-container">
-      <div v-if="isLoading" class="loading">
-        <Spinner />
-      </div>
-      <PredataSaveModal 
-        v-if="isSaving"
-        :predatasetId="predatasetId"
-        :preProcessJson="preProcessJson"
-        :selectedMethod="selectedMethod"
-        @close="closeSavingModal"
-      />
-      <DatasetDrawTable
-            v-if="!isLoading"
-            @turnoffSpiner="turnoffSpiner"
-            :path="path"
-          />
-      <div class="action-container">
-        <div class="method-label">
-          결측치 처리 방법을 선택하세요.
-        </div>
-        <select
-          v-model="selectedMethod"
-          class="method-select"
-        >
-          <option
-            v-for="method in methods"
-            :value="method.value"
-            :key="method.value"
-          >
-            {{ method.text }}
-          </option>
-        </select>
-        <div class="btn-container">
-          <!--<button class="restore-btn" @click="findNa">
-            복원
-          </button>
-          <button class="run-btn" @click="runNa">
-            수행
-          </button>-->
-          <button class="save-btn" @click="save">
-            저장
-          </button>
-        </div>
-      </div>
+    <div class="table-container" v-if="!showMissingPreProcessingModal">
+      <table>
+        <thead>
+          <th>데이터셋</th>
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <template v-for="dataset in Predatasets" >
+            <tr
+                :key="dataset.id"
+                v-if="dataset.datasetType < 2"
+            >
+              <td class="name">{{ dataset.name }}</td>
+              <td class="action">
+                <button
+                  class="pre-btn"
+                  @click="openshowMissingPreProcessingModal(dataset)"
+                >
+                  <font-awesome-icon
+                    icon="fa-solid fa-table"
+                  />결측치 처리하기
+                </button>
+                <button
+                  class="show-btn"
+                  @click="openDatasetPreviewModal(dataset)"
+                >
+                  <font-awesome-icon
+                    icon="fa-solid fa-table"
+                  />데이터 확인
+                </button>
+                <!--<button
+                  class="add-data-btn"
+                  @click="openDatasetAddDataModal(dataset)"
+                >
+                  <font-awesome-icon
+                    icon="fa-solid fa-plus"
+                  />데이터 추가
+                </button>-->
+                <button
+                  class="edit-btn"
+                  @click="openPreDatasetUpdateModal(dataset)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-pen" />
+                  수정
+                </button>
+                <button
+                  class="delete-btn"
+                  @click="openPreDatasetDeleteModal(dataset)"
+                >
+                  <font-awesome-icon
+                    icon="fa-solid fa-trash-can"
+                  />삭제
+                </button>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
     </div>
+    <PreDatasetUpdateModal
+      v-if="showPreDatasetUpdateModal"
+      @close="closePreDatasetUpdateModal"
+      :dataset="SelectedDataset"
+      :userId="userId"
+    />
+    <DatasetDeleteModal
+      v-if="showPreDatasetDeleteModal"
+      @close="closePreDatasetDeleteModal"
+      :dataset="SelectedDataset"
+    />
+    <DatasetPreviewModal
+      v-if="showDatasetPreviewModal"
+      @close="closeDatasetPreviewModal"
+      :dataset="SelectedDataset"
+    />
+    <MissingPreProcessingModal
+      v-if="showMissingPreProcessingModal"
+      @close="closeshowMissingPreProcessingModal"
+      :predatasetId="SelectedDataset.preDatasetId"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
-import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
-import DatasetDrawTable from "@/components/common/DatasetDrawTable";
+import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
+import PreDatasetUpdateModal from "@/components/dataset/modal/PreDatasetUpdateModal";
+import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
+import MissingPreProcessingModal from "@/components/preprocessing/MissingPreProcessingModal";
 export default {
-  props: ["predatasetId"],
+  props: ["datasetId"],
   components: {
     Spinner,
-    PredataSaveModal,
-    DatasetDrawTable,
+    DatasetDeleteModal,
+    PreDatasetUpdateModal,
+    DatasetPreviewModal,
+    MissingPreProcessingModal,
   },
   data() {
     return {
-      data: [],
-      saveData: [],
-      originData: [],
-      originDataNa: [],
       isLoading: true,
-      isSaving: false,
-      naIdxList: [],
-      selectedMethod: "0",
-      idxCol: "created_at",
-      methods: [
-        {
-          text: "VAR모델 예측값으로 대체",
-          value: "0",
-        },
-        {
-          text: "보간 예측값으로 대체",
-          value: "1",
-        },
-      ],
-      preProcessJson:{
-        method: "",
-        column: "",
-      },
+      Predatasets: [],
+      showPreDatasetUpdateModal: false,
+      showPreDatasetDeleteModal: false,
+      showDatasetPreviewModal: false,
+      showMissingPreProcessingModal: false,
+      SelectedDataset: [],
     };
   },
   methods: {
-    ...mapActions("dataset", ["CREATE_PREVIEW_DATA", "PREVIEW_DATA"]),
-    ...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
-    /*
-    findNa() {
-      this.isLoading = true;
-      this.FETCH_DATA({
-        PredatasetId: this.predatasetId,
-        limit: 0,
-      }).then((res) => {
-        this.originData = res;
-        this.FIND_NA({ request: res }).then((res) => {
-          this.saveData = res;
-          this.data = res;
-          this.originDataNa = res;
-          this.isLoading = false;
-          this.updateNaIdx();
-        });
-      });
-    },
-    updateNaIdx() {
-      this.naIdxList = [];
-      for (
-        var i = 0;
-        i < this.originDataNa.data.length;
-        i++
-      ) {
-        for (
-          var j = 0;
-          j < this.originDataNa.column.length;
-          j++
-        ) {
-          if (
-            this.originDataNa.data[i][
-              this.originDataNa.column[j].name
-            ] === null
-          ) {
-            this.naIdxList.push({ i, j });
-          }
-        }
-      }
-    },
-    isNaIdx(iIdx, jIdx) {
-      var isContain = this.naIdxList.filter(
-        (e) => e.i === iIdx && e.j === jIdx
-      );
-      return isContain.length > 0;
-    },
-    restore() {
-      this.isLoading = true;
-      this.data = this.originDataNa;
-      this.isLoading = false;
-    },
-    runNa() {
-      this.isLoading = true;
-      this.RUN_NA({
-        method: this.selectedMethod,
-        idxCol: this.idxCol,
-        request: this.originData,
-      }).then((res) => {
-        this.data = res.run;
-        this.saveData = res.save;
-        this.isLoading = false;
-      });
-    },
-    */
-    closeSavingModal() {
-      this.isSaving = false;
-    },
-    
-    save() {
-      this.preProcessJson['method'] = this.selectedMethod;
-      this.isSaving = true;
+    ...mapActions("dataset", ["FETCH_PREDATASETS"]),
+    close() {
+      this.$emit("close");
     },
     getData() {
-      console.log(this.predatasetId);
-      this.PREVIEW_DATA({
-          preDatasetMasterId: this.predatasetId,
-        })
-        .then((res) => {
-          this.path = res.data[res.data.length-1].path;
-          this.isLoading=false;
-        });
+      this.FETCH_PREDATASETS({
+        originDatasetMasterId: this.datasetId,
+      }).then((res) => {
+        if(res.data.length <= 0){this.close();} // 데이터를 모두 삭제해서 리스트에 아무것도 없는 경우 창 닫기
+        this.isLoading = false;
+        this.Predatasets = res.data.slice(1, );
+        this.Predatasets.push(res.data[0]);
+        this.Predatasets[this.Predatasets.length-1].name += "(Original)";
+      });
     },
-    turnoffSpiner(){
-      this.isLoading = false;
-    }, 
+    openPreDatasetUpdateModal(dataset) {
+      this.SelectedDataset = dataset;
+      this.showPreDatasetUpdateModal = true;
+    },
+    closePreDatasetUpdateModal() {
+      this.getData();
+      this.showPreDatasetUpdateModal = false;
+    },
+    openPreDatasetDeleteModal(dataset) {
+      this.SelectedDataset = dataset;
+      this.showPreDatasetDeleteModal = true;
+    },
+    closePreDatasetDeleteModal() {
+      this.getData();
+      this.showPreDatasetDeleteModal = false;
+    },
+    openDatasetPreviewModal(dataset) {
+      this.SelectedDataset = dataset;
+      this.showDatasetPreviewModal = true;
+    },
+    closeDatasetPreviewModal() {
+      this.getData();
+      this.showDatasetPreviewModal = false;
+    },
+    openshowMissingPreProcessingModal(dataset) {
+      this.SelectedDataset = dataset;
+      this.showMissingPreProcessingModal = true;
+    },
+    closeshowMissingPreProcessingModal() {
+      this.getData();
+      this.showMissingPreProcessingModal = false;
+    },
   },
   created() {
-    //this.findNa();
     this.getData();
   },
   computed:{
@@ -190,112 +172,100 @@ export default {
 </script>
 
 <style scoped>
-.missing-value-control {
+
+.dataset-list-root {
+  height: 90%;
+  /*display: flex;*/
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+.table-container {
+  display: flex;
+  justify-content: center;
   height: 100%;
+  width: 100%;
+  margin-top: 10px;
 }
 table {
+  justify-content: center;
   color: #e8e8e8;
   font-weight: 300;
   text-align: center;
   font-size: 16px;
-  border: 1.5px solid #545454;
+  border-collapse: separate;
+  border-spacing: 0;
+  display: block;
+  overflow: auto;
 }
 th {
+  position: sticky;
+  top: 0px;
   height: 35px;
+  border: 1.5px solid #545454;
   font-size: 17px;
   font-weight: 400;
   background-color: #2c2c2c;
+  width: 300px;
+}
+th:first-child {
+  border-right: none;
 }
 td {
-  border: 0.5px solid #353535;
-  height: 30px;
-  width: 12%;
+  border: 1.5px solid #353535;
+  border-top: none;
+  height: 60px;
 }
-
-.data-description {
-  color: #e8e8e8;
-  font-weight: 300;
-  margin-bottom: 5px;
+td:first-child {
+  border-right: none;
 }
-.data-container {
-  display: flex;
-  justify-content: space-between;
-  height: calc(100% - 35px);
+.name {
+  min-width: 300px;
 }
-.table-container {
-  margin: auto;
-  padding: auto;
-  overflow: auto;
-  width: 65%;
+.action {
+  padding: 0 20px;
+  min-width: 620px;
 }
-
-.action-container {
-  margin-right: 20px;
-  padding: 20px;
-  position: relative;
-  border: 0.8px solid rgba(109, 109, 109, 0.306);
-  background-color: rgba(255, 255, 255, 0.014);
-  border-radius: 15px;
-  width: 250px;
-  margin-left: 10px;
+.action button {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 20px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 5px;
+  font-size: 15px;
+}
+button svg {
+  margin-right: 6px;
+}
+.pre-btn {
+  border: 1px solid rgb(30, 143, 30);
+  color: rgb(30, 143, 30);
+}
+.show-btn {
+  border: 1px solid rgb(157, 157, 157);
+  color: rgb(157, 157, 157);
+}
+.add-data-btn {
+  border: 1px solid rgb(76, 135, 90);
+  color: rgb(76, 135, 90);
+}
+.edit-btn {
+  border: 1px solid rgb(48, 119, 181);
+  color: rgb(48, 119, 181);
+}
+.edit-btn svg {
+  margin-right: 2px;
+}
+.delete-btn {
+  color: rgb(206, 54, 54);
+  border: 1px solid rgb(206, 54, 54);
+}
+.action button:hover {
+  background-color: rgba(181, 181, 181, 0.065);
 }
 .loading {
   margin-top: 30px;
   width: 65%;
-}
-.method-label {
-  color: #e8e8e8;
-  margin-bottom: 10px;
-}
-.method-select {
-  background-color: rgb(39, 39, 39);
-  color: #e8e8e8;
-  font-size: 16px;
-  padding: 10px;
-}
-.btn-container {
-  width: 250px;
-  padding-right: 20px;
-  display: flex;
-  justify-content: space-around;
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 20px;
-}
-.btn-container button {
-  width: 70px;
-  font-size: 18px;
-  height: 30px;
-  font-size: 17px;
-  margin: 0 5px;
-  border-radius: 5px;
-  color: #e8e8e8;
-  font-weight: 400;
-  border: 1px #676767a6 solid;
-  cursor: pointer;
-  transition: all 0.5s;
-}
-
-.restore-btn,
-.run-btn {
-  background-color: #373737;
-}
-.restore-btn:hover,
-.run-btn:hover {
-  background-color: #464646;
-}
-.save-btn {
-  background-color: #3f8ae2;
-}
-.save-btn:hover {
-  background-color: #2f6cb1;
-}
-.na-td {
-  border: 1px double #ae2f2f;
-}
-.datetime-td {
-  border: 1.5px solid #545454;
-  background-color: #2c2c2c;
-  border: none;
 }
 </style>

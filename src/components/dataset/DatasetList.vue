@@ -118,8 +118,9 @@ export default {
     closeDatasetDeleteModal() {
       this.FETCH_DATASETS({
         userId: this.userId,
+      }).then(()=>{
+        this.showDatasetDeleteModal = false;
       });
-      this.showDatasetDeleteModal = false;
     },
     /*openDatasetPreviewModal(dataset) {
       this.dataset = dataset;
@@ -133,7 +134,11 @@ export default {
       this.showDatasetPreviewModal = false;
     },*/
     closePreDatasetManageModal(){
-      this.showPreDatasetManageModal = false;
+      this.FETCH_DATASETS({
+        userId: this.userId,
+      }).then(()=>{
+        this.showPreDatasetManageModal = false;
+      });
     },  
     openDatasetAddDataModal(dataset) {
       this.dataset = dataset;
@@ -187,6 +192,7 @@ td {
   border: 1.5px solid #353535;
   border-top: none;
   height: 60px;
+  
 }
 td:first-child {
   border-right: none;

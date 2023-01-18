@@ -139,68 +139,9 @@
                 </div>
               </div>
             </div>
-            <!--<div class="preview">
-              <button class="preview-btn" @click="preview">
-                Preview
-              </button>
-              <div class="preview-header">
-                <div class="label">Preview</div>
-                <div
-                  class="msg"
-                  v-if="previewMsg.length !== 0"
-                  :class="{ 'error-msg': previewError }"
-                >
-                  {{ previewMsg }}
-                </div>
-              </div>
-              <Spinner class="spinner" v-if="isLoading" />
-              <div
-                class="preview-table-container"
-                v-if="!isLoading"
-              >
-                <table
-                  v-if="Object.keys(this.data).length !== 0"
-                >
-                  <thead>
-                    <th>
-                      {{ this.data.dateTimeColumn }}
-                    </th>
-                    <th
-                      v-for="(col, i) in data.column"
-                      :key="i"
-                    >
-                      {{ col.name }}
-                    </th>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="(row, i) in data.data"
-                      :key="i"
-                    >
-                      <td class="datetime-td">
-                        {{ row.date }}
-                      </td>
-                      <td
-                        v-for="(col, j) in data.column"
-                        :key="j"
-                      >
-                        {{ row.value[col.name] }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>-->
           </div>
         </div>
         <div class="modal-footer">
-          <div
-            class="msg"
-            v-if="saveMsg.length !== 0"
-            :class="{ 'error-msg': saveError }"
-          >
-            {{ saveMsg }}
-          </div>
           <button class="save-btn" @click="save">
             저장
           </button>
@@ -247,22 +188,7 @@ export default {
   },
   computed: {
     ...mapGetters("login", ["userId"]),
-    saveMsg() {
-      if (this.saveMsgOrigin === null) {
-        return "실패하였습니다.";
-      } else if (this.saveMsgOrigin.length > 50) {
-        return this.saveMsgOrigin.slice(0, 50) + "...";
-      }
-      return this.saveMsgOrigin;
-    },
-    previewMsg() {
-      if (this.previewMsgOrigin === null) {
-        return "실패하였습니다.";
-      } else if (this.previewMsgOrigin.length > 50) {
-        return this.previewMsgOrigin.slice(0, 50) + "...";
-      }
-      return this.previewMsgOrigin;
-    },
+
   },
   methods: {
     ...mapActions("dataset", [
@@ -272,6 +198,7 @@ export default {
       "PREVIEW_WITH_DATABASE",
       "PREVIEW_WITH_CSV",
       "UPDATE_DATASET",
+      "UPDATE_DATASET_WITH_CSV",
     ]),
     close() {
       this.$emit("close");
@@ -286,7 +213,7 @@ export default {
           this.name = this.db + '.' + this.table;
         }
         
-        this.SAVE_DATASET_WITH_DATABASE({
+        /*this.SAVE_DATASET_WITH_DATABASE({
           name: this.name,
           host: this.host,
           port: this.port,
@@ -296,33 +223,29 @@ export default {
           table: this.table,
         })
           .then(() => {
-            this.FETCH_DATASETS().then(() => {
+            this.FETCH_DATASETS({userId: this.userId}).then(() => {
               this.$emit("close");
             });
           })
           .catch((err) => {
             this.saveError = true;
             this.saveMsgOrigin = err.response.data.message;
-          });
+          });*/
       } else {
         this.SAVE_DATASET_WITH_CSV({
           csv: this.csv
         })
-          .then((res) => {
-            this.UPDATE_DATASET({
-              userId: this.userId, 
-              originDatasetId: res.data.originDatasetId, 
-              name: this.name
-            }).then(() => {
-                  this.FETCH_DATASETS({userId: this.userId}).then(() => {
-                  this.$emit("close");
-                });
-              })
-          })
-          .catch((err) => {
-            this.saveError = true;
-            this.saveMsgOrigin = err.response.data.message;
-          });
+        .then((res) => {
+          this.UPDATE_DATASET_WITH_CSV({
+            userId: this.userId, 
+            originDatasetId: res.data.originDatasetId, 
+            name: this.name
+          }).then(() => {
+                this.FETCH_DATASETS({userId: this.userId}).then(() => {
+                this.$emit("close");
+              });
+            })
+        })
       }
     },
 
@@ -351,7 +274,6 @@ export default {
       this.db = "";
       this.table = "";
     },
-
     preview() {
       this.data = {};
       this.previewError = false;

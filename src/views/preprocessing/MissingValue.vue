@@ -11,47 +11,34 @@
     <div class="content">
       <MissingValueControl
         v-if="showData"
-        :predatasetId="predatasetId"
+        @close="closeMissingValueControl"
+        :datasetId="datasetId"
       />
     </div>
     <DatasetSelectModal
-        v-if="showDatasetSelectModal"
-        @close="closeDatasetSelectModal"
-        :datasetId="datasetId"
-      >
-        <template slot="description">
-          <div class="description">
-            모델훈련을 실행 할 원본 데이터셋을 선택하세요.
-          </div>
-        </template>
-      </DatasetSelectModal>
-
-      <PreDatasetSelectModal
-        v-if="showPreDatasetSelectModal"
-        @close="closePreDatasetSelectModal"
-        :datasetId="datasetId"
-      >
-        <template slot="description">
-          <div class="description">
-            모델훈련을 실행 할 데이터셋 버전을 선택하세요.
-          </div>
-        </template>
-      </PreDatasetSelectModal>
+      v-if="showDatasetSelectModal"
+      @close="closeDatasetSelectModal"
+      :datasetId="datasetId"
+    >
+      <template slot="description">
+        <div class="description">
+          모델훈련을 실행 할 원본 데이터셋을 선택하세요.
+        </div>
+      </template>
+    </DatasetSelectModal>
   </div>
 </template>
 
 <script>
 import SelectedData from "@/components/common/SelectedData";
 import DatasetSelectModal from "@/components/common/DatasetSelectModal";
-import PreDatasetSelectModal from "@/components/common/PreDatasetSelectModal";
 import MissingValueControl from "@/components/preprocessing/MissingValueControl";
-
+import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     DatasetSelectModal,
     MissingValueControl,
     SelectedData,
-    PreDatasetSelectModal,
   },
   data() {
     return {
@@ -63,21 +50,23 @@ export default {
     };
   },
   methods: {
+    ...mapActions("dataset", ["FETCH_DATASETS"]),
     closeDatasetSelectModal(datasetId) {
       this.showDatasetSelectModal = false;
       this.datasetId = datasetId;
-      this.showPreDatasetSelectModal = true;
-    },
-    closePreDatasetSelectModal(datasetId) {
-      this.showPreDatasetSelectModal = false;
-      this.predatasetId = datasetId;
-      console.log(this.predatasetId);
       this.showData = true;
     },
     changeDataset() {
       this.showDatasetSelectModal = true;
       this.showData = false;
     },
+    closeMissingValueControl(){
+      this.FETCH_DATASETS({userId:this.userId})
+      this.changeDataset();
+    }
+  },
+  computed: {
+    ...mapGetters("login", ["userId"])
   },
 };
 </script>

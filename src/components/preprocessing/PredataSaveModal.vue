@@ -40,7 +40,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
-  props: ["predatasetId", "preProcessJson", "selectedMethod"],
+  props: ["predatasetId", "preProcessJson", "preProcessType"],
   components: {},
   data() {
     return {
@@ -61,14 +61,17 @@ export default {
         name: this.name,
         isPublic: this.isPublic, 
         preProcessJson: this.preProcessJson, 
-        preProcessType : this.selectedMethod,
+        preProcessType : this.preProcessType,
         userId: this.userId,
-      }).then(() => {
-        this.close();
+      }).then((res) => {
+        this.close(res.data);
       });
     },
-    close() {
-      this.$emit("close");
+    close(data) {
+      this.$emit("close", {
+        code: data.code,
+        preDatasetMasterId: data.preDatasetMasterId,
+      });
     },
   },
   created(){

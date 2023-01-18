@@ -48,25 +48,18 @@ export default {
       this.$emit("close");
     },
     update() {
-      if(this.dataset.datasetType){
-        console.log("아직 API미생성");
-      }
-      else{
-        var originDatasetId = this.dataset.id;
-        if (originDatasetId == null) {originDatasetId = this.dataset.originDatasetId;}
-        this.UPDATE_DATASET({
-          userId: this.dataset.userId,
-          originDatasetId: originDatasetId,
-          name: this.name,
+      var originDatasetMasterId = this.dataset.id;
+      if (originDatasetMasterId == null) {originDatasetMasterId = this.dataset.originDatasetId;}
+      this.UPDATE_DATASET({
+        originDatasetMasterId: originDatasetMasterId,
+        name: this.name,
+      }).then(() => {
+        this.FETCH_DATASETS({
+          userId: this.userId,
         }).then(() => {
-          this.FETCH_DATASETS({
-            userId: this.userId,
-          }).then(() => {
-            this.$emit("close");
-          });
+          this.$emit("close");
         });
-      }
-      
+      });
     },
   },
 };

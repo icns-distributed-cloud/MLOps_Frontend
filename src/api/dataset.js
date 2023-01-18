@@ -63,27 +63,25 @@ const dataset = {
   },
   getList(userId) {
     return axios.post(
-      "/api/origindataset/post/getorigindatasetlist",
+      "/api/origindataset/post/getoriginlist",
       {userId}
       );
   },
   GetPreList(originDatasetMasterId){
     return axios.post(
-      "/api/predataset/post/getpredatasetlist",
+      "/api/predataset/post/getprelist",
       {originDatasetMasterId}
     );
   },
-  update({ userId, originDatasetId, name }) {
-    return axios.post("/api/origindataset/post/updateorigin", {
-      userId,
-      originDatasetId,
+  update({ originDatasetMasterId, name }) {
+    return axios.post("/api/origindataset/post/updateoriginname", {
+      originDatasetMasterId,
       name,
     });
   },
-  Preupdate({ userId, originDatasetId, name }) {
-    return axios.post("/api/predataset/post/updatepre", {
-      userId,
-      originDatasetId,
+  preUpdate({ preDatasetMasterId, name }) {
+    return axios.post("/api/predataset/post/updateprename", {
+      preDatasetMasterId,
       name,
     });
   },
@@ -108,7 +106,7 @@ const dataset = {
   },
   getPreviewData({ preDatasetMasterId }) {
     return axios.post(
-      "/api/predataset/post/getminipredataset",{
+      "/api/predataset/post/getonepre",{
         preDatasetMasterId
       }
     );
@@ -146,20 +144,13 @@ const dataset = {
       }
     );
   },
-  updateWithCsv(csv) {
-    let formData = new FormData();
-    formData.append("csv", csv);
-
+  updateWithCsv({
+    userId, originDatasetId, name
+  }) {
+    console.log({userId, originDatasetId, name});
     return axios.post(
-      "/dataset-api/datasets/data/csv",
-      formData
-    );
-  },
-
-  updatePredataSet( preDatasetMasterId, name, isPublic, preProcessJson, loginId ) {
-    return axios.post(
-      "/api/predataset/post/createpre",{
-        preDatasetMasterId, name, isPublic, preProcessJson, loginId
+      "/api/origindataset/post/updateoriginstatus",{
+        userId, originDatasetId, name
       });
   },
   deleteDataByDate({ datasetId, dateList }) {

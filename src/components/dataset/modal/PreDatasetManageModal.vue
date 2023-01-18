@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-    <DatasetUpdateModal
+    <PreDatasetUpdateModal
       v-if="showPreDatasetUpdateModal"
       @close="closePreDatasetUpdateModal"
       :dataset="SelectedDataset"
@@ -94,7 +94,7 @@
 <script>
 import Spinner from "@/components/common/Spinner";
 import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
-import DatasetUpdateModal from "@/components/dataset/modal/DatasetUpdateModal";
+import PreDatasetUpdateModal from "@/components/dataset/modal/PreDatasetUpdateModal";
 import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
 
 import { mapActions } from "vuex";
@@ -103,7 +103,7 @@ export default {
   components: {
     Spinner,
     DatasetDeleteModal,
-    DatasetUpdateModal,
+    PreDatasetUpdateModal,
     DatasetPreviewModal,
   },
   data() {
@@ -117,7 +117,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("dataset", ["FETCH_PREDATASETS"]),
+    ...mapActions("dataset", ["FETCH_PREDATASETS", "FETCH_DATASETS"]),
     close() {
       this.$emit("close");
     },
@@ -131,7 +131,6 @@ export default {
         this.Predatasets.push(res.data[0]);
         this.Predatasets[this.Predatasets.length-1].name += "(Original)";
       });
-      
     },
     openPreDatasetUpdateModal(dataset) {
       this.SelectedDataset = dataset;
@@ -139,6 +138,7 @@ export default {
     },
     closePreDatasetUpdateModal() {
       this.showPreDatasetUpdateModal = false;
+      this.getData();
     },
     openPreDatasetDeleteModal(dataset) {
       this.SelectedDataset = dataset;
@@ -248,6 +248,7 @@ td {
   border: 1.5px solid #353535;
   border-top: none;
   height: 60px;
+  
 }
 td:first-child {
   border-right: none;
