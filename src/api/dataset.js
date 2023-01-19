@@ -68,7 +68,7 @@ const dataset = {
       );
   },
   GetPreList({originDatasetId}){
-    console.log(originDatasetId);
+    console.log("GetPreList", originDatasetId);
     return axios.post(
       "/api/predataset/post/getprelist",
       {originDatasetId}
@@ -106,6 +106,7 @@ const dataset = {
     );
   },
   getPreviewData({ preDatasetId }) {
+    console.log(preDatasetId);
     return axios.post(
       "/api/predataset/post/getonepre",{
         preDatasetId

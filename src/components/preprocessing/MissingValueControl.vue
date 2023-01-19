@@ -81,7 +81,7 @@
     <MissingPreProcessingModal
       v-if="showMissingPreProcessingModal"
       @close="closeshowMissingPreProcessingModal"
-      :predatasetId="SelectedDataset.preDatasetId"
+      :dataset="SelectedDataset"
     />
   </div>
 </template>

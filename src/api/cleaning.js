@@ -59,9 +59,9 @@ const cleaning = {
     );
   },
   save({preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId}){
-    console.log({preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId});
+    console.log({preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId})
     return axios.post("/api/predataset/post/createpre", {
-      preDatasetId, name, isPublic, preProcessJson, preProcessType, userId
+      preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId
     });
   }
 };

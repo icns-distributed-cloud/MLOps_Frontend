@@ -65,6 +65,7 @@ export default {
         datasetType: this.datasetType,
         userId: this.userId,
       }).then((res) => {
+        console.log(res);
         this.close(res.data);
       });
     },

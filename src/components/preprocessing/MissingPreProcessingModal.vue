@@ -62,7 +62,7 @@ import Spinner from "@/components/common/Spinner";
 import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
 import DatasetDrawTable from "@/components/common/DatasetDrawTable";
 export default {
-  props: ["preDatasetId"],
+  props: ["dataset"],
   components: {
     Spinner,
     PredataSaveModal,
@@ -77,6 +77,7 @@ export default {
       isLoading: true,
       isSaving: false,
       naIdxList: [],
+      preDatasetId: 0,
       preProcessType: 0,
       idxCol: "created_at",
       methods: [
@@ -102,8 +103,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions("dataset", ["CREATE_PREVIEW_DATA", "PREVIEW_DATA"]),
-    ...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
+    ...mapActions("dataset", ["PREVIEW_DATA"]),
+    ...mapActions("cleaning", ["SAVE"]),
     /*
     findNa() {
       this.isLoading = true;
@@ -169,7 +170,9 @@ export default {
     */
 
     restore(){
-      this.pathList.pop();
+      if(this.pathList.length>1){
+        this.pathList.pop();
+      }
     },
     close() {
       this.$emit("close");
@@ -189,6 +192,7 @@ export default {
       this.isSaving = true;
     },
     getData() {
+      this.preDatasetId = this.dataset.preDatasetId;
       this.PREVIEW_DATA({
         preDatasetId: this.preDatasetId,
         })
@@ -201,10 +205,31 @@ export default {
       this.isLoading = false;
     }, 
     dictToJSON(){
-      return JSON.stringify({cloumn:this.selectedColList});
+      return JSON.stringify({column:this.selectedColList});
     },
     miniMapProcessing(){
+      this.preProcessType = this.selectedMethod;
       this.datasetType = 2;
+      this.preProcessJson = this.dictToJSON();
+
+      this.isLoading = true;
+      this.SAVE({
+        preDatasetId: this.preDatasetId,
+        name: "MiniPreProcessing",
+        isPublic: false, 
+        preProcessJson: this.preProcessJson, 
+        preProcessType : this.preProcessType,
+        datasetType: this.datasetType,
+        userId: this.userId,
+      }).then((res) => {
+        console.log(res);
+        this.PREVIEW_DATA({
+          preDatasetId: res.data.preDatasetId
+        }).then((Preres)=>{
+          this.pathList.push(Preres.data.miniDatasetPath);
+        })
+        
+      });
     },
   },
   created() {
