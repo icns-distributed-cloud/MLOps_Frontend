@@ -96,7 +96,7 @@ export default {
     },
     RunModelButton() {
       this.RUN_MODEL({
-        preDatasetMasterId: this.predatasetId, 
+        preDatasetId: this.predatasetId, 
         userId: this.userId, 
         name: this.name, 
         modelName: this.selected_model.model_name,

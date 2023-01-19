@@ -4,7 +4,6 @@
         <div class="title">모델 훈련</div>
         <SelectedData
           v-if="showData"
-          :datasetId="datasetId"
           @changeDataset="changeDataset"
         />
       </div>
@@ -17,7 +16,6 @@
       <DatasetSelectModal
         v-if="showDatasetSelectModal"
         @close="closeDatasetSelectModal"
-        :datasetId="datasetId"
       >
         <template slot="description">
           <div class="description">
@@ -29,7 +27,7 @@
       <PreDatasetSelectModal
         v-if="showPreDatasetSelectModal"
         @close="closePreDatasetSelectModal"
-        :datasetId="datasetId"
+        :originDatasetId="originDatasetId"
       >
         <template slot="description">
           <div class="description">
@@ -57,15 +55,15 @@
       return {
         showDatasetSelectModal: true,
         showPreDatasetSelectModal: false,
-        datasetId: 0,
+        originDatasetId: 0,
         predatasetId: 0,
         showData: false,
       };
     },
     methods: {
-      closeDatasetSelectModal(datasetId) {
+      closeDatasetSelectModal(selectedId) {
         this.showDatasetSelectModal = false;
-        this.datasetId = datasetId;
+        this.originDatasetId = selectedId;
         this.showPreDatasetSelectModal = true;
       },
       closePreDatasetSelectModal(datasetId) {

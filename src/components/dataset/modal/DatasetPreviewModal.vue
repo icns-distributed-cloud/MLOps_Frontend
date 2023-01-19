@@ -53,7 +53,7 @@ export default {
     },
     getData() {
       this.PREVIEW_DATA({
-        preDatasetMasterId: this.dataset.preDatasetId,
+        preDatasetId: this.dataset.preDatasetId,
       })
       .then((res) => {
         this.path = res.data.miniDatasetPath;

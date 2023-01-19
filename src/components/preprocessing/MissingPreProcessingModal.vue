@@ -10,7 +10,7 @@
       </div>
       <PredataSaveModal 
         v-if="isSaving"
-        :predatasetId="predatasetId"
+        :preDatasetId="preDatasetId"
         :preProcessJson="preProcessJson"
         :preProcessType="preProcessType"
         :datasetType="datasetType"
@@ -62,7 +62,7 @@ import Spinner from "@/components/common/Spinner";
 import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
 import DatasetDrawTable from "@/components/common/DatasetDrawTable";
 export default {
-  props: ["predatasetId"],
+  props: ["preDatasetId"],
   components: {
     Spinner,
     PredataSaveModal,
@@ -96,7 +96,7 @@ export default {
       pathList:[],
       item:{
         path: "",
-        predatasetId: 0,
+        preDatasetId: 0,
         preProcessJson:{},
       }
     };
@@ -174,10 +174,10 @@ export default {
     close() {
       this.$emit("close");
     },
-    closeSavingModal({code, preDatasetMasterId}) {
+    closeSavingModal({code, preDatasetId}) {
       this.isSaving = false;
       if (code){
-        this.predatasetId = preDatasetMasterId;
+        this.preDatasetId = preDatasetId;
         this.getData();
         this.close();
       }
@@ -190,7 +190,7 @@ export default {
     },
     getData() {
       this.PREVIEW_DATA({
-          preDatasetMasterId: this.predatasetId,
+        preDatasetId: this.preDatasetId,
         })
         .then((res) => {
           this.pathList.push(res.data.miniDatasetPath);

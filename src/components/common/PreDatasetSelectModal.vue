@@ -79,7 +79,7 @@ import { mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
 
 export default {
-  props: ["datasetId"],
+  props: ["originDatasetId"],
   components: {
     Spinner,
   },
@@ -99,7 +99,7 @@ export default {
     ...mapActions("dataset", ["FETCH_PREDATASETS"]),
     getData() {
       this.FETCH_PREDATASETS({
-        originDatasetMasterId: this.datasetId,
+        originDatasetId: this.originDatasetId,
       }).then((res) => {
         this.isLoading = false;
         this.Predatasets = res.data.slice(1, );
@@ -154,6 +154,7 @@ export default {
     },
   },
   created() {
+    console.log(this.originDatasetId);
     if (this.datasetId === 0) {
       this.selected = this.datasetId[0].id;
     } else {

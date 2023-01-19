@@ -94,7 +94,7 @@ import PreDatasetUpdateModal from "@/components/dataset/modal/PreDatasetUpdateMo
 import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
 import MissingPreProcessingModal from "@/components/preprocessing/MissingPreProcessingModal";
 export default {
-  props: ["datasetId"],
+  props: ["originDatasetId"],
   components: {
     Spinner,
     DatasetDeleteModal,
@@ -120,7 +120,7 @@ export default {
     },
     getData() {
       this.FETCH_PREDATASETS({
-        originDatasetMasterId: this.datasetId,
+        originDatasetId: this.originDatasetId,
       }).then((res) => {
         if(res.data.length <= 0){this.close();} // 데이터를 모두 삭제해서 리스트에 아무것도 없는 경우 창 닫기
         this.isLoading = false;

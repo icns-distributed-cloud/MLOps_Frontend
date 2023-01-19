@@ -48,10 +48,10 @@ export default {
       this.$emit("close");
     },
     update() {
-      var originDatasetMasterId = this.dataset.id;
-      if (originDatasetMasterId == null) {originDatasetMasterId = this.dataset.originDatasetId;}
+      var originDatasetId = this.dataset.originDatasetId;
+      if (originDatasetId == null) {originDatasetId = this.dataset.originDatasetId;}
       this.UPDATE_DATASET({
-        originDatasetMasterId: originDatasetMasterId,
+        originDatasetId: originDatasetId,
         name: this.name,
       }).then(() => {
         this.FETCH_DATASETS({

@@ -55,43 +55,41 @@ const actions = {
       context.commit("SET_DATASETS", res.data);
     });
   },
-  FETCH_PREDATASETS(context, {originDatasetMasterId}) {
-    return dataset.GetPreList(originDatasetMasterId)
+  FETCH_PREDATASETS(context, {originDatasetId}) {
+    return dataset.GetPreList({
+      originDatasetId})
       .then((res) => {
         return res.data;
       });
   },
-  UPDATE_DATASET(context,{ originDatasetMasterId ,name }
+  UPDATE_DATASET(context,{ originDatasetId ,name }
   ) {
-    console.log({originDatasetMasterId, name});
     return dataset
-      .update({ originDatasetMasterId, name })
+      .update({ originDatasetId, name })
       .then((res) => {
         return res.data;
       });
   },
-  UPDATE_PREDATASET(context,{ preDatasetMasterId ,name }
+  UPDATE_PREDATASET(context,{ preDatasetId ,name }
     ) {
-      console.log({preDatasetMasterId, name});
       return dataset
-        .preUpdate({ preDatasetMasterId, name })
+        .preUpdate({ preDatasetId, name })
         .then((res) => {
           return res.data;
         });
     },
-  DELETE_DATASET(context, { originDatasetMasterId }) {
+  DELETE_DATASET(context, { originDatasetId }) {
     return dataset.delete({
-      originDatasetMasterId,
+      originDatasetId,
     }).then((res) => {
-      console.log(res.data);
       if (res.data.success) {alert("데이터셋이 삭제되었습니다.");}
       else {alert("데이터셋 삭제에 실패하였습니다.");}
       return res;
     });
   },
-  DELETE_PREDATASET(context, { preDatasetMasterId }) {
+  DELETE_PREDATASET(context, { originDatasetId }) {
     return dataset.delete({
-      preDatasetMasterId,
+      originDatasetId,
     }).then((res) => {
       if (res.data.success) {alert("데이터셋이 삭제되었습니다.");}
       else{alert("데이터셋 삭제에 실패하였습니다.")}
@@ -163,22 +161,22 @@ const actions = {
       });
   },
   CREATE_PREVIEW_DATA(context, {
-    originDatasetMasterId, preDatasetMasterId, name, isPulbic, preProcessJson, preProcessType, userId 
+    originDatasetMasterId, preDatasetId, name, isPulbic, preProcessJson, preProcessType, userId 
   }) {
     return dataset
       .createPreviewData({
-        originDatasetMasterId, preDatasetMasterId, name, isPulbic, preProcessJson, preProcessType, userId 
+        originDatasetMasterId, preDatasetId, name, isPulbic, preProcessJson, preProcessType, userId 
       })
       .then((res) => {
          return res.data;
       });
   },
   PREVIEW_DATA(context, {
-    preDatasetMasterId
+    preDatasetId
   }) {
     return dataset
       .getPreviewData({
-        preDatasetMasterId
+        preDatasetId
       })
       .then((res) => {
          return res.data;

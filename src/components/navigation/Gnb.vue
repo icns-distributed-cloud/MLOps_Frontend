@@ -120,10 +120,14 @@ export default {
             name: "missing-value",
             title: "결측치 처리",
           },
-          {
+          /*{
             name: "noise",
             title: "노이즈 제거",
-          },
+          },*/
+          {
+            name: "column-selection",
+            title: "컬럼 선택"
+          }
         ],
         datatrain: [
           {

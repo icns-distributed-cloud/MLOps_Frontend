@@ -26,10 +26,10 @@
                 >
                   <tr
                     v-if="list_start <= index && index < list_end"
-                    :key="dataset.id"
-                    @click="select(dataset.id)"
+                    :key="dataset.originDatasetId "
+                    @click="select(dataset.originDatasetId )"
                     :class="[
-                      selected === dataset.id
+                      selected === dataset.originDatasetId 
                         ? 'selected'
                         : 'unselected',
                     ]"
@@ -71,9 +71,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
-  props: ["datasetId"],
   data() {
     return {
       list_start: 0,
@@ -85,13 +84,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("dataset", [
-      "FETCH_PREDATASETS"
-    ]),
     close() {
-      this.FETCH_PREDATASETS({
-        originDatasetMasterId:this.selected,
-      });
       this.$emit("close", this.selected);
     },
     select(id) {

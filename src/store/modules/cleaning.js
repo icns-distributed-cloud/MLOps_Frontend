@@ -36,8 +36,8 @@ const actions = {
       return res.data;
     });
   },
-  SAVE(context, {preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, datasetType, userId}){
-    return cleaning.save({preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, datasetType, userId})
+  SAVE(context, {preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId}){
+    return cleaning.save({preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId})
     .then((res)=>{
       return res.data;
     })

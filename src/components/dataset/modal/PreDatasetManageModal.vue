@@ -123,12 +123,13 @@ export default {
     },
     getData() {
       this.FETCH_PREDATASETS({
-        originDatasetMasterId: this.dataset.id,
+        originDatasetId: this.dataset.originDatasetId,
       }).then((res) => {
         if(res.data.length <= 0){this.close();}
         this.isLoading = false;
         this.Predatasets = res.data.slice(1, );
         this.Predatasets.push(res.data[0]);
+        console.log(this.Predatasets);
         this.Predatasets[this.Predatasets.length-1].name += "(Original)";
       });
     },

@@ -22,9 +22,9 @@ const actions = {
       context.commit("SET_RUNNING_MODELINFOS", res.data.data);
     });
   },
-  RUN_MODEL(context, {preDatasetMasterId, userId, name, modelName, parameter_json, isPublic, isUseGPU}) {
+  RUN_MODEL(context, {preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU}) {
     return training
-      .run(preDatasetMasterId, userId, name, modelName, parameter_json, isPublic, isUseGPU)
+      .run(preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU)
       .then((res) => {
         return res.data;
       });

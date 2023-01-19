@@ -48,9 +48,9 @@ export default {
       this.$emit("close");
     },
     update() {
-      var preDatasetMasterId = this.dataset.preDatasetId;
+      var preDatasetId = this.dataset.preDatasetId;
       this.UPDATE_PREDATASET({
-        preDatasetMasterId: preDatasetMasterId,
+        preDatasetId: preDatasetId,
         name: this.name,
       }).then(() => {
           this.$emit("close");

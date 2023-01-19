@@ -47,14 +47,14 @@ export default {
     deleteData() {
       if (this.dataset.datasetType){
         this.DELETE_PREDATASET({
-          preDatasetMasterId: this.dataset.id,
+          preDatasetId: this.dataset.originDatasetId,
         });
       }
       else {
-        var originDatasetId = this.dataset.id;
+        var originDatasetId = this.dataset.originDatasetId;
         if (originDatasetId == null) {originDatasetId = this.dataset.originDatasetId;}
         this.DELETE_DATASET({
-          originDatasetMasterId: originDatasetId,
+          originDatasetId: originDatasetId,
         }).then(()=>{
           this.close();
         });

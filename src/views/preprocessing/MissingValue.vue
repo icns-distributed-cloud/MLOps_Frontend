@@ -12,13 +12,12 @@
       <MissingValueControl
         v-if="showData"
         @close="closeMissingValueControl"
-        :datasetId="datasetId"
+        :originDatasetId="originDatasetId"
       />
     </div>
     <DatasetSelectModal
       v-if="showDatasetSelectModal"
       @close="closeDatasetSelectModal"
-      :datasetId="datasetId"
     >
       <template slot="description">
         <div class="description">
@@ -44,16 +43,16 @@ export default {
     return {
       showDatasetSelectModal: true,
       showPreDatasetSelectModal: false,
-      datasetId: 0,
+      originDatasetId: 0,
       predatasetId: 0,
       showData: false,
     };
   },
   methods: {
     ...mapActions("dataset", ["FETCH_DATASETS"]),
-    closeDatasetSelectModal(datasetId) {
+    closeDatasetSelectModal(selectedId) {
       this.showDatasetSelectModal = false;
-      this.datasetId = datasetId;
+      this.originDatasetId = selectedId;
       this.showData = true;
     },
     changeDataset() {

@@ -67,32 +67,33 @@ const dataset = {
       {userId}
       );
   },
-  GetPreList(originDatasetMasterId){
+  GetPreList({originDatasetId}){
+    console.log(originDatasetId);
     return axios.post(
       "/api/predataset/post/getprelist",
-      {originDatasetMasterId}
+      {originDatasetId}
     );
   },
-  update({ originDatasetMasterId, name }) {
+  update({ originDatasetId, name }) {
     return axios.post("/api/origindataset/post/updateoriginname", {
-      originDatasetMasterId,
+      originDatasetId,
       name,
     });
   },
-  preUpdate({ preDatasetMasterId, name }) {
+  preUpdate({ preDatasetId, name }) {
     return axios.post("/api/predataset/post/updateprename", {
-      preDatasetMasterId,
+      preDatasetId,
       name,
     });
   },
-  delete({ originDatasetMasterId }) {
+  delete({ originDatasetId }) {
     return axios.post("/api/origindataset/post/deleteorigin",{
-      originDatasetMasterId
+      originDatasetId
     });
   },
-  Predelete({preDatasetMasterId}){
+  Predelete({preDatasetId}){
     return axios.post("/api/predataset/post/deletepre",{
-      preDatasetMasterId
+      preDatasetId
     });
   },
   createPreviewData({ 
@@ -104,10 +105,10 @@ const dataset = {
       }
     );
   },
-  getPreviewData({ preDatasetMasterId }) {
+  getPreviewData({ preDatasetId }) {
     return axios.post(
       "/api/predataset/post/getonepre",{
-        preDatasetMasterId
+        preDatasetId
       }
     );
   },
@@ -147,7 +148,6 @@ const dataset = {
   updateWithCsv({
     userId, originDatasetId, name
   }) {
-    console.log({userId, originDatasetId, name});
     return axios.post(
       "/api/origindataset/post/updateoriginstatus",{
         userId, originDatasetId, name

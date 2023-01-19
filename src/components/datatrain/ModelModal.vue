@@ -5,7 +5,7 @@
         <tbody>
           <tr>
             <td>{{model_info.name}}</td>
-            <td>{{predatasetName}}</td>
+            <td>{{endTime}}</td>
             <td>{{model_info.modelName}}</td>
             <td>진행도 : {{process}}</td>
             <td>val_loss : {{loss}}</td>
