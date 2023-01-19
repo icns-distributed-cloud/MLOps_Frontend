@@ -18,7 +18,7 @@
       <DatasetDrawTable
             v-if="!isLoading"
             @turnoffSpiner="turnoffSpiner"
-            :path="path"
+            :path="pathList[pathList.length-1]"
           />
       <div class="action-container">
         <div class="method-label">
@@ -37,10 +37,10 @@
           </option>
         </select>
         <div class="btn-container">
-          <button class="restore-btn" @click="findNa">
+          <button class="restore-btn" @click="restore">
             복원
           </button>
-          <button class="run-btn" @click="runNa">
+          <button class="run-btn" @click="miniMapProcessing">
             수행
           </button>
           <button class="save-btn" @click="save">
@@ -91,6 +91,12 @@ export default {
       selectedMethod: 0,
       preProcessJson:{},
       selectedColList:[],
+      pathList:[],
+      item:{
+        path: "",
+        predatasetId: 0,
+        preProcessJson:{},
+      }
     };
   },
   methods: {
@@ -160,6 +166,9 @@ export default {
     },
     */
 
+    restore(){
+      this.pathList.pop();
+    },
     close() {
       this.$emit("close");
     },
@@ -174,14 +183,13 @@ export default {
       this.preProcessType = this.selectedMethod;
       this.preProcessJson = this.dictToJSON();
       this.isSaving = true;
-      this.close();
     },
     getData() {
       this.PREVIEW_DATA({
           preDatasetMasterId: this.predatasetId,
         })
         .then((res) => {
-          this.path = res.data.miniDatasetPath;
+          this.pathList.push(res.data.miniDatasetPath);
           this.isLoading=false;
         });
     },
@@ -190,6 +198,9 @@ export default {
     }, 
     dictToJSON(){
       return JSON.stringify({cloumn:this.selectedColList});
+    },
+    miniMapProcessing(){
+
     },
   },
   created() {
