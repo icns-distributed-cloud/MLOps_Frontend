@@ -40,7 +40,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
-  props: ["predatasetId", "preProcessJson", "preProcessType"],
+  props: ["predatasetId", "preProcessJson", "preProcessType", "datasetType"],
   components: {},
   data() {
     return {
@@ -62,6 +62,7 @@ export default {
         isPublic: this.isPublic, 
         preProcessJson: this.preProcessJson, 
         preProcessType : this.preProcessType,
+        datasetType: this.datasetType,
         userId: this.userId,
       }).then((res) => {
         this.close(res.data);

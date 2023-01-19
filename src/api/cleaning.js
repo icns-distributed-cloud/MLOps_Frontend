@@ -58,8 +58,8 @@ const cleaning = {
       request
     );
   },
-  save({preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, userId}){
-    console.log({preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, userId});
+  save({preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, datasetType, userId}){
+    console.log({preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, datasetType, userId});
     return axios.post("/api/predataset/post/createpre", {
       preDatasetMasterId, name, isPublic, preProcessJson, preProcessType, userId
     });

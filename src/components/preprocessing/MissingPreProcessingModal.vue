@@ -13,6 +13,7 @@
         :predatasetId="predatasetId"
         :preProcessJson="preProcessJson"
         :preProcessType="preProcessType"
+        :datasetType="datasetType"
         @close="closeSavingModal"
       />
       <DatasetDrawTable
@@ -91,6 +92,7 @@ export default {
       selectedMethod: 0,
       preProcessJson:{},
       selectedColList:[],
+      datasetType: 0,
       pathList:[],
       item:{
         path: "",
@@ -177,10 +179,12 @@ export default {
       if (code){
         this.predatasetId = preDatasetMasterId;
         this.getData();
+        this.close();
       }
     },
     save() {
       this.preProcessType = this.selectedMethod;
+      this.datasetType = 1;
       this.preProcessJson = this.dictToJSON();
       this.isSaving = true;
     },
@@ -200,7 +204,7 @@ export default {
       return JSON.stringify({cloumn:this.selectedColList});
     },
     miniMapProcessing(){
-
+      this.datasetType = 2;
     },
   },
   created() {

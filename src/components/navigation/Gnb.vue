@@ -26,7 +26,7 @@
       ></font-awesome-icon>
       {{ menu.title }}
     </router-link>
-    <div class="menu-title">
+    <!--<div class="menu-title">
       <font-awesome-icon icon="fa-solid fa-chart-column" />
       데이터 현황
     </div>
@@ -41,7 +41,7 @@
         size="xs"
       ></font-awesome-icon>
       {{ menu.title }}
-    </router-link>
+    </router-link>-->
     <div class="menu-title">
       <font-awesome-icon icon="fa-solid fa-wrench" />
       데이터 전처리
