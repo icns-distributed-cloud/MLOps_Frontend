@@ -5,7 +5,7 @@
         <tbody>
           <tr>
             <td>{{model_info.name}}</td>
-            <td>{{endTime}}</td>
+            <td>진행 상황 : {{ProcessingMessage}}</td>
             <td>{{model_info.modelName}}</td>
             <td>진행도 : {{process}}</td>
             <td>val_loss : {{loss}}</td>
@@ -13,8 +13,10 @@
           <tr>
             <td>시작 시간</td>
             <td>{{model_info.createdTime}}</td>
-            <td>경과 시간</td>
-            <td>{{process_time}}</td>
+            <td v-if="isProcessing">경과 시간</td>
+            <td v-if="isProcessing">{{process_time}}</td>
+            <td v-if="!isProcessing">종료 시간</td>
+            <td v-if="!isProcessing">{{endTime}}</td>
             <td>
               <button class="detail-btn" @click="Change_See_Detail">
                 자세히보기
@@ -49,8 +51,9 @@ export default {
       predatasetName: "",
       createdTime: "",
       endTime: "",
-      real_time_update_flag: true,
+      isProcessing: true,
       process_time: "",
+      ProcessingMessage: "학습 중",
     };
   },
   created() {
@@ -71,6 +74,7 @@ export default {
         }
         else{
           this.real_time_update_flag = false;
+          this.ProcessingMessage="학습 완료";
         }
       })
       
@@ -119,7 +123,7 @@ export default {
     //...mapGetters("dataset", ["getDatasets"]),
   },
   mounted(){
-    if (this.real_time_update_flag){
+    if (this.isProcessing){
       this.timer = setInterval(() => {
           this.Get_Process_Info();
           this.ReadLog();

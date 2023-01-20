@@ -8,27 +8,25 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  props: ["datasetId"],
   data() {
     return {
       dataset: {},
     };
   },
   methods: {
-    ...mapActions("dataset", ["FETCH_DATASET"]),
-    getDataset() {
-      this.FETCH_DATASET(this.datasetId).then((res) => {
-        this.dataset = res;
+    ...mapActions("dataset", ["FETCH_DATASETS"]),
+    changeDataset() {
+      this.FETCH_DATASETS({
+        userId: this.userId
+      }).then(() => {
+        this.$emit("changeDataset");
       });
     },
-    changeDataset() {
-      this.$emit("changeDataset");
-    },
   },
-  created() {
-    this.getDataset();
+  computed: {
+    ...mapGetters("login", ["userId"])
   },
 };
 </script>

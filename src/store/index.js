@@ -10,6 +10,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     userId: 0,
+    baseURL: "http://data.icnslab.net"
   },
   modules: {
     dataset,

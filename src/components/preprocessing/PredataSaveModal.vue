@@ -1,7 +1,10 @@
 <template>
   <div class="modal-mask">
     <div class="modal-wrapper">
-      <div class="modal-container">
+      <div v-if="isLoading" class="loading">
+            <Spinner />
+      </div>
+      <div v-if="!isLoading" class="modal-container">
         <div class="modal-header">
           <div class="title">전처리 데이터셋 등록</div>
         </div>
@@ -39,13 +42,17 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import Spinner from "@/components/common/Spinner";
 export default {
   props: ["preDatasetId", "preProcessJson", "preProcessType", "datasetType"],
-  components: {},
+  components: {
+    Spinner,
+  },
   data() {
     return {
       name: "",
       isPublic: true,
+      isLoading: false,
     };
   },
   computed: {
@@ -66,6 +73,7 @@ export default {
         userId: this.userId,
       }).then((res) => {
         console.log(res);
+        this.isLoading = false;
         this.close(res.data);
       });
     },

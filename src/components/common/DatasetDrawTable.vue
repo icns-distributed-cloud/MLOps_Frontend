@@ -75,9 +75,15 @@ export default {
       this.turnoffSpiner();
     },
     drawTable(){
+      console.log(this.path);
+      
       if (this.path == null){
-        this.path = "http://data.icnslab.net/datasets/origin/021815_catfish.csv";
+        this.path = "http://data.icnslab.net/datasets/mini/catfish_with_na.csv"  
       }
+      else{
+        this.path = this.$store.state.baseURL + this.path;
+      }
+      
       fetch(this.path)
         .then((res) => {
           this.EditTable(res);

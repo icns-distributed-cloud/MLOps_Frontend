@@ -5,7 +5,8 @@ import Manage from "@/views/dataset/Manage";
 import Visualize from "@/views/status/Visualize";
 import Statistic from "@/views/status/Statistic";
 import MissingValue from "@/views/preprocessing/MissingValue";
-import Noise from "@/views/preprocessing/Noise";
+//import Noise from "@/views/preprocessing/Noise";
+import Column from "@/views/preprocessing/Column";
 import ModelCheck from "@/views/datatrain/ModelCheck";
 import ModelTrain from "@/views/datatrain/ModelTrain";
 
@@ -14,7 +15,7 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: "/",
-        name: "home",
+        name: "root",
         component: Home,
     },
     {
@@ -42,10 +43,15 @@ const routes = [
         name: "missing-value",
         component: MissingValue,
     },
-    {
+    /*{
         path: "/preprocessing/noise",
         name: "noise",
         component: Noise,
+    },*/
+    {
+        path: "/preprocessing/column",
+        name: "column-selection",
+        component: Column,
     },
     {
         path: "/datatrain/model-train",

@@ -55,12 +55,6 @@ const dataset = {
       formData
     );
   },
-  get(datasetId) {
-    return axios.post(
-      "/dataset-api/datasets/",
-      datasetId
-      );
-  },
   getList(userId) {
     return axios.post(
       "/api/origindataset/post/getoriginlist",
@@ -68,7 +62,6 @@ const dataset = {
       );
   },
   GetPreList({originDatasetId}){
-    console.log("GetPreList", originDatasetId);
     return axios.post(
       "/api/predataset/post/getprelist",
       {originDatasetId}
@@ -106,7 +99,6 @@ const dataset = {
     );
   },
   getPreviewData({ preDatasetId }) {
-    console.log(preDatasetId);
     return axios.post(
       "/api/predataset/post/getonepre",{
         preDatasetId

@@ -45,11 +45,6 @@ const actions = {
         return res.data;
       });
   },
-  FETCH_DATASET(context, datasetId) {
-    return dataset.get(datasetId).then((res) => {
-      return res.data;
-    });
-  },
   FETCH_DATASETS(context, {userId}) {
     return dataset.getList(userId).then((res) => {
       context.commit("SET_DATASETS", res.data);

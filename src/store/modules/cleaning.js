@@ -39,7 +39,6 @@ const actions = {
   SAVE(context, {preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId}){
     return cleaning.save({preDatasetId, name, isPublic, preProcessJson, preProcessType, datasetType, userId})
     .then((res)=>{
-      console.log(res);
       return res.data;
     })
   }

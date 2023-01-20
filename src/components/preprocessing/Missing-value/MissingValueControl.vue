@@ -10,7 +10,7 @@
           <th>Action</th>
         </thead>
         <tbody>
-          <template v-for="dataset in Predatasets" >
+          <template v-for="dataset in Predatasets.slice().reverse()" >
             <tr
                 :key="dataset.id"
                 v-if="dataset.datasetType < 2"
@@ -92,7 +92,7 @@ import Spinner from "@/components/common/Spinner";
 import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
 import PreDatasetUpdateModal from "@/components/dataset/modal/PreDatasetUpdateModal";
 import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
-import MissingPreProcessingModal from "@/components/preprocessing/MissingPreProcessingModal";
+import MissingPreProcessingModal from "@/components/preprocessing/Missing-value/MissingPreProcessingModal";
 export default {
   props: ["originDatasetId"],
   components: {

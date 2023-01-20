@@ -184,7 +184,7 @@ export default {
 
 .modal-container {
   width: 800px;
-  height: 420px;
+  height: 600px;
   margin: 0px auto;
   color: #e8e8e8;
   background-color: #252525;
@@ -208,6 +208,7 @@ export default {
 
 .modal-body {
   padding: 15px 20px;
+  
 }
 .name {
   font-size: 17px;
