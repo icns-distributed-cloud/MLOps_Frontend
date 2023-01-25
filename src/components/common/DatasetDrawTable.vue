@@ -81,7 +81,7 @@ export default {
         this.path = "http://data.icnslab.net/datasets/mini/catfish_with_na.csv"  
       }
       else{
-        this.path = this.$store.state.baseURL + this.path;
+        this.path = this.$store.state.baseURL +'/'+ this.path;
       }
       
       fetch(this.path)

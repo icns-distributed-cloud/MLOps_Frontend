@@ -1,14 +1,14 @@
 <template>
   <div class="main">
     <div class="header">
-      <div class="title">결측치 처리</div>
+      <div class="title">속성 엔지니어링</div>
       <SelectedData
         v-if="showData"
         @changeDataset="changeDataset"
       />
     </div>
     <div class="content">
-      <MissingValueControl
+      <ColumnEngineeringControl
         v-if="showData"
         @close="closeMissingValueControl"
         :originDatasetId="originDatasetId"
@@ -20,7 +20,7 @@
     >
       <template slot="description">
         <div class="description">
-          모델훈련을 실행 할 원본 데이터셋을 선택하세요.
+          속성 엔지니어링을 실행 할 원본 데이터셋을 선택하세요.
         </div>
       </template>
     </DatasetSelectModal>
@@ -30,12 +30,12 @@
 <script>
 import SelectedData from "@/components/common/SelectedData";
 import DatasetSelectModal from "@/components/common/DatasetSelectModal";
-import MissingValueControl from "@/components/preprocessing/Missing-value/MissingValueControl";
+import ColumnEngineeringControl from "@/components/preprocessing/Column-engineering/ColumnEngineeringControl.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     DatasetSelectModal,
-    MissingValueControl,
+    ColumnEngineeringControl,
     SelectedData,
   },
   data() {

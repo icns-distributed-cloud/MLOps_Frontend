@@ -125,8 +125,8 @@ export default {
             title: "노이즈 제거",
           },*/
           {
-            name: "column-selection",
-            title: "컬럼 선택"
+            name: "column-engineering",
+            title: "속성 엔지니어링"
           }
         ],
         datatrain: [

@@ -50,7 +50,7 @@ const routes = [
     },*/
     {
         path: "/preprocessing/column",
-        name: "column-selection",
+        name: "column-engineering",
         component: Column,
     },
     {

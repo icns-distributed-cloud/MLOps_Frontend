@@ -42,7 +42,7 @@
 
 <script>
 import RegistrationModal from "@/components/home/RegistrationModal";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   components:{
     RegistrationModal,
@@ -59,15 +59,21 @@ export default {
       "LOGIN",
     ]),
     Login() {
-      this.LOGIN({
-        loginId: this.loginId,
-        loginPassword: this.password,
-      }).then((res) => {
-        if (res.userId>0){
-          this.$emit("close");
-          this.ToDataManage();
-        }
-      });
+      if(this.userId > 0){
+        this.ToDataManage();
+      }
+      else{
+        this.LOGIN({
+          loginId: this.loginId,
+          loginPassword: this.password,
+        }).then((res) => {
+          if (res.userId>0){
+            this.$emit("close");
+            this.ToDataManage();
+          }
+        });
+      }
+      
     },
     Registration(){
       console.log("회원가입", this.ID, this.PW);
@@ -80,7 +86,9 @@ export default {
       // object
       this.$router.push({ path: 'dataset/manage' })
     },
-    
+  },
+  computed: {
+    ...mapGetters("login", ["userId"]),
   },
 };
 </script>

@@ -22,7 +22,6 @@ export default {
     this.FETCH_DATASETS({
         userId: this.userId
       });
-    console.log();
   },
   computed: {
     ...mapGetters("login", ["userId"]),
