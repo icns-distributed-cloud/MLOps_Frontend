@@ -52,7 +52,7 @@
                     <td class="action">
                       <button
                         class="delete-btn"
-                        @click="deleteCol(index)"
+                        @click="addCol(index)"
                       >
                         <font-awesome-icon
                           icon="fa-solid fa-trash-can"
@@ -107,6 +107,10 @@ export default {
     deleteCol(index) {
       this.nonselected_cols.push(this.selected_cols[index]);
       this.selected_cols.splice(index, 1);
+    },
+    addCol(index) {
+      this.selected_cols.push(this.nonselected_cols[index]);
+      this.nonselected_cols.splice(index, 1);
     },
   },
   created(){
