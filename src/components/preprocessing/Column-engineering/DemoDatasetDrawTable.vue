@@ -56,7 +56,7 @@ export default {
       var columns = split_line[0].replace('\r', '').split(',')
       columns.forEach((col)=>{
         this.data["column"].push({
-          "name":col, "type":typeof(col)
+          "name":col, "type":typeof(col),
         });
       })
 

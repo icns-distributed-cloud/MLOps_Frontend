@@ -39,12 +39,12 @@
           </option>
         </select>
         <div v-if="this.selectedMethod == 0">
-          <button class="selectcolumn-btn" @click="showColumnSelect">
+          <button class="selectcolumn-btn" @click="openColumnSelect">
             속성 선택
           </button>
         </div>
         <div v-if="this.selectedMethod == 1">
-          <button class="selectcolumn-btn" @click="showColumnSelect">
+          <button class="selectcolumn-btn" @click="openCorrMethodSelectModal">
             상관계수 선택
           </button>
         </div>
@@ -69,6 +69,11 @@
     @close="closeColumnSelect"
     :col_list="col_list"
     />
+    <CorrMethodSelectModal 
+    v-if="showCorrMethodSelectModal"
+    @close="closeCorrMethodSelectModal"
+    :col_list="col_list"
+    />
   </div>
 </template>
 
@@ -78,6 +83,7 @@ import Spinner from "@/components/common/Spinner";
 import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
 import DemoDatasetDrawTable from "@/components/preprocessing/Column-engineering/DemoDatasetDrawTable.vue";
 import ColumnSelectModal from "@/components/preprocessing/Column-engineering/ColumnSelectModal.vue";
+import CorrMethodSelectModal from "@/components/preprocessing/Column-engineering/CorrMethodSelectModal.vue";
 export default {
   props: ["dataset"],
   components: {
@@ -85,12 +91,14 @@ export default {
     PredataSaveModal,
     DemoDatasetDrawTable,
     ColumnSelectModal,
+    CorrMethodSelectModal,
   },
   data() {
     return {
       isLoading: true,
       isSaving: false,
       showColumnSelectModal: false,
+      showCorrMethodSelectModal: false,
       preDatasetId: 0,
       preProcessType: 0,
       selectedMethod: 0,
@@ -161,7 +169,6 @@ export default {
       this.isLoading = false;
 
       this.col_list = col_list;
-      console.log(this.col_list);
     }, 
     dictToJSON(){
       return JSON.stringify({column:this.selectedColList});
@@ -190,11 +197,17 @@ export default {
         
       });
     },
-    showColumnSelect(){
+    openColumnSelect(){
       this.showColumnSelectModal = true;
     },
     closeColumnSelect(){
       this.showColumnSelectModal = false;
+    },
+    openCorrMethodSelectModal(){
+      this.showCorrMethodSelectModal = true;
+    },
+    closeCorrMethodSelectModal(){
+      this.showCorrMethodSelectModal = false;
     },
   },
   created() {

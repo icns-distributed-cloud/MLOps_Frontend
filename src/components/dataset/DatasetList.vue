@@ -8,7 +8,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="dataset in getDatasets"
+            v-for="dataset in getDatasets.slice().reverse()"
             :key="dataset.id"
           >
             <td class="name">{{ dataset.name }}</td>

@@ -3,7 +3,7 @@
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-header">
-          <div class="title">데이터셋 등록</div>
+          <div class="title">사용할 속성 선택</div>
         </div>
         <div class="modal-body">
           <div class="content">
@@ -35,7 +35,34 @@
                 </tbody>
               </table>
             </div>
-            <div class="nonselected-container"></div>
+            <div class="nonselected-container">
+              <table>
+                <thead>
+                  <th>제거할 속성</th>
+                  <th>Action</th>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="col, index in nonselected_cols"
+                    :key="index"
+                  >
+                    <td class="name">
+                      {{ col.name }}
+                    </td>
+                    <td class="action">
+                      <button
+                        class="delete-btn"
+                        @click="deleteCol(index)"
+                      >
+                        <font-awesome-icon
+                          icon="fa-solid fa-trash-can"
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -78,7 +105,7 @@ export default {
       console.log(this.col_list);
     },
     deleteCol(index) {
-      this.nonselected_cols.push(index);
+      this.nonselected_cols.push(this.selected_cols[index]);
       this.selected_cols.splice(index, 1);
     },
   },
@@ -142,11 +169,13 @@ export default {
   width: 45%;
   height: 90%;
   margin: auto;
+  border: 1px #969696 solid;
 }
 .nonselected-container{
   width: 45%;
   height: 90%;
   margin: auto;
+  border: 1px #969696 solid;
 }
 .modal-footer {
   display: flex;
@@ -211,7 +240,7 @@ td:first-child {
 .action {
   padding: 0 20px;
   max-width: 50px;
-  color: #e8e8e8;
+  color: #ffffff;
 }
 .action button {
   height: 25px;
@@ -220,10 +249,10 @@ td:first-child {
   background-color: transparent;
   border-radius: 5px;
   font-size: 15px;
+  color: rgb(157, 157, 157);
+  border-color: rgb(157, 157, 157);;
 }
-button svg {
-  margin-right: 6px;
-}
+
 .show-btn {
   border: 1px solid rgb(157, 157, 157);
   color: rgb(157, 157, 157);

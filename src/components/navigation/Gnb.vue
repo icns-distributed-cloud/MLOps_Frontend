@@ -6,9 +6,12 @@
       @click.native="openMenu('home')"
     >
       <div class="logo">
-        <img src="@/assets/images/logo.png" />
+        <!--<img src="@/assets/images/logo.png" />-->
+        <img src="@/assets/images/Military_logo.png" />
       </div>
-      <div>KHU Data Studio</div>
+      <div class="logo-title">
+        대한민국  국방부
+      </div>
     </router-link>
     <div class="menu-title">
       <font-awesome-icon icon="fa-regular fa-folder-open" />
@@ -152,6 +155,13 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family:'Bold_TTF';
+  src: url('../../assets/font/Bold_TTF.ttf');
+  font-weight: 400;
+}
+
+
 .gnb {
   background-color: #2c2c2c;
   width: 220px;
@@ -168,10 +178,11 @@ export default {
   width: 100%;
   text-align: center;
   font-size: 20px;
-  font-family: "Noto Sans Mono", monospace;
+  font-family: "Noto Sans KR", monospace;
   letter-spacing: -0.5px;
   word-spacing: -4px;
   display: flex;
+  align-items: center;
   margin-bottom: 10px;
 }
 .logo {
@@ -180,7 +191,13 @@ export default {
   padding-left: 10px;
 }
 .logo > img {
-  width: 25px;
+  width: 45px;
+  height: 45px;
+}
+.logo-title {
+  font-size: 23px;
+  text-align: center;
+  font-family: "Bold_TTF", "Noto Sans KR";
 }
 .menu-title {
   color: #7999c3;
