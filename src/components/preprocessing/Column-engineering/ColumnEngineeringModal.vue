@@ -16,10 +16,11 @@
         :datasetType="datasetType"
         @close="closeSavingModal"
       />
-      <DatasetDrawTable
+      <DemoDatasetDrawTable
             v-if="!isLoading"
             @turnoffSpiner="turnoffSpiner"
             :path="pathList[pathList.length-1]"
+            :ban_list="ban_list"
           />
       <div class="action-container">
         <div class="method-label">
@@ -37,6 +38,16 @@
             {{ method.text }}
           </option>
         </select>
+        <div v-if="this.selectedMethod == 0">
+          <button class="selectcolumn-btn" @click="showColumnSelect">
+            속성 선택
+          </button>
+        </div>
+        <div v-if="this.selectedMethod == 1">
+          <button class="selectcolumn-btn" @click="showColumnSelect">
+            상관계수 선택
+          </button>
+        </div>
         <div class="btn-container">
           <button class="restore-btn" @click="restore">
             복원
@@ -53,6 +64,11 @@
         </div>
       </div>
     </div>
+    <ColumnSelectModal 
+    v-if="showColumnSelectModal"
+    @close="closeColumnSelect"
+    :col_list="col_list"
+    />
   </div>
 </template>
 
@@ -60,25 +76,34 @@
 import { mapGetters, mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
 import PredataSaveModal from "@/components/preprocessing/PredataSaveModal.vue";
-import DatasetDrawTable from "@/components/common/DatasetDrawTable";
+import DemoDatasetDrawTable from "@/components/preprocessing/Column-engineering/DemoDatasetDrawTable.vue";
+import ColumnSelectModal from "@/components/preprocessing/Column-engineering/ColumnSelectModal.vue";
 export default {
   props: ["dataset"],
   components: {
     Spinner,
     PredataSaveModal,
-    DatasetDrawTable,
+    DemoDatasetDrawTable,
+    ColumnSelectModal,
   },
   data() {
     return {
+      isLoading: true,
+      isSaving: false,
+      showColumnSelectModal: false,
+      preDatasetId: 0,
+      preProcessType: 0,
+      selectedMethod: 0,
+      datasetType: 0,
       data: [],
       saveData: [],
       originData: [],
       originDataNa: [],
-      isLoading: true,
-      isSaving: false,
       naIdxList: [],
-      preDatasetId: 0,
-      preProcessType: 0,
+      preProcessJson:{},
+      pathList:[],
+      ban_list:[],
+      col_list:[],
       idxCol: "created_at",
       methods: [
         {
@@ -90,11 +115,6 @@ export default {
           value: 1,
         },
       ],
-      selectedMethod: 0,
-      preProcessJson:{},
-      selectedColList:[],
-      datasetType: 0,
-      pathList:[],
       item:{
         path: "",
         preDatasetId: 0,
@@ -105,70 +125,6 @@ export default {
   methods: {
     ...mapActions("dataset", ["PREVIEW_DATA"]),
     ...mapActions("cleaning", ["SAVE"]),
-    /*
-    findNa() {
-      this.isLoading = true;
-      this.FETCH_DATA({
-        PredatasetId: this.predatasetId,
-        limit: 0,
-      }).then((res) => {
-        this.originData = res;
-        this.FIND_NA({ request: res }).then((res) => {
-          this.saveData = res;
-          this.data = res;
-          this.originDataNa = res;
-          this.isLoading = false;
-          this.updateNaIdx();
-        });
-      });
-    },
-    updateNaIdx() {
-      this.naIdxList = [];
-      for (
-        var i = 0;
-        i < this.originDataNa.data.length;
-        i++
-      ) {
-        for (
-          var j = 0;
-          j < this.originDataNa.column.length;
-          j++
-        ) {
-          if (
-            this.originDataNa.data[i][
-              this.originDataNa.column[j].name
-            ] === null
-          ) {
-            this.naIdxList.push({ i, j });
-          }
-        }
-      }
-    },
-    isNaIdx(iIdx, jIdx) {
-      var isContain = this.naIdxList.filter(
-        (e) => e.i === iIdx && e.j === jIdx
-      );
-      return isContain.length > 0;
-    },
-    restore() {
-      this.isLoading = true;
-      this.data = this.originDataNa;
-      this.isLoading = false;
-    },
-    runNa() {
-      this.isLoading = true;
-      this.RUN_NA({
-        method: this.selectedMethod,
-        idxCol: this.idxCol,
-        request: this.originData,
-      }).then((res) => {
-        this.data = res.run;
-        this.saveData = res.save;
-        this.isLoading = false;
-      });
-    },
-    */
-
     restore(){
       if(this.pathList.length>1){
         this.pathList.pop();
@@ -201,8 +157,11 @@ export default {
           this.isLoading=false;
         });
     },
-    turnoffSpiner(){
+    turnoffSpiner(col_list){
       this.isLoading = false;
+
+      this.col_list = col_list;
+      console.log(this.col_list);
     }, 
     dictToJSON(){
       return JSON.stringify({column:this.selectedColList});
@@ -230,6 +189,12 @@ export default {
         })
         
       });
+    },
+    showColumnSelect(){
+      this.showColumnSelectModal = true;
+    },
+    closeColumnSelect(){
+      this.showColumnSelectModal = false;
     },
   },
   created() {
@@ -305,6 +270,20 @@ td {
   color: #e8e8e8;
   font-size: 16px;
   padding: 10px;
+  margin-bottom: 10px;
+  width: 250px;
+}
+.selectcolumn-btn{
+  width: 250px;
+  height: 30px;
+  border-radius: 5px;
+  color: #e8e8e8;
+  font-weight: 400;
+  border: 1px #676767a6 solid;
+  background-color: #373737;
+}
+.selectcolumn-btn:hover {
+  background-color: #464646;
 }
 .btn-container {
   width: 250px;

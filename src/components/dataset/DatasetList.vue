@@ -183,7 +183,6 @@ th {
   font-size: 17px;
   font-weight: 400;
   background-color: #2c2c2c;
-  width: 300px;
 }
 th:first-child {
   border-right: none;
