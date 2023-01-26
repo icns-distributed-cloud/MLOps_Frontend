@@ -98,11 +98,11 @@ export default {
   },
   methods: {
     close() {
-      this.$emit("close");
+      this.$emit("close", this.col_list);
     },
     save() {
-      console.log("save");
-      console.log(this.col_list);
+      this.col_list = this.selected_cols;
+      this.close();
     },
     deleteCol(index) {
       this.nonselected_cols.push(this.selected_cols[index]);
@@ -114,7 +114,7 @@ export default {
     },
   },
   created(){
-    this.selected_cols = this.col_list;
+    this.selected_cols = Object.assign([], this.col_list);
     console.log(this.col_list);
   }
 };

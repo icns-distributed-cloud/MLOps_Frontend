@@ -200,7 +200,8 @@ export default {
     openColumnSelect(){
       this.showColumnSelectModal = true;
     },
-    closeColumnSelect(){
+    closeColumnSelect(payload){
+      this.col_list = payload;
       this.showColumnSelectModal = false;
     },
     openCorrMethodSelectModal(){
