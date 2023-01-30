@@ -6,12 +6,13 @@
       @click.native="openMenu('home')"
     >
       <div class="logo">
-        <!--<img src="@/assets/images/logo.png" />-->
-        <img src="@/assets/images/Military_logo.png" />
+        <!--<img src="@/assets/images/logo.png" />--> <!--기본 MLStudio 로고-->
+        <!--<img src="@/assets/images/Military_logo.png" />--> <!--국방부 과제용 로고-->
+        <img src="@/assets/images/Battery_logo.png" /> <!--배터리팀 로고-->
       </div>
-      <div class="logo-title">
-        대한민국  국방부
-      </div>
+      <!--<div class="logo-title"> KHU Data Studio </div>-->
+      <!--<div class="logo-title"> 대한민국  국방부 </div>-->
+      <div class="logo-title"> Battery Studio </div>
     </router-link>
     <div class="menu-title">
       <font-awesome-icon icon="fa-regular fa-folder-open" />
@@ -193,11 +194,6 @@ export default {
 .logo > img {
   width: 45px;
   height: 45px;
-}
-.logo-title {
-  font-size: 23px;
-  text-align: center;
-  font-family: "Bold_TTF", "Noto Sans KR";
 }
 .menu-title {
   color: #7999c3;
