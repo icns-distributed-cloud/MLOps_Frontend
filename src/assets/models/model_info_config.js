@@ -10,7 +10,7 @@ const model_info = [
             {
                 "param_name" : "flag",
                 "val" : "ms",
-                "description" : "???"
+                "description" : "Training mode"
             },
             {
                 "param_name" : "type",

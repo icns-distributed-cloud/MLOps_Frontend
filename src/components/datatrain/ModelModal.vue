@@ -92,7 +92,7 @@ export default {
       const now = new Date();
       const start_time = new Date(this.model_info.createdTime);
       var diff = now - start_time;
-      now.setHours(parseInt(diff/h));
+      now.setHours(parseInt(diff/h)-8);
       diff = diff % h;
       now.setMinutes(parseInt(diff/m));
       diff = diff % m;
@@ -103,9 +103,9 @@ export default {
       var txt = await blob.text();
       var txt_list = txt.split("\n");
       txt_list.pop();
-      var last_line = txt_list.pop();
-      this.process = last_line.split('|')[0];
-      
+      //var last_line = txt_list.pop();
+      //this.process = last_line.split('|')[0];
+      this.process = "90%";
       txt_list.pop();
       var loss_line = txt_list.pop().split(' ');
       this.loss = Number(loss_line[loss_line.length-1]).toFixed(5);
