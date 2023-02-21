@@ -5,6 +5,7 @@ git clone -b hyeonki https://github.com/icns-distributed-cloud/MLOps_Frontend.gi
 cd MLOps_Frontend
 
 apt update
+apt upgrade -y
 apt install npm -y
 npm install
 npm run serve
