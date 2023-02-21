@@ -3,6 +3,8 @@
 ```
 git clone -b hyeonki https://github.com/icns-distributed-cloud/MLOps_Frontend.git
 cd MLOps_Frontend
+
+apt update
 apt install npm -y
 npm install
 npm run serve
