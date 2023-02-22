@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "@/views/home/Home";
+//import Home from "@/views/home/Home";
 import Manage from "@/views/dataset/Manage";
 import Visualize from "@/views/status/Visualize";
 import Statistic from "@/views/status/Statistic";
@@ -16,12 +16,12 @@ const routes = [
     {
         path: "/",
         name: "root",
-        component: Home,
+        component: Manage,
     },
     {
         path: "/home",
         name: "home",
-        component: Home,
+        component: Manage,
     },
     {
         path: "/dataset/manage",

@@ -1,7 +1,7 @@
 import login from "@/api/login";
 
 const state = {
-  Id: 0,
+  Id: 1,
   UserName: "",
 };
 
