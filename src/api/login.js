@@ -18,7 +18,8 @@ const login = {
     });
   },
   dummy_login(){
-    return axios.get("/api/users/get/dumylogin")
+    console.log("is it work?");
+    return axios.get("/api/users/get/dummylogin")
   },
 };
 
