@@ -137,11 +137,11 @@ export default {
           {
             name: "model-train",
             title: "모델 훈련",
-          },
+          }/*,
           {
             name: "model-check",
             title: "모델 확인",
-          },
+          },*/
         ],
       },
       currentMenu: "home",

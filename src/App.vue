@@ -17,11 +17,13 @@ export default {
   components: { Gnb },
   methods: {
     ...mapActions("dataset", ["FETCH_DATASETS"]),
+    ...mapActions("login", ["DUMMY_LOGIN"])
   },
   created() {
     this.FETCH_DATASETS({
         userId: this.userId
       });
+    this.DUMMY_LOGIN();
   },
   computed: {
     ...mapGetters("login", ["userId"]),

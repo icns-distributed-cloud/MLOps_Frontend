@@ -175,6 +175,7 @@ table {
   display: block;
   overflow: auto;
 }
+
 th {
   position: sticky;
   top: 0px;
@@ -183,6 +184,7 @@ th {
   font-size: 17px;
   font-weight: 400;
   background-color: #2c2c2c;
+  min-width: 200px;
 }
 th:first-child {
   border-right: none;

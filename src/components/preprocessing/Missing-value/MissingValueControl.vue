@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="loading">
           <Spinner />
     </div>
-    <div class="table-container" v-if="!showMissingPreProcessingModal">
+    <div class="table-container" v-if="!showMissingPreProcessingModal && !isLoading">
       <table>
         <thead>
           <th>데이터셋</th>
@@ -122,7 +122,10 @@ export default {
       this.FETCH_PREDATASETS({
         originDatasetId: this.originDatasetId,
       }).then((res) => {
-        if(res.data.length <= 0){this.close();} // 데이터를 모두 삭제해서 리스트에 아무것도 없는 경우 창 닫기
+        if(res.data.length <= 0){
+          this.isLoading = false;
+          return ;
+        } // 데이터를 모두 삭제해서 리스트에 아무것도 없는 경우 창 닫기
         this.isLoading = false;
         this.Predatasets = res.data.slice(1, );
         this.Predatasets.push(res.data[0]);

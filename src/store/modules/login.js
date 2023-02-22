@@ -55,6 +55,20 @@ const actions = {
       }
     });
   },
+
+  /* 로그인을 사용하지 않을 때, 
+  만약 DB를 초기화 한다면 계정이 하나도 없기 때문에 초기 계정 하나 생성 */
+  DUMMY_LOGIN(){
+    return login.dummy_login()
+      .then((res) => {
+        if(res.data.success){
+          console.log("dummy_login success");
+        }
+        else{
+          console.log("dummy_login fail");
+        }
+    });
+  },
 };
 
 export default {

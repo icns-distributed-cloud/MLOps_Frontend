@@ -17,6 +17,9 @@ const login = {
       loginId, loginPassword, name, eMail, phoneNumber
     });
   },
+  dummy_login(){
+    return axios.get("/api/users/get/dumylogin")
+  },
 };
 
 export default login;
