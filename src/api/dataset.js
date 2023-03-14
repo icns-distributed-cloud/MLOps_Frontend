@@ -2,22 +2,34 @@ import axios from "axios";
 
 const dataset = {
   saveWithDatabase({
-    name,
-    host,
+    datasetName,
+    dataBaseName,
+    dataBaseIp,
     port,
-    db,
-    username,
-    password,
-    table,
+    //db,
+    userId,
+    userPassWord,
+    tableName,
   }) {
-    return axios.post("/dataset-api/datasets/database", {
-      name,
-      host,
+    console.log({
+      datasetName,
+      dataBaseName,
+      dataBaseIp,
       port,
-      db,
-      username,
-      password,
-      table,
+      //db,
+      userId,
+      userPassWord,
+      tableName,
+    });
+    return axios.post("/api/origindataset/post/addnewdatabaseorigin", {
+      datasetName,
+      dataBaseName,
+      dataBaseIp,
+      port,
+      //db,
+      userId,
+      userPassWord,
+      tableName,
     });
   },
   saveWithCsv(csv) {

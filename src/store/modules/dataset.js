@@ -17,29 +17,40 @@ const mutations = {
 };
 
 const actions = {
-  SAVE_DATASET(
+  SAVE_DATASET_WITH_DATABASE(
     context,
     {
-      name,
-      host,
+      datasetName,
+      dataBaseName,
+      dataBaseIp,
       port,
-      db,
-      userName,
-      password,
+      //db,
+      userId,
+      userPassWord,
       tableName,
-      dateTimeColumn,
     }
   ) {
+    console.log({
+      datasetName,
+      dataBaseName,
+      dataBaseIp,
+      port,
+      //db,
+      userId,
+      userPassWord,
+      tableName,
+    })
+    console.log("Save With Database");
     return dataset
-      .save({
-        name,
-        host,
+      .saveWithDatabase({
+        datasetName,
+        dataBaseName,
+        dataBaseIp,
         port,
-        db,
-        userName,
-        password,
+        //db,
+        userId,
+        userPassWord,
         tableName,
-        dateTimeColumn,
       })
       .then((res) => {
         return res.data;

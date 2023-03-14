@@ -207,31 +207,39 @@ export default {
       this.validate = true;
       this.saveError = false;
       this.saveMsgOrigin = "데이터를 확인하고 있습니다.";
+
       if (this.selected === 0) {
         if (this.name == "")
         {
           this.name = this.db + '.' + this.table;
         }
-        
-        /*this.SAVE_DATASET_WITH_DATABASE({
-          name: this.name,
-          host: this.host,
+        this.SAVE_DATASET_WITH_DATABASE({
+          datasetName : this.name,
+          dataBaseIp: this.host,
           port: this.port,
-          db: this.db,
-          username: this.username,
-          password: this.password,
-          table: this.table,
+          dataBaseName: this.db,
+          userId: this.username,
+          userPassWord: this.password,
+          tableName: this.table,
         })
-          .then(() => {
-            this.FETCH_DATASETS({userId: this.userId}).then(() => {
-              this.$emit("close");
-            });
+          .then((res) => {
+            console.log("res is")
+            console.log(res)
+            if(res.success){
+              this.FETCH_DATASETS({userId: this.userId}).then(() => {
+                this.$emit("close");
+              });
+            }
+            else{
+              alert("데이터베이스 연결에 실패하였습니다. 다시 시도해주세요.");
+            }
           })
           .catch((err) => {
             this.saveError = true;
             this.saveMsgOrigin = err.response.data.message;
-          });*/
-      } else {
+          });
+      } 
+      else {
         this.SAVE_DATASET_WITH_CSV({
           csv: this.csv
         })
