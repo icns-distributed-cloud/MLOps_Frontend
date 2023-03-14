@@ -11,16 +11,6 @@ const dataset = {
     userPassWord,
     tableName,
   }) {
-    console.log({
-      datasetName,
-      dataBaseName,
-      dataBaseIp,
-      port,
-      //db,
-      userId,
-      userPassWord,
-      tableName,
-    });
     return axios.post("/api/origindataset/post/addnewdatabaseorigin", {
       datasetName,
       dataBaseName,

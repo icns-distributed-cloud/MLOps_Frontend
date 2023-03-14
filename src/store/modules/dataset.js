@@ -30,17 +30,6 @@ const actions = {
       tableName,
     }
   ) {
-    console.log({
-      datasetName,
-      dataBaseName,
-      dataBaseIp,
-      port,
-      //db,
-      userId,
-      userPassWord,
-      tableName,
-    })
-    console.log("Save With Database");
     return dataset
       .saveWithDatabase({
         datasetName,
