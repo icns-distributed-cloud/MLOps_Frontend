@@ -2,9 +2,9 @@ name: Upload a Build Artifact
 
 on:
   push:
-    branches: [hyeonki]
+    branches: [main]
   pull_request:
-    branches: [hyeonki]
+    branches: [main]
 
 jobs:
   # job의 이름 설정
