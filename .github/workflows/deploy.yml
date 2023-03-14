@@ -67,4 +67,4 @@ jobs:
           script:  |
             docker rm -f ${{ secrets.MLOPS_UI_CONTAINER_NAME }}
             docker rmi ${{ secrets.MLOPS_UI_DOCKER_REPO }}
-            # docker run -d --name ${{ secrets.MLOPS_UI_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.MLOPS_UI_DOCKER_REPO }}
+            docker run -d --name ${{ secrets.MLOPS_UI_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.MLOPS_UI_DOCKER_REPO }}
