@@ -108,6 +108,10 @@ export default {
             name: "manage",
             title: "데이터셋 관리",
           },
+          {
+            name: "TransferAnalyzeData",
+            title: "분석용 데이터 변환",
+          },
         ],
         status: [
           {

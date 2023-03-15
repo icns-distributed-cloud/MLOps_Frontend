@@ -78,7 +78,7 @@ export default {
       console.log(this.path);
       
       if (this.path == null){
-        this.path = "http://data.icnslab.net/datasets/mini/catfish_with_na.csv"  
+        this.path = "http://data.icnslab.net/datasets/mini/5_catfish_with_na.csv"  
       }
       else{
         this.path = this.$store.state.baseURL +'/'+ this.path;

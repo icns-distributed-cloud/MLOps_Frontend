@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 //import Home from "@/views/home/Home";
 import Manage from "@/views/dataset/Manage";
+import TransferAnalyzeData from "@/views/dataset/TransferAnalyzeData";
 import Visualize from "@/views/status/Visualize";
 import Statistic from "@/views/status/Statistic";
 import MissingValue from "@/views/preprocessing/MissingValue";
@@ -27,6 +28,11 @@ const routes = [
         path: "/dataset/manage",
         name: "manage",
         component: Manage,
+    },
+    {
+        path: "/dataset/TransferAnalyzeData",
+        name: "TransferAnalyzeData",
+        component: TransferAnalyzeData,
     },
     {
         path: "/status/visualize",
