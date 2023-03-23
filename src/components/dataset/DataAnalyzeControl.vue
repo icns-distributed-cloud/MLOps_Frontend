@@ -43,6 +43,8 @@
     },
     data() {
       return {
+        name:"",
+
         checked_model_list: [],
         isLoading: false,
         isNaming: true,
@@ -54,34 +56,38 @@
       };
     },
     methods: {
-      ...mapActions("training", ["FETCH_RUNNING_MODELINFOS"]),
+      ...mapActions("dataset", ["CREATE_HAPPY_PRE"]),
       
       // 분석용 데이터셋 이름입력 모달창(AnalyzedDataSetName) close시 동작
       closeAnalyzedDataSetName() {
         this.isNaming = false;
       },
       saveName(name){
+        this.name = name;
         this.isNaming = false;
         this.isLoading = true;
 
         console.log("분석용 데이터셋 이름");
-        console.log(name);
+        console.log(this.name);
         console.log( this.isNaming);
 
         // 이곳에 분석데이터 API 넣음
+        this.CREATE_HAPPY_PRE({
+          preDatasetId:this.predatasetId, 
+          name:this.name, 
+          userId:this.userId, 
+          PreProcessType:0,
+        })
+        .then((res) => {
+            console.log(res);
+            this.isLoading = false;
+        });
         // 분석데이터가 완료되면, 데이터의 path를 리턴받아 테이블 작성
         // 테스트
-        this.isLoading = false;
+        //this.isLoading = false;
       },
     },
-    created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
-      this.FETCH_RUNNING_MODELINFOS({
-        userId: this.userId,
-      });
-      console.log(this.predatasetId);
-    },
     computed: {
-      ...mapGetters("training", ["getRunningModelinfos"]),
       ...mapGetters("login", ["userId"]),
     },
   };

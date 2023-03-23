@@ -29,6 +29,7 @@ const dataset = {
       "/api/origindataset/post/createorigin", file
     );
   },
+  /*
   previewWithDatabase({
     host,
     port,
@@ -57,6 +58,7 @@ const dataset = {
       formData
     );
   },
+  */
   getList(userId) {
     return axios.post(
       "/api/origindataset/post/getoriginlist",
@@ -107,6 +109,7 @@ const dataset = {
       }
     );
   },
+  /*
   getData(PredatasetId, st, et) {
     return axios.get(
       "/dataset-api/datasets/" +
@@ -140,6 +143,7 @@ const dataset = {
       }
     );
   },
+  */
   updateWithCsv({
     userId, originDatasetId, name
   }) {
@@ -148,6 +152,7 @@ const dataset = {
         userId, originDatasetId, name
       });
   },
+  /*
   deleteDataByDate({ datasetId, dateList }) {
     return axios.delete(
       "/dataset-api/datasets/" + datasetId + "/data",
@@ -170,6 +175,16 @@ const dataset = {
     return axios.get(
       "/dataset-api/datasets/" + datasetId + "/history"
     );
+  },
+  */
+  createHappyPre({
+    preDatasetId, name, userId, PreProcessType
+  }) {
+    console.log(preDatasetId, name, userId, PreProcessType);
+    return axios.post(
+      "preDatasetId, name, userId, PreProcessType",{
+        preDatasetId, name, userId, PreProcessType
+      });
   },
 };
 

@@ -177,6 +177,18 @@ const actions = {
          return res.data;
       });
   },
+  CREATE_HAPPY_PRE(context, {
+    preDatasetId, name, userId, PreProcessType
+  }){
+    console.log(preDatasetId, name, userId, PreProcessType);
+    return dataset
+    .createHappyPre({
+      preDatasetId, name, userId, PreProcessType
+    })
+    .then((res) => {
+      return res.data;
+   });
+  },
 };
 
 export default {
