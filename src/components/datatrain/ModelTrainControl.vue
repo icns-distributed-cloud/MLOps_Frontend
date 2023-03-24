@@ -53,9 +53,11 @@
         <button class="footer-btn" @click="openModelDelete">
           선택 모델 삭제
         </button>
-        <button class="footer-btn" @click="openModelCompare">
+        
+        <!--<button class="footer-btn" @click="openModelCompare">
           선택 모델 비교
-        </button>
+        </button>-->
+        
       </div>
     </div>
   </div>

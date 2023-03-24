@@ -72,7 +72,7 @@
     <CorrMethodSelectModal 
     v-if="showCorrMethodSelectModal"
     @close="closeCorrMethodSelectModal"
-    :col_list="col_list"
+    :dataset="dataset"
     />
   </div>
 </template>
@@ -214,6 +214,7 @@ export default {
   created() {
     //this.findNa();
     this.getData();
+    console.log(this.dataset);
   },
   computed:{
     ...mapGetters("login", ["userId"]),

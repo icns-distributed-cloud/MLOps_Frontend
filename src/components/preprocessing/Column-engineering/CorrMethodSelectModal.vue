@@ -13,9 +13,9 @@
               <input class="methods" type="radio" v-model="corr_methods" value="2">Kendall
             </div>
             <div class="content-body">
-              <img class="heatmap" v-if="corr_methods==0" src="~@/assets/images/Pearson_heatmap.png" />
-              <img class="heatmap" v-if="corr_methods==1" src="~@/assets/images/Spearman_heatmap.png" />
-              <img class="heatmap" v-if="corr_methods==2" src="~@/assets/images/Kendall_heatmap.png" />
+              <img class="heatmap" v-if="corr_methods==0" :src=Pearson_heatmap />
+              <img class="heatmap" v-if="corr_methods==1" :src=Spearman_heatmap />
+              <img class="heatmap" v-if="corr_methods==2" :src=Kendall_heatmap />
             </div>
           </div>
         </div>
@@ -36,13 +36,16 @@
 import { mapGetters } from "vuex";
 //import Spinner from "@/components/common/Spinner";
 export default {
-  props: ["col_list"],
+  props: ["dataset"],
   components: {
     //Spinner,
   },
   data() {
     return {
       corr_methods: -1,
+      Pearson_heatmap:"",
+      Spearman_heatmap:"",
+      Kendall_heatmap:"",
     };
   },
   computed: {
@@ -57,7 +60,14 @@ export default {
       this.$emit("close");
     },
   },
-  created(){
+  mounted(){
+    // 상관계수 이미지 주소 변경할 부분
+    this.BASEURL= this.$store.state.baseURL +'/'+ this.dataset.miniDatasetPath.slice(0, -4);
+    this.Pearson_heatmap= this.BASEURL+"_Pearson_heatmap.png";
+    this.Spearman_heatmap= this.BASEURL+"_Spearman_heatmap.png";
+    this.Kendall_heatmap= this.BASEURL+"_Kendall_heatmap.png";
+
+    console.log(this.Pearson_heatmap);
   },
 };
 </script>

@@ -28,10 +28,10 @@
     </div>
     <div class="image-div modal-body" v-if="see_detail">
       <div class="accuracy image-box">
-        <img src="http://data.icnslab.net/outputs/1/fig1.png" /> 
+        <img :src=FIG1URL /> 
       </div>
       <div class="loss image-box">
-        <img src="http://data.icnslab.net/outputs/1/fig2.png" /> 
+        <img :src=FIG2URL /> 
       </div>
     </div>
   </div>
@@ -43,6 +43,10 @@ export default {
   props: ["model_info"],
   data() {
     return {
+      BASEURL: "",
+      FIG1URL: "",
+      FIG2URL: "",
+      LOGURL: "",
       timer: null,
       selected: 1,
       see_detail: false,
@@ -112,17 +116,24 @@ export default {
 
     },
     ReadLog(){
-      var url = "http://data.icnslab.net/outputs/1/process.log";
-      fetch(url)
+      fetch(this.LOGURL)
         .then((res) => {
           this.Update_Process_Info(res);
         });
+      
     },
   },
   computed: {
     //...mapGetters("dataset", ["getDatasets"]),
   },
   mounted(){
+    // 모델정보 읽어올 URL부분 수정
+    this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(this.model_info.trainId);
+    //this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(1);
+    this.FIG1URL= this.BASEURL+"/fig1.png";
+    this.FIG2URL= this.BASEURL+"/fig2.png";
+    this.LOGURL= this.BASEURL+"/process.log";
+    
     if (this.isProcessing){
       this.timer = setInterval(() => {
           this.Get_Process_Info();
