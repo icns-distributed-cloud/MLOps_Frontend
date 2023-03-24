@@ -57,7 +57,10 @@ export default {
       })
       .then((res) => {
         this.path = res.data.miniDatasetPath;
-        this.isLoading=false;
+        if (this.path != null){this.isLoading=false;}
+        else{
+          alert("데이터를 찾을 수 없습니다.");
+        }
       });
     },
     turnoffSpiner(){

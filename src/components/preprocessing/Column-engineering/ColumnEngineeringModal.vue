@@ -167,7 +167,6 @@ export default {
     },
     turnoffSpiner(col_list){
       this.isLoading = false;
-
       this.col_list = col_list;
     }, 
     dictToJSON(){

@@ -76,16 +76,15 @@ export default {
     },
     drawTable(){
       if (this.path == null){
-        this.path = "http://data.icnslab.net/datasets/mini/catfish_with_na.csv"  
+        alert("데이터를 찾을 수 없습니다.");  
       }
       else{
         this.path = this.$store.state.baseURL +'/'+ this.path;
-      }
-      
-      fetch(this.path)
+        fetch(this.path)
         .then((res) => {
           this.EditTable(res);
         });
+      }
     },
   },
   created() {
