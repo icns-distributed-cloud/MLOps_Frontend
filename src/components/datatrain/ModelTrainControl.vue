@@ -17,7 +17,8 @@
         <ModelAddModal 
           v-if="showModelAddModal" 
           @close="closeModelAddModal" 
-          :predatasetId="predatasetId" 
+          :predatasetId="predatasetId"
+          :col_list="col_list"
         />
         <ModelDelete v-if="showModelDelete" @close="closeModelDelete" />
         <ModelCompareModal v-if="showModelCompare" @close="closeModelCompare" />
@@ -80,6 +81,9 @@
     },
     data() {
       return {
+        path:"",
+        col_list: [],
+
         checked_model_list: [],
         isLoading: false,
         showModelAddModal: false,
@@ -90,6 +94,7 @@
     },
     methods: {
       ...mapActions("training", ["FETCH_RUNNING_MODELINFOS"]),
+      ...mapActions("dataset", ["PREVIEW_DATA"]),
       //...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
       
       //새 모델 생성 open, close
@@ -102,12 +107,46 @@
       openModelCompare() {this.showModelCompare = true;},
       closeModelCompare() {this.showModelCompare = false;},
 
+      //전처리 데이터셋 정보 가져오기
+      getData() {
+        this.PREVIEW_DATA({
+          preDatasetId: this.predatasetId,
+          })
+          .then((res) => {
+            this.path = res.data.miniDatasetPath;
+            if (this.path == null){
+              alert("데이터를 찾을 수 없습니다.");  
+            }
+            else{
+              this.path = this.$store.state.baseURL +'/'+ this.path;
+              fetch(this.path)
+              .then((res) => {
+                this.EditTable(res);
+              });
+            }
+            this.isLoading=false;
+          });
+      },
+      async EditTable(blob){
+        var txt = await blob.text();
+        var split_line = txt.split('\n');
+
+        // Create Columns
+        var columns = split_line[0].replace('\r', '').split(',')
+        columns.forEach((col)=>{
+          this.col_list.push({
+            "name":col, "type":typeof(col),
+          });
+        })
+      },
+      
+
     },
     created() { // 테스트용으로 mounted를 쓰지만, 이후 데이터를 가져올때는 created사용
       this.FETCH_RUNNING_MODELINFOS({
         userId: this.userId,
       });
-      console.log(this.predatasetId);
+      this.getData();
     },
     computed: {
       ...mapGetters("training", ["getRunningModelinfos"]),

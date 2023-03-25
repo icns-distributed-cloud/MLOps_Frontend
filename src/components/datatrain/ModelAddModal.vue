@@ -34,22 +34,99 @@
               </thead>
             </table>
           </div>
-          <div class="body-table">
-            <table>
-              <thead>
-                <th>하이퍼파라미터</th>
-                <th>값 입력</th>
-                <th>설명</th>
-              </thead>
-              <tbody>
-                <tr v-for="(param, index) in selected_model.parameter_json"
-                :key="index">
-                  <td >{{param.param_name}}</td>
-                  <td><input :value="param.val"/></td>
-                  <td>{{param.description}}</td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="method-menu">
+            <div
+              class="method"
+              :class="{ unselected: selected !== 0 }"
+              @click="select(0)"
+            >
+              데이터 속성 선택
+            </div>
+            <div
+              class="method"
+              :class="{ unselected: selected !== 1 }"
+              @click="select(1)"
+            >
+              모델 하이퍼파라미터 설정
+            </div>
+          </div>
+          <div class="content" v-if="selected === 0">
+            <div class="selected-container">
+              <table>
+                <thead>
+                  <th>사용할 속성</th>
+                  <th>Action</th>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="col, index in selected_cols"
+                    :key="index"
+                  >
+                    <td class="name">
+                      {{ col.name }}
+                    </td>
+                    <td class="action">
+                      <button
+                        class="delete-btn"
+                        @click="deleteCol(index)"
+                      >
+                        <font-awesome-icon
+                          icon="fa-solid fa-trash-can"
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="nonselected-container">
+              <table>
+                <thead>
+                  <th>제거할 속성</th>
+                  <th>Action</th>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="col, index in nonselected_cols"
+                    :key="index"
+                  >
+                    <td class="name">
+                      {{ col.name }}
+                    </td>
+                    <td class="action">
+                      <button
+                        class="delete-btn"
+                        @click="addCol(index)"
+                      >
+                        <font-awesome-icon
+                          icon="fa-solid fa-trash-can"
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div
+          v-if="selected === 1">
+            <div class="body-table">
+              <table>
+                <thead>
+                  <th>하이퍼파라미터</th>
+                  <th>값 입력</th>
+                  <th>설명</th>
+                </thead>
+                <tbody>
+                  <tr v-for="(param, index) in selected_model.parameter_json"
+                  :key="index">
+                    <td >{{param.param_name}}</td>
+                    <td><input :value="param.val"/></td>
+                    <td>{{param.description}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -69,7 +146,7 @@
 import { mapGetters, mapActions } from "vuex";
 import model_info from "@/assets/models/model_info_config"
 export default {
-  props: ["predatasetId"],
+  props: ["predatasetId", "col_list"],
   data() {
     return {
       name: "",
@@ -77,6 +154,10 @@ export default {
       selected_model:"",
       isPublic: false, 
       isUseGPU: false,
+
+      selected: 0,
+      selected_cols: [],
+      nonselected_cols: [],
     };
   },
   methods: {
@@ -84,6 +165,19 @@ export default {
     close() {
       this.$emit("close");
     },
+    select(value) {
+      this.selected = value;
+    },
+    // 컬럼 선택 파트
+    deleteCol(index) {
+      this.nonselected_cols.push(this.selected_cols[index]);
+      this.selected_cols.splice(index, 1);
+    },
+    addCol(index) {
+      this.selected_cols.push(this.nonselected_cols[index]);
+      this.nonselected_cols.splice(index, 1);
+    },
+    // 파라미터 설정 파트
     GetParamDict(parameter_json){
       var param_list = [];
       var dict = {};
@@ -114,10 +208,12 @@ export default {
     Fetch_ModelInfos(){
       this.model_info_list = model_info;
     },
+    
   },
   created(){
-    console.log(this.predatasetId);
     this.Fetch_ModelInfos();
+    this.selected_cols = this.col_list;
+    console.log(this.selected_cols);
   },
   computed: {
     ...mapGetters("login", ["userId"]),
@@ -169,7 +265,26 @@ export default {
   padding: 10px 20px;
   font-size: 15px;
 }
-
+.content {
+  background-color: #1f1f1f;
+  /*height: 475px;*/
+  margin-bottom: 10px 0;
+  height: 400px;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+}
+.selected-container{
+  width: 45%;
+  height: 90%;
+  margin: auto;
+  border: 1px #969696 solid;
+}
+.nonselected-container{
+  width: 45%;
+  height: 90%;
+  margin: auto;
+  border: 1px #969696 solid;
+}
 .modal-body label {
   font-size: 14px;
   font-weight: 300;
@@ -179,10 +294,56 @@ export default {
   margin: 3px;
   padding-left: 35px;
 }
+.method-menu {
+  display: flex;
+  justify-content: center;
+}
+.method {
+  padding: 10px 40px;
+  width: 100%;
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+  background-color: #1f1f1f;
+  cursor: pointer;
+  color: #3f8ae2;
+}
 
+.method:first-child {
+  border-right: 4px solid #252525;
+}
+.unselected {
+  border-bottom: 2px solid #252525;
+  background-color: #505050;
+  color: rgb(173, 173, 173);
+  box-shadow: inset 0px -8px 7px 2px rgba(25, 25, 25, 0.306);
+}
+.unselected:hover {
+  background-color: #424242;
+}
+.name {
+  width: 70%;
+}
+.action {
+  padding: 0 20px;
+  max-width: 50px;
+  color: #ffffff;
+}
+.action button {
+  height: 25px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 5px;
+  font-size: 15px;
+  color: rgb(157, 157, 157);
+  border-color: rgb(157, 157, 157);;
+}
 .body-head{
   display:flex;
   align-items: center;
+}
+.body-options{
+  padding: 10px 0;
 }
 input, select{
   width: 90%;
@@ -198,7 +359,6 @@ select{
 }
 table {
   width: 100%;
-  margin-top: 10px;
   color: #e8e8e8;
   font-weight: 300;
   border-collapse: collapse;

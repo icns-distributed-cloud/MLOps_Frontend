@@ -28,6 +28,33 @@ state: {
     baseURL: "Put base URL"  //example: "http://data.icnslab.net"
   },
 ```
+## MLOps_Frontend/src/components/preprocessing/Column-engineering/CorrMethodSelectModal.vue
+//Set Model Info URL
+```
+line 129~135
+  mounted(){
+    // 모델정보 읽어올 URL부분 수정
+    this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(this.model_info.trainId);
+    //this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(1);
+    this.FIG1URL= this.BASEURL+"/fig1.png";
+    this.FIG2URL= this.BASEURL+"/fig2.png";
+    this.LOGURL= this.BASEURL+"/process.log";
+```
+## MLOps_Frontend/src/components/datatrain/ModelModal.vue
+
+//Set Corelation Figure URL
+```
+line 63~71
+mounted(){
+    // 상관계수 이미지 주소 변경할 부분
+    this.BASEURL= this.$store.state.baseURL +'/'+ this.dataset.miniDatasetPath.slice(0, -4);
+    this.Pearson_heatmap= this.BASEURL+"_Pearson_heatmap.png";
+    this.Spearman_heatmap= this.BASEURL+"_Spearman_heatmap.png";
+    this.Kendall_heatmap= this.BASEURL+"_Kendall_heatmap.png";
+
+    console.log(this.Pearson_heatmap);
+  },
+```
 
 # Call DrawDatasetTables
 ## MLOps_Frontend/src/components/common/DatasetDrawTable.vue
@@ -59,33 +86,6 @@ line 77~88
         });
       }
     },
-```
-## MLOps_Frontend/src/components/preprocessing/Column-engineering/CorrMethodSelectModal.vue
-//Set Model Info URL
-```
-line 129~135
-  mounted(){
-    // 모델정보 읽어올 URL부분 수정
-    this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(this.model_info.trainId);
-    //this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(1);
-    this.FIG1URL= this.BASEURL+"/fig1.png";
-    this.FIG2URL= this.BASEURL+"/fig2.png";
-    this.LOGURL= this.BASEURL+"/process.log";
-```
-## MLOps_Frontend/src/components/datatrain/ModelModal.vue
-
-//Set Corelation Figure URL
-```
-line 63~71
-mounted(){
-    // 상관계수 이미지 주소 변경할 부분
-    this.BASEURL= this.$store.state.baseURL +'/'+ this.dataset.miniDatasetPath.slice(0, -4);
-    this.Pearson_heatmap= this.BASEURL+"_Pearson_heatmap.png";
-    this.Spearman_heatmap= this.BASEURL+"_Spearman_heatmap.png";
-    this.Kendall_heatmap= this.BASEURL+"_Kendall_heatmap.png";
-
-    console.log(this.Pearson_heatmap);
-  },
 ```
 
 ## Add
