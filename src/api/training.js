@@ -12,7 +12,6 @@ const training = {
     preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU
   ) 
   {
-    console.log({preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU});
     return axios.post("/api/model/post/createmodel", {
       preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU
     });
