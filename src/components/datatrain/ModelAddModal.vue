@@ -241,30 +241,29 @@ export default {
     },
     RunModelButton() {
       if (this.selected_model === ""){alert("모델이 선택되지 않았습니다.")}
-      var parameter_json = this.GetParamDict();
-
-      if (parameter_json.input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
-      else if (parameter_json.output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
       else{
-        /*
-        this.RUN_MODEL({
-          preDatasetId: this.predatasetId, 
-          userId: this.userId, 
-          name: this.name, 
-          modelName: this.selected_model.model_name,
-          parameter_json: parameter_json, 
-          isPublic: this.isPublic, 
-          isUseGPU: this.isUseGPU,
-        })
-        .then(()=>{
-          this.FETCH_RUNNING_MODELINFOS({
-            userId: this.userId,
-          });
-        })
-        */
-        this.$emit("close");
+        var parameter_json = this.GetParamDict();
+        if (parameter_json.input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
+        else if (parameter_json.output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
+        else{
+          this.RUN_MODEL({
+            preDatasetId: this.predatasetId, 
+            userId: this.userId, 
+            name: this.name, 
+            modelName: this.selected_model.model_name,
+            parameter_json: parameter_json, 
+            isPublic: this.isPublic, 
+            isUseGPU: this.isUseGPU,
+          })
+          .then(()=>{
+            this.FETCH_RUNNING_MODELINFOS({
+              userId: this.userId,
+            });
+          })
+          console.log(parameter_json);
+          this.$emit("close");
+        }
       }
-      console.log(parameter_json);
     },
     Fetch_ModelInfos(){
       this.model_info_list = model_info;
