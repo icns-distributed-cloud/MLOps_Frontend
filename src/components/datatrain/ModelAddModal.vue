@@ -54,6 +54,7 @@
             <div class="selected-container">
               <table>
                 <thead>
+                  <th>라벨 속성</th>
                   <th>사용할 속성</th>
                   <th>Action</th>
                 </thead>
@@ -62,6 +63,15 @@
                     v-for="col, index in selected_cols"
                     :key="index"
                   >
+                    <td class="label">
+                      <label>
+                        <div width=0 height=0 style="visibility:hidden">
+                          <input type="checkbox" v-model="col.isLabel" @click="updateisLabel(1, index)" style="display:none">
+                        </div>
+                        <font-awesome-icon :icon="['fas', 'star']" v-if="col.isLabel"/>
+                        <font-awesome-icon :icon="['far', 'star']" v-if="!col.isLabel"/>
+                      </label>
+                    </td>
                     <td class="name">
                       {{ col.name }}
                     </td>
@@ -82,6 +92,7 @@
             <div class="nonselected-container">
               <table>
                 <thead>
+                  <th>라벨 속성</th>
                   <th>제거할 속성</th>
                   <th>Action</th>
                 </thead>
@@ -90,6 +101,15 @@
                     v-for="col, index in nonselected_cols"
                     :key="index"
                   >
+                    <td class="label">
+                      <label>
+                        <div width=0 height=0 style="visibility:hidden">
+                          <input type="checkbox" v-model="col.isLabel" @click="updateisLabel(0, index)" style="display:none">
+                        </div>
+                        <font-awesome-icon :icon="['fas', 'star']" v-if="col.isLabel"/>
+                        <font-awesome-icon :icon="['far', 'star']" v-if="!col.isLabel"/>
+                      </label>
+                    </td>
                     <td class="name">
                       {{ col.name }}
                     </td>
@@ -154,14 +174,39 @@ export default {
       selected_model:"",
       isPublic: false, 
       isUseGPU: false,
+      label_index: 0,
 
       selected: 0,
       selected_cols: [],
       nonselected_cols: [],
+      output_columns: "",
     };
   },
   methods: {
     ...mapActions("training", ["RUN_MODEL", "FETCH_RUNNING_MODELINFOS"]),
+    SetSelectedCols(){
+      this.col_list.forEach(elem => {
+        this.selected_cols.push({
+          name: elem.name,
+          isLabel: false,
+        })
+      });
+    },
+    updateisLabel(isSelected, index){
+      var col_name = "";
+      this.selected_cols.forEach((elem) =>{elem.isLabel=false})
+      this.nonselected_cols.forEach((elem) =>{elem.isLabel=false})
+      if(isSelected){
+        this.selected_cols[index].isLabel=true;
+        col_name = this.selected_cols[index].name;
+      }
+      else{
+        this.nonselected_cols[index].isLabel=true
+        col_name = this.nonselected_cols[index].name;
+      }
+      this.output_columns=col_name;
+      console.log(this.output_columns);
+    },
     close() {
       this.$emit("close");
     },
@@ -178,42 +223,57 @@ export default {
       this.nonselected_cols.splice(index, 1);
     },
     // 파라미터 설정 파트
-    GetParamDict(parameter_json){
-      var param_list = [];
+    GetParamDict(){
       var dict = {};
-      parameter_json.forEach(elem => {
-        dict = {};
+      dict["input_columns"] = [];
+      dict["output_columns"] = [this.output_columns];
+      
+      // 모델 생성 Req를 위한 하이퍼파라미터 딕셔너리 생성
+      this.selected_model.parameter_json.forEach(elem => {
         dict[elem.param_name] = elem.val;
-        param_list.push(dict);
       });
-      return param_list;
+
+      this.selected_cols.forEach(elem => {
+        dict["input_columns"].push(elem.name); 
+      });
+
+      return dict;
     },
     RunModelButton() {
-      this.RUN_MODEL({
-        preDatasetId: this.predatasetId, 
-        userId: this.userId, 
-        name: this.name, 
-        modelName: this.selected_model.model_name,
-        parameter_json: this.GetParamDict(this.selected_model.parameter_json), 
-        isPublic: this.isPublic, 
-        isUseGPU: this.isUseGPU,
-      })
-      .then(()=>{
-        this.FETCH_RUNNING_MODELINFOS({
-          userId: this.userId,
-        });
-      })
-      this.$emit("close");
+      if (this.selected_model === ""){alert("모델이 선택되지 않았습니다.")}
+      var parameter_json = this.GetParamDict();
+
+      if (parameter_json.input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
+      else if (parameter_json.output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
+      else{
+        /*
+        this.RUN_MODEL({
+          preDatasetId: this.predatasetId, 
+          userId: this.userId, 
+          name: this.name, 
+          modelName: this.selected_model.model_name,
+          parameter_json: parameter_json, 
+          isPublic: this.isPublic, 
+          isUseGPU: this.isUseGPU,
+        })
+        .then(()=>{
+          this.FETCH_RUNNING_MODELINFOS({
+            userId: this.userId,
+          });
+        })
+        */
+        this.$emit("close");
+      }
+      console.log(parameter_json);
     },
     Fetch_ModelInfos(){
       this.model_info_list = model_info;
     },
-    
   },
   created(){
     this.Fetch_ModelInfos();
-    this.selected_cols = this.col_list;
-    console.log(this.selected_cols);
+    // Deep copy, 그냥 사용하면 모달을 다시 띄울 때 컬럼이 사라짐
+    this.SetSelectedCols();
   },
   computed: {
     ...mapGetters("login", ["userId"]),
@@ -285,15 +345,6 @@ export default {
   margin: auto;
   border: 1px #969696 solid;
 }
-.modal-body label {
-  font-size: 14px;
-  font-weight: 300;
-  display: block;
-  width: 100%;
-  color: #b3b3b3;
-  margin: 3px;
-  padding-left: 35px;
-}
 .method-menu {
   display: flex;
   justify-content: center;
@@ -320,6 +371,7 @@ export default {
 .unselected:hover {
   background-color: #424242;
 }
+
 .name {
   width: 70%;
 }
@@ -366,6 +418,10 @@ table {
   font-size: 15px;
   border: 1.5px solid #545454;
 }
+table input{
+  outline:none;
+  background-color: none;
+}
 th {
   height: 30px;
   border: 1.5px solid #545454;
@@ -382,8 +438,9 @@ tr {
 td {
   border: 1px solid #545454;
   height: 30px;
-  width: 14%;
+  width: 20%;
 }
+
 .modal-footer {
   display: flex;
   justify-content: right;

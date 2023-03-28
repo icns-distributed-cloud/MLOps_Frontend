@@ -18,19 +18,9 @@ const model_info = [
                 "description" : "train or test"
             },
             {
-                "param_name" : "input_size",
-                "val" : 7,
-                "description" : "Input data size"
-            },
-            {
                 "param_name" : "seq_len",
                 "val" : 24,
                 "description" : "Window size per one sequence"
-            },
-            {
-                "param_name" : "output_size",
-                "val" : 1,
-                "description" : "Prediction output size"
             },
             {
                 "param_name" : "hidden_size",
@@ -83,7 +73,8 @@ const model_info = [
                 "description" : "Gamma"
             }
         ]
-    },
+    }//,
+    /*
     {
         "model_name": "CNN",
         "parameter_json":[
@@ -315,6 +306,7 @@ const model_info = [
             }
         ]
     },
+    */
 ];
 
 export default model_info;
