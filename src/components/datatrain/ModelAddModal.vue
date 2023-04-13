@@ -251,7 +251,7 @@ export default {
             userId: this.userId, 
             name: this.name, 
             modelName: this.selected_model.model_name,
-            parameter_json: parameter_json, 
+            parameter_json: JSON.stringify(parameter_json), 
             isPublic: this.isPublic, 
             isUseGPU: this.isUseGPU,
           })
