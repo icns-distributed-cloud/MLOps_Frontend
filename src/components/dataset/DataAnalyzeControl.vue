@@ -13,11 +13,11 @@
         @save="saveName"
         :predatasetId="predatasetId"
         />
-        <div v-if="isLoading && !isNaming" class="loading">
+        <div v-if="isLoading" class="loading">
           <Spinner />
         </div>
         <DatasetDrawTable
-            v-if="!isLoading && !isNaming"
+            v-if="isDraw"
             @turnoffSpiner="turnoffSpiner"
             :path="pathList[pathList.length-1]"
           />
@@ -45,9 +45,11 @@
       return {
         name:"",
 
+        newpredatasetId : -1,
         checked_model_list: [],
         isLoading: false,
         isNaming: true,
+        isDraw : false,
         showModelAddModal: false,
         
         showModelDelete: false,
@@ -56,35 +58,56 @@
       };
     },
     methods: {
-      ...mapActions("dataset", ["CREATE_HAPPY_PRE"]),
+      ...mapActions("dataset", ["CREATE_HAPPY_PRE", "PREVIEW_DATA"]),
       
       // 분석용 데이터셋 이름입력 모달창(AnalyzedDataSetName) close시 동작
       closeAnalyzedDataSetName() {
         this.isNaming = false;
       },
-      saveName(name){
+      async saveName(name){
+        var predata_path = "";
         this.name = name;
-        this.isNaming = false;
-        this.isLoading = true;
-
+        
         console.log("분석용 데이터셋 이름");
         console.log(this.name);
         console.log( this.isNaming);
 
         // 이곳에 분석데이터 API 넣음
-        this.CREATE_HAPPY_PRE({
+        await this.CREATE_HAPPY_PRE({
           preDatasetId:this.predatasetId, 
           name:this.name, 
           userId:this.userId, 
           PreProcessType:0,
         })
         .then((res) => {
-            console.log(res);
-            this.isLoading = false;
+            if(res.success){
+              this.isLoading = false;
+              this.newpredatasetId = res.data.preDatasetId;
+              this.PREVIEW_DATA({
+                preDatasetId : this.newpredatasetId
+              }).then((Preres) => {
+                console.log("Preres");
+                console.log(Preres);
+                this.isNaming = false;
+
+                predata_path = "datasets/mini/"+String(Preres.data.preDatasetId)+"_";
+                this.pathList.push(predata_path+this.name)
+                
+                this.isLoading = true;
+                setTimeout(() => this.isDraw=true, 10000);
+              })
+            }
+            else{
+              alert("데이터 등록에 실패하였습니다. 다시 시도해주세요.")
+            }
         });
+        
         // 분석데이터가 완료되면, 데이터의 path를 리턴받아 테이블 작성
         // 테스트
-        //this.isLoading = false;
+        //
+      },
+      turnoffSpiner(){
+        this.isLoading = false;
       },
     },
     computed: {

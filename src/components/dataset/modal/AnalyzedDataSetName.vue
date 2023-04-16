@@ -35,7 +35,7 @@ export default {
   props: ["predatasetId"],
   data() {
     return {
-      name: this.dataset.name,
+      name: "",
     };
   },
   methods: {
@@ -48,10 +48,15 @@ export default {
       this.$emit("close");
     },
     close_withName() {
+      var csv_check = "";
       if (this.name === ""){
         alert("정확한 이름을 입력해주세요");
       } 
       else{
+        csv_check = this.name.split('.')
+        if(csv_check[csv_check.length - 1] != "csv"){
+          this.name+=".csv";
+        }
         this.$emit("save", this.name);
       }
     },

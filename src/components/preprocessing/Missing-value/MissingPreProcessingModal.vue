@@ -207,13 +207,13 @@ export default {
     dictToJSON(){
       return JSON.stringify({column:this.selectedColList});
     },
-    miniMapProcessing(){
+    async miniMapProcessing(){
       this.preProcessType = this.selectedMethod;
       this.datasetType = 2;
       this.preProcessJson = this.dictToJSON();
 
       this.isLoading = true;
-      this.SAVE({
+      await this.SAVE({
         preDatasetId: this.preDatasetId,
         name: "MiniPreProcessing",
         isPublic: false, 
@@ -226,7 +226,9 @@ export default {
         this.PREVIEW_DATA({
           preDatasetId: res.data.preDatasetId
         }).then((Preres)=>{
+          console.log(Preres);
           this.pathList.push(Preres.data.miniDatasetPath);
+          this.isLoading=false;
         })
         
       });

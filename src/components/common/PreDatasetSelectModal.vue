@@ -77,6 +77,7 @@
 <script>
 import { mapActions } from "vuex";
 import Spinner from "@/components/common/Spinner";
+//import { shallowReactive } from "vue";
 
 export default {
   props: ["originDatasetId"],
@@ -151,7 +152,10 @@ export default {
         default:
           ch = "Gb"
       }
-      return  filesize.toString() + ch;
+      if(filesize){
+        return  filesize.toString() + ch;
+      }
+      return "0" + ch;
     },
   },
   created() {

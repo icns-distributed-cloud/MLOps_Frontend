@@ -79,6 +79,8 @@ export default {
       console.log(this.path);
       fetch(this.path)
         .then((res) => {
+          console.log("Draw Table")
+          console.log(this.path)
           this.EditTable(res);
         });
     },
