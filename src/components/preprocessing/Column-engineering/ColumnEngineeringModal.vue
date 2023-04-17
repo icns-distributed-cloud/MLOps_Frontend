@@ -24,7 +24,7 @@
           />
       <div class="action-container">
         <div class="method-label">
-          결측치 처리 방법을 선택하세요.
+          속성 엔지니어링 방법을 선택하세요.
         </div>
         <select
           v-model="selectedMethod"
@@ -49,12 +49,12 @@
           </button>
         </div>
         <div class="btn-container">
-          <button class="restore-btn" @click="restore">
+          <!--<button class="restore-btn" @click="restore">
             복원
           </button>
           <button class="run-btn" @click="miniMapProcessing">
             수행
-          </button>
+          </button>-->
           <button class="save-btn" @click="save">
             저장
           </button>
@@ -114,13 +114,13 @@ export default {
       col_list:[],
       idxCol: "created_at",
       methods: [
-        {
+        /*{
           text: "수동으로 속성 선택",
           value: 0,
-        },
+        },*/
         {
           text: "상관계수를 이용하여 선택",
-          value: 1,
+          value: 0,
         },
       ],
       item:{

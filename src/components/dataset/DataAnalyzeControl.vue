@@ -94,17 +94,13 @@
                 this.pathList.push(predata_path+this.name)
                 
                 this.isLoading = true;
-                setTimeout(() => this.isDraw=true, 10000);
+                setTimeout(() => this.isDraw=true, 20000);
               })
             }
             else{
               alert("데이터 등록에 실패하였습니다. 다시 시도해주세요.")
             }
         });
-        
-        // 분석데이터가 완료되면, 데이터의 path를 리턴받아 테이블 작성
-        // 테스트
-        //
       },
       turnoffSpiner(){
         this.isLoading = false;

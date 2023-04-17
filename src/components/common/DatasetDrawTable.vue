@@ -1,4 +1,4 @@
-<template>
+<template v-if="isDraw">
   <div class="table-container">
     <table
       v-if="Object.keys(this.data).length !== 0"
@@ -42,6 +42,8 @@ export default {
         "column":[],
         "data":[],
       },
+      isDraw:false,
+      count:0,
     };
   },
   methods: {
@@ -72,16 +74,24 @@ export default {
         }
         this.data["data"].push(dump);
       })
+
+      this.isDraw = true;
       this.turnoffSpiner();
     },
     drawTable(){
       this.path = this.$store.state.baseURL +'/'+ this.path;
+      this.count += 1;
+      console.log("DrawTable");
       console.log(this.path);
+
       fetch(this.path)
         .then((res) => {
-          console.log("Draw Table")
-          console.log(this.path)
-          this.EditTable(res);
+          if(res.ok){
+            this.EditTable(res);
+          }
+          else{
+            setTimeout(() => this.drawTable(), 1000);
+          }
         });
     },
   },

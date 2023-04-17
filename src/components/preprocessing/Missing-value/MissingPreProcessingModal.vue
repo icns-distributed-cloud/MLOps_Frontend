@@ -17,7 +17,7 @@
         @close="closeSavingModal"
       />
       <DatasetDrawTable
-            v-if="!isLoading"
+            v-if="isDraw"
             @turnoffSpiner="turnoffSpiner"
             :path="pathList[pathList.length-1]"
           />
@@ -38,12 +38,12 @@
           </option>
         </select>
         <div class="btn-container">
-          <button class="restore-btn" @click="restore">
+          <!--<button class="restore-btn" @click="restore">
             복원
           </button>
           <button class="run-btn" @click="miniMapProcessing">
             수행
-          </button>
+          </button>-->
           <button class="save-btn" @click="save">
             저장
           </button>
@@ -76,9 +76,11 @@ export default {
       originDataNa: [],
       isLoading: true,
       isSaving: false,
+      isDraw: false,
       naIdxList: [],
       preDatasetId: 0,
       preProcessType: 0,
+      name: "",
       idxCol: "created_at",
       methods: [
         {
@@ -168,7 +170,6 @@ export default {
       });
     },
     */
-
     restore(){
       if(this.pathList.length>1){
         this.pathList.pop();
@@ -198,7 +199,7 @@ export default {
         })
         .then((res) => {
           this.pathList.push(res.data.miniDatasetPath);
-          this.isLoading=false;
+          this.isDraw=true;
         });
     },
     turnoffSpiner(){
@@ -208,14 +209,18 @@ export default {
       return JSON.stringify({column:this.selectedColList});
     },
     async miniMapProcessing(){
+      var predata_path = "datasets/mini/";
+
       this.preProcessType = this.selectedMethod;
       this.datasetType = 2;
       this.preProcessJson = this.dictToJSON();
-
+      this.name = "MiniPreProcessing_"+this.preDatasetId.toString()+".csv"
+    
       this.isLoading = true;
+      this.isDraw = false;
       await this.SAVE({
         preDatasetId: this.preDatasetId,
-        name: "MiniPreProcessing",
+        name: this.name,
         isPublic: false, 
         preProcessJson: this.preProcessJson, 
         preProcessType : this.preProcessType,
@@ -227,8 +232,12 @@ export default {
           preDatasetId: res.data.preDatasetId
         }).then((Preres)=>{
           console.log(Preres);
-          this.pathList.push(Preres.data.miniDatasetPath);
-          this.isLoading=false;
+
+          
+          this.pathList.push(predata_path+this.name)
+          
+          this.isLoading = true;
+          setTimeout(() => this.isDraw=true, 20000);
         })
         
       });
