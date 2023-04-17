@@ -224,17 +224,17 @@ export default {
     },
     // 파라미터 설정 파트
     GetParamDict(){
-      var dict = {};
-      dict["input_columns"] = [];
-      dict["output_columns"] = [this.output_columns];
+      var dict = {"model" : []};
+      dict["model"]["input_columns"] = [];
+      dict["model"]["output_columns"] = [this.output_columns];
       
       // 모델 생성 Req를 위한 하이퍼파라미터 딕셔너리 생성
       this.selected_model.parameter_json.forEach(elem => {
-        dict[elem.param_name] = elem.val;
+        dict["model"][elem.param_name] = elem.val;
       });
 
       this.selected_cols.forEach(elem => {
-        dict["input_columns"].push(elem.name); 
+        dict["model"]["input_columns"].push(elem.name); 
       });
 
       return dict;
@@ -242,16 +242,16 @@ export default {
     RunModelButton() {
       if (this.selected_model === ""){alert("모델이 선택되지 않았습니다.")}
       else{
-        var parameter_json = this.GetParamDict();
-        if (parameter_json.input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
-        else if (parameter_json.output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
+        var parameterJson = this.GetParamDict();
+        if (parameterJson["model"].input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
+        else if (parameterJson["model"].output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
         else{
           this.RUN_MODEL({
             preDatasetId: this.predatasetId, 
             userId: this.userId, 
             name: this.name, 
             modelName: this.selected_model.model_name,
-            parameterJson: JSON.stringify(parameter_json), 
+            parameterJson: JSON.stringify(parameterJson), 
             isPublic: this.isPublic, 
             isUseGPU: this.isUseGPU,
           })
@@ -260,7 +260,7 @@ export default {
               userId: this.userId,
             });
           })
-          console.log(parameter_json);
+          console.log(parameterJson);
           this.$emit("close");
         }
       }
