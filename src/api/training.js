@@ -9,11 +9,11 @@ const training = {
     });
   },
   run(
-    preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU
+    preDatasetId, userId, name, modelName, parameterJson, isPublic, isUseGPU
   ) 
   {
     return axios.post("/api/model/post/createmodel", {
-      preDatasetId, userId, name, modelName, parameter_json, isPublic, isUseGPU
+      preDatasetId, userId, name, modelName, parameterJson, isPublic, isUseGPU
     });
   },
   get_model_info(
