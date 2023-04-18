@@ -72,7 +72,7 @@ export default {
   },*/
   methods: {
     ...mapActions("training", ["GET_MODEL_INFO"]),
-    Process_Endtime(x){
+    Process_time(x){
       var time = new Date(x).toISOString().toString();
       time = time.slice(0, time.length-5)
       time = time.replace("T", " ")
@@ -87,7 +87,7 @@ export default {
         this.predatasetName = res.data.name;
         this.createdTime = new Date(res.data.createdTime).toLocaleDateString();
         this.endTime = res.data.endTime;
-        this.endTime = this.Process_Endtime(this.endTime);
+        this.endTime = this.Process_time(this.endTime);
         this.status = res.data.status;
 
         if(this.status){
@@ -109,18 +109,18 @@ export default {
       this.model = this.model_info;
     },*/
     Get_Process_Time(){
-      const s = 1000;
-      const m = s*60;
-      const h = m*60;
       const now = new Date();
       const start_time = new Date(this.model_info.createdTime);
-      var diff = now - start_time;
-      now.setHours(parseInt(diff/h)-8);
-      diff = diff % h;
-      now.setMinutes(parseInt(diff/m));
-      diff = diff % m;
-      now.setSeconds(parseInt(diff/s));
-      this.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
+
+      now.setHours(now.getHours() - start_time.getHours());
+
+      now.setMinutes(now.getMinutes() - start_time.getMinutes());
+
+      now.setSeconds(now.getSeconds() - start_time.getSeconds());
+      
+      //this.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
+      this.process_time = this.Process_time(now.toString());
+      this.process_time = this.process_time.slice(11, this.process_time.length);
     },
 
     async Update_Process_Info(blob){
