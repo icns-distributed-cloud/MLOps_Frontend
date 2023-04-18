@@ -94,7 +94,7 @@
                 this.pathList.push(predata_path+this.name)
                 
                 this.isLoading = true;
-                setTimeout(() => this.isDraw=true, 20000);
+                this.isDraw=true
               })
             }
             else{

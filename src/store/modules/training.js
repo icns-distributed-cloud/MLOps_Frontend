@@ -23,6 +23,7 @@ const actions = {
     });
   },
   RUN_MODEL(context, {preDatasetId, userId, name, modelName, parameterJson, isPublic, isUseGPU}) {
+    console.log({preDatasetId, userId, name, modelName, parameterJson, isPublic, isUseGPU});
     return training
       .run(preDatasetId, userId, name, modelName, parameterJson, isPublic, isUseGPU)
       .then((res) => {

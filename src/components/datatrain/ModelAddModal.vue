@@ -172,6 +172,7 @@ export default {
       name: "",
       model_info_list:[],
       selected_model:"",
+      dataset_path:"",
       isPublic: false, 
       isUseGPU: false,
       label_index: 0,
@@ -184,6 +185,7 @@ export default {
   },
   methods: {
     ...mapActions("training", ["RUN_MODEL", "FETCH_RUNNING_MODELINFOS"]),
+    ...mapActions("dataset", ["PREVIEW_DATA"]),
     SetSelectedCols(){
       this.col_list.forEach(elem => {
         this.selected_cols.push({
@@ -205,7 +207,6 @@ export default {
         col_name = this.nonselected_cols[index].name;
       }
       this.output_columns=col_name;
-      console.log(this.output_columns);
     },
     close() {
       this.$emit("close");
@@ -224,10 +225,12 @@ export default {
     },
     // 파라미터 설정 파트
     GetParamDict(){
-      var dict = {"model" : []};
+      var dict = {"model" : {}};
       dict["model"]["input_columns"] = [];
       dict["model"]["output_columns"] = [this.output_columns];
-      
+      dict["model"]["dataset_path"] = this.dataset_path;
+      dict["model"]["model_type"] = this.selected_model.model_name;
+
       // 모델 생성 Req를 위한 하이퍼파라미터 딕셔너리 생성
       this.selected_model.parameter_json.forEach(elem => {
         dict["model"][elem.param_name] = elem.val;
@@ -239,29 +242,39 @@ export default {
 
       return dict;
     },
-    RunModelButton() {
+    async RunModelButton() {
       if (this.selected_model === ""){alert("모델이 선택되지 않았습니다.")}
       else{
+        await this.PREVIEW_DATA({
+                preDatasetId : this.predatasetId
+          }).then((res)=>{
+            if (res.success){this.dataset_path = res.data.path; }
+            else{
+              alert("모델 생성에 실패하였습니다. 다시 시도해주세요.")
+              return
+            }
+          })
+
         var parameterJson = this.GetParamDict();
         if (parameterJson["model"].input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
         else if (parameterJson["model"].output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
         else{
           this.RUN_MODEL({
-            preDatasetId: this.predatasetId, 
-            userId: this.userId, 
-            name: this.name, 
-            modelName: this.selected_model.model_name,
-            parameterJson: JSON.stringify(parameterJson), 
-            isPublic: this.isPublic, 
-            isUseGPU: this.isUseGPU,
-          })
-          .then(()=>{
-            this.FETCH_RUNNING_MODELINFOS({
-              userId: this.userId,
-            });
-          })
-          console.log(parameterJson);
-          this.$emit("close");
+              preDatasetId: this.predatasetId, 
+              userId: this.userId, 
+              name: this.name, 
+              modelName: this.selected_model.model_name,
+              parameterJson: JSON.stringify(parameterJson), 
+              isPublic: this.isPublic, 
+              isUseGPU: this.isUseGPU,
+            })
+            .then(()=>{
+              this.FETCH_RUNNING_MODELINFOS({
+                userId: this.userId,
+              });
+            })
+            console.log(parameterJson);
+            this.$emit("close");
         }
       }
     },
