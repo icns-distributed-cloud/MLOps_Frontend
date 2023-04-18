@@ -7,8 +7,12 @@
             <td>{{model_info.name}}</td>
             <td>진행 상황 : {{ProcessingMessage}}</td>
             <td>{{model_info.modelName}}</td>
-            <td>진행도 : {{process}}</td>
             <td>val_loss : {{loss}}</td>
+            <td>
+              <button class="detail-btn" @click="Change_See_Detail">
+                모델 사용하기
+              </button>
+            </td>
           </tr>
           <tr>
             <td>시작 시간</td>
@@ -28,7 +32,7 @@
     </div>
     <div class="image-div modal-body" v-if="see_detail">
       <div class="log"  v-if="isLog">
-        <p>{{ log_txt }}</p>
+        <textarea v-model="log_txt" :readonly="true"></textarea>
       </div>
       <div class="result" v-if="!isLog">
         <div class="accuracy image-box">
@@ -124,15 +128,9 @@ export default {
     },
 
     async Update_Process_Info(blob){
-      this.log_txt = await blob.text();
-      var txt_list = this.log_txt.split("\n");
-      txt_list.pop();
-      //var last_line = txt_list.pop();
-      //this.process = last_line.split('|')[0];
-      this.process = "90%";
-      txt_list.pop();
-      var loss_line = txt_list.pop().split(' ');
-      this.loss = Number(loss_line[loss_line.length-1]).toFixed(5);
+      var log = await blob.text();
+      var txt_list = log.split("\n");
+      this.log_txt = txt_list.join("\n")
     },
 
     ReadLog(){
@@ -248,5 +246,12 @@ img{
   width: 50%;
   height: 100%;
   
+}
+
+textarea{
+  width: 800px;
+  height: 200px;
+  max-width: 90%;
+  padding: auto;
 }
 </style>

@@ -83,16 +83,20 @@ export default {
       this.count += 1;
       console.log("DrawTable");
       console.log(this.path);
-
-      fetch(this.path)
+      var flag = true;
+      while(flag){
+        fetch(this.path)
         .then((res) => {
           if(res.ok){
             this.EditTable(res);
+            flag = false;
           }
           else{
-            setTimeout(() => this.drawTable(), 1000);
+            setTimeout(() => console.log("waiting"), 1000);
           }
         });
+      }
+      
     },
   },
   created() {
