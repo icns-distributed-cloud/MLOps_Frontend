@@ -27,11 +27,13 @@
       </table>
     </div>
     <div class="image-div modal-body" v-if="see_detail">
-      <div class="accuracy image-box">
-        <img :src=FIG1URL /> 
+      <div class="log"  v-if="isLog">
+        <p>{{ log_txt }}</p>
       </div>
-      <div class="loss image-box">
-        <img :src=FIG2URL /> 
+      <div class="result" v-if="!isLog">
+        <div class="accuracy image-box">
+          <img :src=FIG1URL /> 
+        </div>
       </div>
     </div>
   </div>
@@ -48,37 +50,54 @@ export default {
       FIG2URL: "",
       LOGURL: "",
       timer: null,
+      status: 0,
       selected: 1,
       see_detail: false,
+
+      log_txt: "",
       process: "0%",
       loss: "0",
       predatasetName: "",
       createdTime: "",
       endTime: "",
+
+      isLog: true,
       isProcessing: true,
       process_time: "",
       ProcessingMessage: "학습 중",
     };
   },
-  created() {
+  /*created() {
     this.Set_Model_info()
-  },
+  },*/
   methods: {
     ...mapActions("training", ["GET_MODEL_INFO"]),
-    Get_Process_Info(){
-      this.GET_MODEL_INFO({
+    Process_Endtime(x){
+      var time = new Date(x).toISOString().toString();
+      time = time.slice(0, time.length-5)
+      time = time.replace("T", " ")
+      return time;
+    },
+
+    async Get_Process_Info(){
+      await this.GET_MODEL_INFO({
         trainId: this.model_info.trainId,
       })
       .then((res)=>{
         this.predatasetName = res.data.name;
-        this.createdTime = res.data.createdTime;
+        this.createdTime = new Date(res.data.createdTime).toLocaleDateString();
         this.endTime = res.data.endTime;
-        if(res.data.status != 0){
-          this.Get_Process_Time();
+        this.endTime = this.Process_Endtime(this.endTime);
+        this.status = res.data.status;
+
+        if(this.status){
+          this.isProcessing = false;
+          this.isLog = false;
+          this.ProcessingMessage="학습 완료";
+
         }
         else{
-          this.real_time_update_flag = false;
-          this.ProcessingMessage="학습 완료";
+          this.Get_Process_Time();
         }
       })
       
@@ -86,9 +105,9 @@ export default {
     Change_See_Detail(){
       this.see_detail = !this.see_detail;
     },
-    Set_Model_info(){
+    /*Set_Model_info(){
       this.model = this.model_info;
-    },
+    },*/
     Get_Process_Time(){
       const s = 1000;
       const m = s*60;
@@ -103,9 +122,10 @@ export default {
       now.setSeconds(parseInt(diff/s));
       this.process_time = now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds();
     },
+
     async Update_Process_Info(blob){
-      var txt = await blob.text();
-      var txt_list = txt.split("\n");
+      this.log_txt = await blob.text();
+      var txt_list = this.log_txt.split("\n");
       txt_list.pop();
       //var last_line = txt_list.pop();
       //this.process = last_line.split('|')[0];
@@ -113,8 +133,8 @@ export default {
       txt_list.pop();
       var loss_line = txt_list.pop().split(' ');
       this.loss = Number(loss_line[loss_line.length-1]).toFixed(5);
-
     },
+
     ReadLog(){
       fetch(this.LOGURL)
         .then((res) => {
@@ -131,7 +151,6 @@ export default {
     this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(this.model_info.trainId);
     //this.BASEURL= this.$store.state.baseURL + "/outputs/" + String(1);
     this.FIG1URL= this.BASEURL+"/fig1.png";
-    this.FIG2URL= this.BASEURL+"/fig2.png";
     this.LOGURL= this.BASEURL+"/process.log";
     
     if (this.isProcessing){
@@ -208,6 +227,9 @@ td {
   border: 1px solid #353535;
   height: 30px;
   width: 14%;
+}
+.log {
+  color: black;
 }
 .selected {
   background-color: #3a3a3a;

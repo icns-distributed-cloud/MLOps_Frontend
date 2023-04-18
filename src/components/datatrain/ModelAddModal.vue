@@ -347,15 +347,19 @@ export default {
 }
 .selected-container{
   width: 45%;
-  height: 90%;
+  height:400px;
+  /*height: 90%;*/
   margin: auto;
   border: 1px #969696 solid;
+  overflow: auto;
 }
 .nonselected-container{
   width: 45%;
-  height: 90%;
+  height:400px;
+  /*height: 90%;*/
   margin: auto;
   border: 1px #969696 solid;
+  overflow: auto;
 }
 .method-menu {
   display: flex;
@@ -429,6 +433,7 @@ table {
   text-align: center;
   font-size: 15px;
   border: 1.5px solid #545454;
+  overflow: auto;
 }
 table input{
   outline:none;
