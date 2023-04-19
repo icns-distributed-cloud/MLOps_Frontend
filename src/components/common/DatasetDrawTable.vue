@@ -92,7 +92,7 @@ export default {
             flag = false;
           }
           else{
-            setTimeout(() => console.log("waiting"), 1000);
+            setTimeout(() => console.log("waiting"), 10000);
           }
         });
       }
