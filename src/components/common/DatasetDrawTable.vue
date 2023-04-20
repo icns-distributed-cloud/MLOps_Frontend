@@ -42,6 +42,7 @@ export default {
         "column":[],
         "data":[],
       },
+      time : '',
       isDraw:false,
       count:0,
     };
@@ -83,24 +84,26 @@ export default {
       this.count += 1;
       console.log("DrawTable");
       console.log(this.path);
-      var flag = true;
-      while(flag){
-        fetch(this.path)
-        .then((res) => {
-          if(res.ok){
-            this.EditTable(res);
-            flag = false;
-          }
-          else{
-            setTimeout(() => console.log("waiting"), 50000);
-          }
-        });
+      if (!this.isDraw){
+        this.timer = setInterval(() => {
+          fetch(this.path)
+          .then((res) => {
+            if(res.ok){
+              this.EditTable(res);
+            }
+            else{
+              console.log("Data didn't upload yet");
+            }
+          });
+        }, 50000)
       }
-      
     },
   },
   created() {
     this.drawTable();
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   },
 };
 </script>
