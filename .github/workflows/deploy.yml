@@ -2,9 +2,9 @@ name: Upload a Build Artifact
 
 on:
   push:
-    branches: [main]
+    branches: [seolroh]
   pull_request:
-    branches: [main]
+    branches: [seolroh]
 
 jobs:
   # job의 이름 설정
