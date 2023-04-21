@@ -99,7 +99,9 @@
       
       //새 모델 생성 open, close
       openModelAddModal() {this.showModelAddModal = true;},
-      closeModelAddModal() {this.showModelAddModal = false;},
+      closeModelAddModal() {
+        this.showModelAddModal = false;
+      },
       //선택 모델 삭제 open, close
       openModelDelete() {this.showModelDelete = true;},
       closeModelDelete() {this.showModelDelete = false;},

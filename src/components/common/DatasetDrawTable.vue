@@ -1,7 +1,10 @@
-<template v-if="isDraw">
+<template>
   <div class="table-container">
+    <div v-if="isLoading" class="loading">
+        <Spinner />
+    </div>
     <table
-      v-if="Object.keys(this.data).length !== 0"
+      v-if="Object.keys(this.data).length !== 0 && !isLoading"
     >
       <thead>
         <!--<th>
@@ -32,18 +35,20 @@
 </template>
 
 <script>
+import Spinner from "@/components/common/Spinner";
 export default {
   props: ["path"],
   components: {
-  },
+    Spinner,
+},
   data() {
     return {
+      isLoading: true,
       data: {
         "column":[],
         "data":[],
       },
       time : '',
-      isDraw:false,
       count:0,
     };
   },
@@ -75,31 +80,33 @@ export default {
         }
         this.data["data"].push(dump);
       })
-
-      this.isDraw = true;
+      clearInterval(this.timer)
+      this.isLoading = false;
       this.turnoffSpiner();
     },
+
     drawTable(){
       this.path = this.$store.state.baseURL +'/'+ this.path;
-      this.count += 1;
-      console.log("DrawTable");
-      console.log(this.path);
-      if (!this.isDraw){
-        this.timer = setInterval(() => {
-          fetch(this.path)
-          .then((res) => {
-            if(res.ok){
-              this.EditTable(res);
+
+      this.timer = setInterval(() => {
+        fetch(this.path)
+        .then((res) => {
+          if(res.ok){
+            console.log("DrawTable");
+            this.EditTable(res);
+          }
+          else{
+            this.count += 1;
+            console.log("Data didn't upload yet");
+            if(this.count > 60){
+              alert("데이터를 가져올 수 없습니다.")
             }
-            else{
-              console.log("Data didn't upload yet");
-            }
-          });
-        }, 50000)
-      }
+          }
+        });
+      }, 1000)
     },
   },
-  created() {
+  mounted() {
     this.drawTable();
   },
   beforeDestroy() {
@@ -113,7 +120,7 @@ export default {
   width: 100%;
   height: 600px;
   overflow: auto;
-  border: 2px solid #545454;
+  /*border: 2px solid #545454;*/
 }
 table {
   width:100%;
@@ -141,5 +148,12 @@ th:first-child {
 td {
   border: 1px solid #353535;
   height: 30px;
+}
+.loading {
+  margin-top: 30px;
+  width: 65%;
+
+  width: 100%;
+  height: 600px;
 }
 </style>

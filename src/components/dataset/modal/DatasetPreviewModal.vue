@@ -10,14 +10,14 @@
         </div>
         <div class="modal-body">
           <div class="name">{{ dataset.name }}</div>
-          <Spinner v-if="isLoading" class="spinner" />
           <div class="preview-table-container">
-          <DatasetDrawTable
-            v-if="!isLoading"
-            @turnoffSpiner="turnoffSpiner"
-            :path="path"
-          />
-        </div>
+            <Spinner v-if="isLoading" class="spinner" />
+            <DatasetDrawTable
+              v-if="!isLoading"
+              @turnoffSpiner="turnoffSpiner"
+              :path="path"
+            />
+          </div>
         </div>
         <div class="modal-footer">
           <button class="close-btn" @click="close">

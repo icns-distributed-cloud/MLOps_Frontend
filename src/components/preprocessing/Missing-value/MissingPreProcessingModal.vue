@@ -200,6 +200,7 @@ export default {
         .then((res) => {
           this.pathList.push(res.data.miniDatasetPath);
           this.isDraw=true;
+          this.isLoading=false;
         });
     },
     turnoffSpiner(){
@@ -218,6 +219,7 @@ export default {
     
       this.isLoading = true;
       this.isDraw = false;
+
       await this.SAVE({
         preDatasetId: this.preDatasetId,
         name: this.name,
@@ -236,8 +238,11 @@ export default {
           
           this.pathList.push(predata_path+this.name)
           
-          this.isLoading = true;
-          setTimeout(() => this.isDraw=true, 20000);
+          
+          setTimeout(() => {
+            this.isLoading=false; 
+            this.isDraw=true;
+          }, 20000);
         })
         
       });

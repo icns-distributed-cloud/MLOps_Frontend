@@ -1,8 +1,8 @@
 <template>
   <div class="dataset-list-root">
-    <div v-if="isLoading" class="loading">
+    <!--<div v-if="isLoading" class="loading">
           <Spinner />
-    </div>
+    </div>-->
     <div class="table-container" v-if="!showMissingPreProcessingModal && !isLoading">
       <table>
         <thead>
@@ -88,7 +88,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import Spinner from "@/components/common/Spinner";
+//import Spinner from "@/components/common/Spinner";
 import DatasetDeleteModal from "@/components/dataset/modal/DatasetDeleteModal";
 import PreDatasetUpdateModal from "@/components/dataset/modal/PreDatasetUpdateModal";
 import DatasetPreviewModal from "@/components/dataset/modal/DatasetPreviewModal";
@@ -96,7 +96,7 @@ import MissingPreProcessingModal from "@/components/preprocessing/Missing-value/
 export default {
   props: ["originDatasetId"],
   components: {
-    Spinner,
+    //Spinner,
     DatasetDeleteModal,
     PreDatasetUpdateModal,
     DatasetPreviewModal,
@@ -267,8 +267,5 @@ button svg {
 .action button:hover {
   background-color: rgba(181, 181, 181, 0.065);
 }
-.loading {
-  margin-top: 30px;
-  width: 65%;
-}
+
 </style>
