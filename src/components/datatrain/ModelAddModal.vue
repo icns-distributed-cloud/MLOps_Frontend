@@ -141,7 +141,7 @@
                   <tr v-for="(param, index) in selected_model.parameter_json"
                   :key="index">
                     <td >{{param.param_name}}</td>
-                    <td><input :value="param.val"/></td>
+                    <td><input v-model="param.val"/></td>
                     <td>{{param.description}}</td>
                   </tr>
                 </tbody>
@@ -259,6 +259,7 @@ export default {
         if (parameterJson["model"].input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
         else if (parameterJson["model"].output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
         else{
+          /*
           this.RUN_MODEL({
               preDatasetId: this.predatasetId, 
               userId: this.userId, 
@@ -275,6 +276,8 @@ export default {
             })
             console.log(parameterJson);
             this.$emit("close");
+          */
+          console.log(JSON.stringify(parameterJson));
         }
       }
     },
