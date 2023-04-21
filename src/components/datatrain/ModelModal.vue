@@ -29,14 +29,14 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="image-div modal-body" v-if="see_detail">
-      <div class="log"  v-if="isLog">
-        <textarea v-model="log_txt" :readonly="true"></textarea>
-      </div>
-      <div class="result" v-if="!isLog">
-        <div class="accuracy image-box">
-          <img :src=FIG1URL /> 
+      <div class="image-div" v-if="see_detail">
+        <div class="log"  v-if="isLog">
+          <textarea v-model="log_txt" :readonly="true"></textarea>
+        </div>
+        <div class="result" v-if="!isLog">
+          <div class="accuracy image-box">
+            <img :src=FIG1URL /> 
+          </div>
         </div>
       </div>
     </div>
@@ -227,7 +227,7 @@ td {
   width: 14%;
 }
 .log {
-  color: black;
+  width: 100%
 }
 .selected {
   background-color: #3a3a3a;
@@ -249,9 +249,9 @@ img{
 }
 
 textarea{
-  width: 800px;
+  width: 100%;
   height: 200px;
   max-width: 90%;
-  padding: auto;
+  margin: 10px;
 }
 </style>
