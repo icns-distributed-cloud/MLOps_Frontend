@@ -17,6 +17,7 @@
         <ModelAddModal 
           v-if="showModelAddModal" 
           @close="closeModelAddModal" 
+          :predatasetId="predatasetId"
           :col_list="col_list"
         />
         <ModelDelete 
