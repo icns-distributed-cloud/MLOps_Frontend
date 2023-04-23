@@ -268,7 +268,6 @@ export default {
         if (parameterJson["model"].input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
         else if (parameterJson["model"].output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
         else{
-          /*
           this.RUN_MODEL({
               preDatasetId: this.predatasetId, 
               userId: this.userId, 
@@ -285,7 +284,6 @@ export default {
             })
             console.log(parameterJson);
             this.$emit("close");
-          */
           console.log(JSON.stringify(parameterJson));
         }
       }
