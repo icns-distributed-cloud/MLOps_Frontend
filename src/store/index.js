@@ -10,7 +10,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     userId: 0,
-    baseURL: "http://data.icnslab.net"
+    baseURL: "http://data.icnslab.net",
+    modelUSE: "http://163.180.117.186:8000"
   },
   modules: {
     dataset,

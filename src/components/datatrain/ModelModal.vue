@@ -9,7 +9,7 @@
             <td>{{model_info.modelName}}</td>
             <td>val_loss : {{loss}}</td>
             <td>
-              <button class="detail-btn" @click="Change_See_Detail">
+              <button class="detail-btn" @click="Use_This_Model">
                 모델 사용하기
               </button>
             </td>
@@ -109,9 +109,19 @@ export default {
     Change_See_Detail(){
       this.see_detail = !this.see_detail;
     },
-    /*Set_Model_info(){
-      this.model = this.model_info;
-    },*/
+    Use_This_Model(){
+      const body = {
+        "train_id" : this.model_info.trainId
+      };
+      console.log(body);
+      fetch(this.$store.state.modelUSE+"/model/serving",{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',},
+        body: JSON.stringify(body), // body의 데이터 유형은 반드시 "Content-Type" 헤더와 일치해야 함
+      }).then((res) => {
+          console.log(res);
+      });
+    },
     Get_Process_Time(){
       const now = new Date();
       const start_time = new Date(this.model_info.createdTime);

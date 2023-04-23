@@ -8,7 +8,6 @@ import Statistic from "@/views/status/Statistic";
 import MissingValue from "@/views/preprocessing/MissingValue";
 //import Noise from "@/views/preprocessing/Noise";
 import Column from "@/views/preprocessing/Column";
-import ModelCheck from "@/views/datatrain/ModelCheck";
 import ModelTrain from "@/views/datatrain/ModelTrain";
 
 Vue.use(VueRouter);
@@ -63,11 +62,6 @@ const routes = [
         path: "/datatrain/model-train",
         name: "model-train",
         component: ModelTrain,
-    },
-    {
-        path: "/datatrain/model-check",
-        name: "model-check",
-        component: ModelCheck,
     },
 ];
 const router = new VueRouter({
