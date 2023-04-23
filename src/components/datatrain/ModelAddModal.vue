@@ -141,7 +141,10 @@
                   <tr v-for="(param, index) in selected_model.parameter_json"
                   :key="index">
                     <td >{{param.param_name}}</td>
-                    <td><input v-model="param.val"/></td>
+                    <td v-if="param.val_type=='int'"><input v-model="param.val" type="number"/></td>
+                    <td v-if="param.val_type=='bool'"><input v-model="param.val" type="checkbox"/></td>
+                    <td v-if="param.val_type=='float'"><input v-model="param.val" type="number" step="0.01"/></td>
+                    <td v-if="param.val_type=='string'"><input v-model="param.val"/></td>
                     <td>{{param.description}}</td>
                   </tr>
                 </tbody>
@@ -234,12 +237,28 @@ export default {
 
       // 모델 생성 Req를 위한 하이퍼파라미터 딕셔너리 생성
       this.selected_model.parameter_json.forEach(elem => {
-        if(elem.val_type == "int"){val = parseInt(elem.val);}
-        else if (elem.val_type == "float"){val = parseFloat(elem.val);}
+        val = elem.val;
+        if(elem.val_type == "int"){
+          val = parseInt(val);
+          if(isNaN(val)){
+            val = null
+          }
+        }
+        else if (elem.val_type == "float"){
+          val = parseFloat(val);
+          if(isNaN(val)){
+            val = null
+          }
+        }
         else if (elem.val_type == "bool"){
-          val = elem.val;
           val = String(val).toLowerCase();
-          val = JSON.parse(val);
+          if(val==='true' || val==='false'){val = JSON.parse(val);}
+          else{val = null}
+        }
+        else{
+          if(!val){
+            val = null
+          }
         }
         dict["model"][elem.param_name] = val;
       });
@@ -268,6 +287,13 @@ export default {
         if (parameterJson["model"].input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
         else if (parameterJson["model"].output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
         else{
+          for (const [key, value] of Object.entries(parameterJson['model'])) {
+            if (value === null){
+                alert("[" + key+"]"+"값을 다시 확인해주세요");
+                return ;
+            }
+          }
+          
           this.RUN_MODEL({
               preDatasetId: this.predatasetId, 
               userId: this.userId, 
@@ -282,7 +308,6 @@ export default {
                 userId: this.userId,
               });
             })
-            console.log(parameterJson);
             this.$emit("close");
           console.log(JSON.stringify(parameterJson));
         }
@@ -426,6 +451,7 @@ export default {
 input, select{
   width: 90%;
   font-size: 16px;
+  text-align: center;
   color: white;
 }
 select{
