@@ -37,6 +37,13 @@ const actions = {
         return res.data;
       });
   },
+  DELETE_MODEL(context, {modelId}) {
+    return training
+      .delete_model(modelId)
+      .then((res) => {
+        return res.data;
+      });
+  },
   
 };
 

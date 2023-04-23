@@ -3,16 +3,31 @@
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="modal-header">
-            <div>선택 모델 비교</div>
-          </div>
-          <div class="modal-body">
-            <div class="image-div">
-              <img :src="require(`@/assets/images/${compare_img}`)" /> 
+            <div class="title">모델 삭제</div>
+            <div class="description">
+                정말 모델을 삭제하시겠습니까?
             </div>
           </div>
+          <div class="modal-body">
+            <table>
+              <template
+                v-for="(model, index) in delete_model_list"
+              >
+                <tr 
+                v-if="!model.deleted"
+                :key="index"
+                >
+                  <td>{{ model.name }}</td>
+                </tr>
+              </template>
+            </table>
+          </div>
           <div class="modal-footer">
+            <button class="delete-btn" @click="deletemodel">
+              확인
+            </button>
             <button class="close-btn" @click="close">
-                완료
+              취소
             </button>
           </div>
         </div>
@@ -23,33 +38,27 @@
   <script>
   //import { mapGetters } from "vuex";
   export default {
-    props: ["datasetId"],
+    props: ["delete_model_list"],
     data() {
       return {
         selected: 1,
-        compare_img: "compare_img.png",
-        see_detail: false,
       };
     },
     methods: {
+      deletemodel() {
+        this.$emit("deleteModel", this.delete_model_list);
+      },
       close() {
-        this.$emit("close", this.selected);
+        this.$emit("close");
       },
       select(id) {
         this.selected = id;
       },
     },
-    /*
     computed: {
-      ...mapGetters("dataset", ["getDatasets"]),
     },
-    */
     created() {
-      if (this.datasetId === 0) {
-        this.selected = this.getDatasets[0].id;
-      } else {
-        this.selected = this.datasetId;
-      }
+      console.log(this.delete_model_list);
     },
   };
   </script>
@@ -73,7 +82,7 @@
   }
   
   .modal-container {
-    width: 800px;
+    width: 400px;
     margin: 0px auto;
     color: #e8e8e8;
     background-color: #252525;
@@ -97,9 +106,9 @@
     display: flex;
     justify-content: right;
     padding: 15px 20px;
-    border-top: 0.2px #969696 solid;
+    /*border-top: 0.2px #969696 solid;*/
   }
-
+  
   .modal-footer button {
     width: 60px;
     height: 30px;
@@ -112,30 +121,55 @@
     cursor: pointer;
     transition: all 0.5s;
   }
-  
-  .close-btn {
+.close-btn {
+  background-color: #252525;
+}
+.close-btn:hover {
+  background-color: #676767a6;
+}
+  .delete-btn {
     background-color: #3f8ae2;
-    color: #e8e8e8;
   }
-  .close-btn:hover {
+  .delete-btn:hover {
     background-color: #2f6cb1;
   }
-  .close-btn:disabled {
-  background-color: #3f8be23f;
-}
+  .description {
+    margin-left: 10px;
+    font-weight: 300;
+  }
+  table {
+    width: 100%;
+    margin-top: 10px;
+    color: #e8e8e8;
+    font-weight: 300;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 15px;
+    border: 1.5px solid #545454;
+  }
+  th {
+    height: 30px;
+    border: 1.5px solid #545454;
+    font-size: 15px;
+    font-weight: 400;
+    background-color: #2c2c2c;
+  }
+  tr {
+    cursor: pointer;
+  }
   .unselected:hover {
     background-color: #ffffff08;
   }
-
-  
-  img{
-    width: 100%;
-    height: 100%;
+  td {
+    border: 1px solid #353535;
+    height: 30px;
+    width: 14%;
   }
-  .image-div{
-    background-color: #e8e8e8;
-    display: flex;
+  .name {
+    width: 250px;
   }
-
+  .selected {
+    background-color: #3f8ae2;
+  }
   </style>
   

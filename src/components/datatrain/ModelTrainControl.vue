@@ -17,10 +17,13 @@
         <ModelAddModal 
           v-if="showModelAddModal" 
           @close="closeModelAddModal" 
-          :predatasetId="predatasetId"
           :col_list="col_list"
         />
-        <ModelDelete v-if="showModelDelete" @close="closeModelDelete" />
+        <ModelDelete 
+        v-if="showModelDelete" 
+        :delete_model_list="delete_model_list"
+        @close="closeModelDelete"
+        @deleteModel="deleteModel"/>
         <ModelCompareModal v-if="showModelCompare" @close="closeModelCompare" />
 
         <div class="models-container" v-if="!isLoading">
@@ -31,7 +34,7 @@
                 v-for="(model, index) in getRunningModelinfos.slice().reverse()"
                 >
                   <tr
-                    v-if="model.preDatasetId == predatasetId" :key="index"
+                    v-if="model.preDatasetId == predatasetId && !model.deleted" :key="index"
                   >
                     <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
                     <ModelModal v-bind:model_info="model"  
@@ -68,22 +71,22 @@
   import { mapGetters, mapActions } from "vuex";
   import Spinner from "@/components/common/Spinner";
   import ModelModal from "@/components/datatrain/ModelModal.vue";
-  import ModelCompareModal from "@/components/datatrain/ModelCompareModal.vue";
   import ModelAddModal from "@/components/datatrain/ModelAddModal.vue"; 
+  import ModelDelete from "@/components/datatrain/ModelDelete.vue"; 
 
   export default {
     props: ["predatasetId"],
     components: {
       Spinner,
       ModelModal,
-      ModelCompareModal,
-      ModelAddModal
+      ModelAddModal,
+      ModelDelete
     },
     data() {
       return {
         path:"",
         col_list: [],
-
+        delete_model_list:[],
         checked_model_list: [],
         isLoading: false,
         showModelAddModal: false,
@@ -93,7 +96,7 @@
       };
     },
     methods: {
-      ...mapActions("training", ["FETCH_RUNNING_MODELINFOS"]),
+      ...mapActions("training", ["FETCH_RUNNING_MODELINFOS", "DELETE_MODEL"]),
       ...mapActions("dataset", ["PREVIEW_DATA"]),
       //...mapActions("cleaning", ["FIND_NA", "RUN_NA"]),
       
@@ -103,8 +106,34 @@
         this.showModelAddModal = false;
       },
       //선택 모델 삭제 open, close
-      openModelDelete() {this.showModelDelete = true;},
+      openModelDelete() {
+        this.delete_model_list = [];
+        this.checked_model_list.forEach(elem => {
+          this.delete_model_list.push(this.getRunningModelinfos.slice().reverse()[elem]);
+        });
+        this.showModelDelete = true;
+      },
       closeModelDelete() {this.showModelDelete = false;},
+
+      deleteModel(delete_model_list) {
+        delete_model_list.forEach((elem) =>{
+          this.DELETE_MODEL({
+            modelId: elem.modelId
+          }).then((res) => {
+            if(!res.success){
+              alert(elem.name+" 모델삭제를 실패했습니다.");
+            }
+            else{
+              console.log(res);
+            }
+          })
+        })
+        this.FETCH_RUNNING_MODELINFOS({
+                userId: this.userId,
+              }).then(()=>{this.getData();});
+
+        this.showModelDelete = false;
+      },
       //선택 모델 비교 open, close
       openModelCompare() {this.showModelCompare = true;},
       closeModelCompare() {this.showModelCompare = false;},

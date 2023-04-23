@@ -24,6 +24,14 @@ const training = {
       trainId
     });
   },
+  delete_model(
+    modelId
+  ) 
+  {
+    return axios.post("/api/model/post/deletemodel", {
+      modelId
+    });
+  },
 };
 
 export default training;
