@@ -38,12 +38,12 @@
             {{ method.text }}
           </option>
         </select>
-        <div v-if="this.selectedMethod == 0">
+        <!--<div v-if="this.selectedMethod == 0">
           <button class="selectcolumn-btn" @click="openColumnSelect">
             속성 선택
           </button>
-        </div>
-        <div v-if="this.selectedMethod == 1">
+        </div>-->
+        <div v-if="this.selectedMethod == 0">
           <button class="selectcolumn-btn" @click="openCorrMethodSelectModal">
             상관계수 선택
           </button>
