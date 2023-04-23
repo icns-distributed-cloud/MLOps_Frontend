@@ -126,14 +126,14 @@
             }
             else{
               console.log(res);
+              this.FETCH_RUNNING_MODELINFOS({
+                userId: this.userId,
+              }).then(()=>{this.getData();});
+              this.showModelDelete = false;
             }
           })
         })
-        this.FETCH_RUNNING_MODELINFOS({
-                userId: this.userId,
-              }).then(()=>{this.getData();});
-
-        this.showModelDelete = false;
+        
       },
       //선택 모델 비교 open, close
       openModelCompare() {this.showModelCompare = true;},

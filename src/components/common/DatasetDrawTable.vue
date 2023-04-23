@@ -124,6 +124,7 @@ export default {
 }
 table {
   width:100%;
+  height: 600px;
   color: #e8e8e8;
   font-weight: 300;
   border-collapse: separate;

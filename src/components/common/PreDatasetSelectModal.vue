@@ -243,6 +243,7 @@ export default {
 }
 table {
   width: 100%;
+  
   margin-top: 10px;
   color: #e8e8e8;
   font-weight: 300;
