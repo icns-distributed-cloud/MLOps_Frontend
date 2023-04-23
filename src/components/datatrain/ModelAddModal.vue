@@ -226,6 +226,7 @@ export default {
     // 파라미터 설정 파트
     GetParamDict(){
       var dict = {"model" : {}};
+      var val = '';
       dict["model"]["input_columns"] = [];
       dict["model"]["output_columns"] = [this.output_columns];
       dict["model"]["dataset_path"] = this.dataset_path;
@@ -233,7 +234,14 @@ export default {
 
       // 모델 생성 Req를 위한 하이퍼파라미터 딕셔너리 생성
       this.selected_model.parameter_json.forEach(elem => {
-        dict["model"][elem.param_name] = elem.val;
+        if(elem.val_type == "int"){val = parseInt(elem.val);}
+        else if (elem.val_type == "float"){val = parseFloat(elem.val);}
+        else if (elem.val_type == "bool"){
+          val = elem.val;
+          val = String(val).toLowerCase();
+          val = JSON.parse(val);
+        }
+        dict["model"][elem.param_name] = val;
       });
 
       this.selected_cols.forEach(elem => {
@@ -248,6 +256,7 @@ export default {
         await this.PREVIEW_DATA({
                 preDatasetId : this.predatasetId
           }).then((res)=>{
+            console.log(res)
             if (res.success){this.dataset_path = res.data.path; }
             else{
               alert("모델 생성에 실패하였습니다. 다시 시도해주세요.")
@@ -259,6 +268,7 @@ export default {
         if (parameterJson["model"].input_columns.length < 1){alert("모델을 훈련할 데이터 속성이 비어있습니다.")}
         else if (parameterJson["model"].output_columns.length < 1){alert("모델을 훈련할 라벨 속성이 비어있습니다.")}
         else{
+          /*
           this.RUN_MODEL({
               preDatasetId: this.predatasetId, 
               userId: this.userId, 
@@ -275,6 +285,7 @@ export default {
             })
             console.log(parameterJson);
             this.$emit("close");
+          */
           console.log(JSON.stringify(parameterJson));
         }
       }

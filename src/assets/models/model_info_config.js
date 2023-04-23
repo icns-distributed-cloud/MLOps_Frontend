@@ -5,71 +5,85 @@ const model_info = [
             {
                 "param_name" : "epochs",
                 "val" : 10,
+                "val_type" : "int",
                 "description" : "Number of iterations"
             },
             {
                 "param_name" : "flag",
                 "val" : "ms",
+                "val_type" : "string",
                 "description" : "Training mode"
             },
             {
                 "param_name" : "type",
                 "val" : "train",
+                "val_type" : "string",
                 "description" : "train or test"
             },
             {
                 "param_name" : "seq_len",
                 "val" : 24,
+                "val_type" : "int",
                 "description" : "Window size per one sequence"
             },
             {
                 "param_name" : "hidden_size",
                 "val" : 64,
+                "val_type" : "int",
                 "description" : "The size of hidden layer in LSTM"
             },
             {
                 "param_name" : "num_layer",
                 "val" : 1,
+                "val_type" : "int",
                 "description" : "Number of Layer"
             },
             {
                 "param_name" : "lr",
                 "val" : 0.05,
+                "val_type" : "float",
                 "description" : "Learning Rate"
             },
             {
                 "param_name" : "batch_size",
                 "val" : 30,
+                "val_type" : "int",
                 "description" : "Size of datasets per one training"
             },
             {
                 "param_name" : "loss",
                 "val" : "MSE",
+                "val_type" : "string",
                 "description" : "The algorithm of calculate accuracy"
             },
             {
                 "param_name" : "optimizer",
                 "val" : "Adam",
+                "val_type" : "string",
                 "description" : "The optimizer"
             },
             {
                 "param_name" : "weight_decay",
                 "val" : 1e-4,
+                "val_type" : "float",
                 "description" : "Weight"
             },
             {
                 "param_name" : "bidirectional",
                 "val" : false,
+                "val_type" : "bool",
                 "description" : "Mono or Bidirectional"
             },
             {
                 "param_name" : "step_size",
                 "val" : 10,
+                "val_type" : "int",
                 "description" : "Step Size"
             },
             {
                 "param_name" : "gamma",
                 "val" : 0.1,
+                "val_type" : "float",
                 "description" : "Gamma"
             }
         ]
