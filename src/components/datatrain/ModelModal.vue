@@ -114,17 +114,24 @@ export default {
       this.see_detail = !this.see_detail;
     },
     Use_This_Model(){
-      const body = {
-        "train_id" : this.model_info.trainId
-      };
-      console.log(body);
-      fetch(this.$store.state.modelUSE+"/model/serving",{
-        method: 'POST',
-        headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify(body), // body의 데이터 유형은 반드시 "Content-Type" 헤더와 일치해야 함
-      }).then((res) => {
-          console.log(res);
-      });
+      if(this.isProcessing){
+        alert("모델이 학습중입니다! 아직 사용할 수 없습니다.")
+      }
+      else{
+        const body = {
+          "train_id" : this.model_info.trainId
+        };
+        console.log(body);
+        fetch(this.$store.state.modelUSE+"/model/serving",{
+          method: 'POST',
+          headers: {'Content-Type': 'application/json',},
+          body: JSON.stringify(body), // body의 데이터 유형은 반드시 "Content-Type" 헤더와 일치해야 함
+        }).then((res) => {
+            console.log(res);
+            alert(this.model_info.name+" 모델을 사용합니다.")
+        });
+      }
+      
     },
     Get_Process_Time(){
       const now = new Date();
