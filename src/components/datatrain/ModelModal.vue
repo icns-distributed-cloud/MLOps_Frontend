@@ -7,7 +7,8 @@
             <td>{{model_info.name}}</td>
             <td>진행 상황 : {{ProcessingMessage}}</td>
             <td>{{model_info.modelName}}</td>
-            <td>val_loss : {{loss}}</td>
+            <td></td>
+            <!--<td>val_loss : {{loss}}</td>-->
             <td>
               <button class="detail-btn" @click="Use_This_Model">
                 모델 사용하기
@@ -36,6 +37,9 @@
         <div class="result" v-if="!isLog">
           <div class="accuracy image-box">
             <img :src=FIG1URL /> 
+          </div>
+          <div class="result-log image-box"  v-if="!isLog">
+            <textarea v-model="log_txt" :readonly="true"></textarea>
           </div>
         </div>
       </div>
@@ -239,6 +243,14 @@ td {
 .log {
   width: 100%
 }
+.result{
+  width: 100%;
+  display: flex;
+}
+.result-log{
+  width: 50%;
+  height: 100%;
+}
 .selected {
   background-color: #3a3a3a;
 }
@@ -255,12 +267,12 @@ img{
 .image-box{
   width: 50%;
   height: 100%;
-  
+  display: flex;
 }
 
 textarea{
   width: 100%;
-  height: 200px;
+  /*height: 200px;*/
   max-width: 90%;
   margin: 10px;
 }

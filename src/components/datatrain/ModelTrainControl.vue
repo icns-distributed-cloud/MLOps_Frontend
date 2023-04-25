@@ -39,7 +39,7 @@
                   >
                     <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
                     <ModelModal v-bind:model_info="model"  
-                    v-bind:key="index"
+                    v-bind:key="getRunningModelinfos.length - index"
                     ></ModelModal>
                   </tr>
                 </template>
@@ -105,6 +105,8 @@
       openModelAddModal() {this.showModelAddModal = true;},
       closeModelAddModal() {
         this.showModelAddModal = false;
+        //this.$router.go(this.$router.currentRoute);
+
       },
       //선택 모델 삭제 open, close
       openModelDelete() {
