@@ -4,13 +4,13 @@ const model_info = [
         "parameter_json":[
             {
                 "param_name" : "epochs",
-                "val" : 10,
+                "val" : 50,
                 "val_type" : "int",
                 "description" : "Number of iterations"
             },
             {
                 "param_name" : "flag",
-                "val" : "ms",
+                "val" : "mm",
                 "val_type" : "string",
                 "description" : "Training mode"
             },
@@ -40,7 +40,7 @@ const model_info = [
             },
             {
                 "param_name" : "lr",
-                "val" : 0.05,
+                "val" : 0.005,
                 "val_type" : "float",
                 "description" : "Learning Rate"
             },
