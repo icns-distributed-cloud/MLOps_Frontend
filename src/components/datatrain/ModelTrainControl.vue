@@ -39,7 +39,7 @@
                   >
                     <input class="model_checkbox" type="checkbox" v-model="checked_model_list" :value="index"/>
                     <ModelModal v-bind:model_info="model"  
-                    v-bind:key="getRunningModelinfos.length - index"
+                    v-bind:key="getRunningModelinfos.length - index -1"
                     ></ModelModal>
                   </tr>
                 </template>

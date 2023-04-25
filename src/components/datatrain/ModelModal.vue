@@ -272,7 +272,7 @@ img{
 
 textarea{
   width: 100%;
-  /*height: 200px;*/
+  min-height: 200px;
   max-width: 90%;
   margin: 10px;
 }
