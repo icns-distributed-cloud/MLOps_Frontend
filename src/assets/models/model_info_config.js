@@ -12,7 +12,7 @@ const model_info = [
                 "param_name" : "flag",
                 "val" : "mm",
                 "val_type" : "string",
-                "description" : "Training mode"
+                "description" : "MultiStep-mm, SingleStep-ms"
             },
             {
                 "param_name" : "type",
