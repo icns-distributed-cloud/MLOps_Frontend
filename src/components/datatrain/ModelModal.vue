@@ -176,7 +176,7 @@ export default {
       this.timer = setInterval(() => {
           this.Get_Process_Info();
           this.ReadLog();
-        }, 1000)
+        }, 5000)
     }
   },
   beforeDestroy() {
