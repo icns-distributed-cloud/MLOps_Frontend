@@ -16,10 +16,11 @@
       <DatasetSelectModal
         v-if="showDatasetSelectModal"
         @close="closeDatasetSelectModal"
+        @submit="submitDatasetSelectModal"
       >
         <template slot="description">
           <div class="description">
-            모델훈련을 실행 할 원본 데이터셋을 선택하세요.
+            모델훈련을 실행 할 원본 데이터셋을 클릭 후, 완료를 눌러주세요.
           </div>
         </template>
       </DatasetSelectModal>
@@ -61,7 +62,10 @@
       };
     },
     methods: {
-      closeDatasetSelectModal(selectedId) {
+      closeDatasetSelectModal() {
+        this.showDatasetSelectModal = false;
+      },
+      submitDatasetSelectModal(selectedId) {
         this.showDatasetSelectModal = false;
         this.originDatasetId = selectedId;
         this.showPreDatasetSelectModal = true;

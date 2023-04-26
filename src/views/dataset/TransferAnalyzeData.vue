@@ -16,6 +16,7 @@
       <DatasetSelectModal
         v-if="showDatasetSelectModal"
         @close="closeDatasetSelectModal"
+        @submit="submitDatasetSelectModal"
       >
         <template slot="description">
           <div class="description">
@@ -61,7 +62,10 @@
       };
     },
     methods: {
-      closeDatasetSelectModal(selectedId) {
+      closeDatasetSelectModal() {
+        this.showDatasetSelectModal = false;
+      },
+      submitDatasetSelectModal(selectedId) {
         this.showDatasetSelectModal = false;
         this.originDatasetId = selectedId;
         this.showPreDatasetSelectModal = true;

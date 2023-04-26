@@ -17,6 +17,7 @@
     <DatasetSelectModal
       v-if="showDatasetSelectModal"
       @close="closeDatasetSelectModal"
+      @submit="submitDatasetSelectModal"
     >
       <template slot="description">
         <div class="description">
@@ -49,7 +50,10 @@ export default {
   },
   methods: {
     ...mapActions("dataset", ["FETCH_DATASETS"]),
-    closeDatasetSelectModal(selectedId) {
+    closeDatasetSelectModal() {
+      this.showDatasetSelectModal = false;
+    },
+    submitDatasetSelectModal(selectedId) {
       this.showDatasetSelectModal = false;
       this.originDatasetId = selectedId;
       this.showData = true;
