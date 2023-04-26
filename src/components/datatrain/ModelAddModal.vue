@@ -172,7 +172,7 @@ export default {
   props: ["predatasetId", "col_list"],
   data() {
     return {
-      name: "",
+      name: "이름을 입력해주세요",
       model_info_list:[],
       selected_model:"",
       dataset_path:"",
