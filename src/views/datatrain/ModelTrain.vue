@@ -33,7 +33,7 @@
       >
         <template slot="description">
           <div class="description">
-            모델훈련을 실행 할 데이터셋 버전을 선택하세요.
+            모델훈련을 실행 할 데이터셋 버전을 클릭 후, 완료를 눌러주세요.
           </div>
         </template>
       </PreDatasetSelectModal>
