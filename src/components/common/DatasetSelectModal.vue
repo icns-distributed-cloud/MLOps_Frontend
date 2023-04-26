@@ -159,7 +159,7 @@ export default {
   font-size: 18px;
 }
 .modal-body {
-  height: 300px;
+  max-height: 500px;
   overflow: auto;
   padding: 10px 20px;
   font-size: 15px;

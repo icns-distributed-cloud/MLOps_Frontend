@@ -189,7 +189,7 @@ export default {
   min-height: 30px;
   padding: 10px 20px;
   font-size: 15px;
-  height: 300px;
+  max-height: 500px;
   overflow: auto;
 }
 .modal-footer {
