@@ -58,14 +58,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="pagemove-btn" @click="prevpage">
-            이전
-          </button>
-           
-          <button class="pagemove-btn" @click="nextpage">
-            다음
-          </button>
           <button class="close-btn" @click="close">
+            닫기
+          </button>
+          <button class="submit-btn" @click="submit">
             완료
           </button>
         </div>
@@ -110,27 +106,14 @@ export default {
       });
     },
     close() {
-      this.$emit("close", this.selected);
+      this.$emit("close");
+    },
+    submit() {
+      this.$emit("submit", this.selected);
     },
     select(id, name) {
       this.selected = id;
       this.selectedName = name;
-    },
-    getPage(){
-      this.list_start = this.distance * this.page;
-      this.list_end = this.list_start+this.distance;
-    },
-    prevpage(){
-      if (this.page > 0){
-        this.page = this.page-1;
-      }
-      this.getPage();
-    },
-    nextpage(){
-      if (this.page < parseInt(this.getPredatasets.length/this.distance)){
-        this.page = this.page+1;
-      }
-      this.getPage();
     },
     convertFileSize(filesize){
       var count = 0;
@@ -231,11 +214,17 @@ export default {
 .pagemove-btn:hover {
   background-color: #676767a6;
 }
-.close-btn {
+.submit-btn {
   background-color: #3f8ae2;
 }
-.close-btn:hover {
+.submit-btn:hover {
   background-color: #2f6cb1;
+}
+.close-btn {
+  background-color: #373737;
+}
+.close-btn:hover {
+  background-color: #464646;
 }
 .description {
   margin-left: 10px;

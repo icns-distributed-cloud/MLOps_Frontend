@@ -28,6 +28,7 @@
       <PreDatasetSelectModal
         v-if="showPreDatasetSelectModal"
         @close="closePreDatasetSelectModal"
+        @submit="submitPreDatasetSelectModal"
         :originDatasetId="originDatasetId"
       >
         <template slot="description">
@@ -70,7 +71,10 @@
         this.originDatasetId = selectedId;
         this.showPreDatasetSelectModal = true;
       },
-      closePreDatasetSelectModal(datasetId) {
+      closePreDatasetSelectModal() {
+        this.showPreDatasetSelectModal = false;
+      },
+      submitPreDatasetSelectModal(datasetId) {
         this.showPreDatasetSelectModal = false;
         this.predatasetId = datasetId;
         this.showData = true;
