@@ -25,8 +25,7 @@
                 v-for="(dataset, index) in getDatasets.slice().reverse()"
                 >
                   <tr
-                    v-if="list_start <= index && index < list_end"
-                    :key="dataset.originDatasetId "
+                    :key="dataset.originDatasetId"
                     @click="select(dataset.originDatasetId )"
                     :class="[
                       selected === dataset.originDatasetId 
@@ -144,8 +143,9 @@ export default {
 }
 .modal-container {
   width: 50%;
+  /*height: 500px;*/
   max-width: 800px;
-  max-height: 600px;
+  /*max-height: 600px;*/
   margin: 0px auto;
   color: #e8e8e8;
   background-color: #252525;
@@ -159,6 +159,8 @@ export default {
   font-size: 18px;
 }
 .modal-body {
+  height: 300px;
+  overflow: auto;
   padding: 10px 20px;
   font-size: 15px;
 }
@@ -203,6 +205,7 @@ export default {
   font-weight: 300;
 }
 table {
+  overflow: auto;
   width: 100%;
   margin-top: 10px;
   color: #e8e8e8;
@@ -213,6 +216,10 @@ table {
   border: 1.5px solid #545454;
 
   justify-content: center;
+  
+}
+table>tbody {
+  height: 300px;
   overflow: auto;
 }
 th {
