@@ -10,5 +10,5 @@ COPY package.json .
 ADD . .
 RUN npm install
 RUN npm run build
-EXPOSE 8082
+EXPOSE 8081
 ENTRYPOINT ["npm", "run", "serve"]
